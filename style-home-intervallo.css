@@ -1,7 +1,24 @@
 
 *:root {
-	color-scheme: dark;
 	font-family: arial, sans-serif;
+	
+	/* ----------- Dark mode color palette ----------- */
+	--bg-color-dark: #111;
+    --text-color-dark: #E0E0E0;
+    --secondary-text-color-dark: #B0B0B0;
+    --highlight-bg-color-dark: #1E1E1E;
+    --border-color-dark: #333;
+	
+	/* ----------- Light mode color palette ----------- */
+	
+	--bg-color-light: #fff;
+    --text-color-Light: #333;
+    --secondary-text-color-light: #666;
+    --highlight-bg-color-light: #CCCCCC;
+    --border-color-light: #dfdfdf;
+	
+	/* ----------- Color Accent ----------- */
+	--accent-color: #C70039;
 }
 
 body{ 
@@ -9,14 +26,90 @@ body{
 }
 
 /* ----------- ---------- ----------- */
+
+/* Dark mode styles */
+
+body[data-mode="dark"],
+#dialogBox[data-mode="dark"],
+#nb_photo[data-mode="dark"],
+#tmp_pose[data-mode="dark"],
+#enregistrement[data-mode="dark"],
+#shutdown[data-mode="dark"],
+#big-screen[data-mode="dark"],
+#landscape-screen[data-mode="dark"]{
+    background-color: var(--bg-color-dark);
+	transition: background-color 0.3s, color 0.3s;
+}
+
+body[data-mode="dark"],
+#dialogBox[data-mode="dark"],
+#nb_photo[data-mode="dark"],
+#tmp_pose[data-mode="dark"],
+#enregistrement[data-mode="dark"],
+#main[data-mode="dark"],
+#navbar-id[data-mode="dark"]{
+	color: var(--text-color-dark);
+}
+
+#shutdown[data-mode="dark"],
+#big-screen[data-mode="dark"],
+#landscape-screen[data-mode="dark"] {
+    color: var(--accent-color);
+}
+
+#main[data-mode="dark"],
+#navbar-id[data-mode="dark"] {
+    background-color: var(--border-color-dark);
+	transition: background-color 0.3s, color 0.3s;
+}
+
+/* Light mode styles */
+
+body[data-mode="light"],
+#dialogBox[data-mode="light"],
+#nb_photo[data-mode="light"],
+#tmp_pose[data-mode="light"],
+#enregistrement[data-mode="light"],
+#shutdown[data-mode="light"],
+#big-screen[data-mode="light"],
+#landscape-screen[data-mode="light"]{
+    background-color: var(--bg-color-light);
+	transition: background-color 0.3s, color 0.3s;
+}
+
+body[data-mode="light"],
+#dialogBox[data-mode="light"],
+#nb_photo[data-mode="light"],
+#tmp_pose[data-mode="light"],
+#enregistrement[data-mode="light"],
+#main[data-mode="light"],
+#navbar-id[data-mode="light"]{
+	color: var(--text-color-light);
+}
+
+#shutdown[data-mode="light"],
+#big-screen[data-mode="light"],
+#landscape-screen[data-mode="light"] {
+    color: var(--accent-color);
+}
+
+#main[data-mode="light"],
+#navbar-id[data-mode="light"] {
+    background-color: var(--border-color-light);
+	transition: background-color 0.3s, color 0.3s;
+}
+
+
+/* ----------- ---------- ----------- */
 #dialogBox {
 	border-radius: 8px;
 	border: none;
 	width: 350px;
-	height: 200px;
+	height: 180px;
 	padding: 10px 20px;
 	box-sizing: border-box;
 	overflow: hidden;
+	color:#fff;
 }
 
 #Compteur {
@@ -41,7 +134,14 @@ form {
 	border-radius: 5px;
 }
 
-
+#form_submit,
+#openDialogBox,
+#test_shot,
+#back_button{
+	background-color: var(--accent-color);
+	color: var(--text-color-dark);
+	font-weight: 600;
+}
 label { 
 	display: table-cell; 
 }
@@ -57,8 +157,8 @@ margin: 0 auto;
 .container,
 .content {
 	padding: 20px 20px 5px 20px;
-	background-color: #333;
-	color: #fff;
+	background-color: var(--border-color-dark);
+	color: var(--text-color-dark);
 	border-radius: 10px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
@@ -91,10 +191,8 @@ margin: 0 auto;
 }
 
 .container input[type="submit"],
-.container button,
-.content input[type="submit"],
 .content button{
-	background-color: #C70039;
+	background-color: var(--accent-color);
 	margin: 0 auto; /* Center the elements horizontally */
 }
 
@@ -119,7 +217,6 @@ margin: 0 auto;
 }
 
 .flex_column button {
-	background-color: #C70039;
 	display: block;
 	width: 45%;
 	padding: 10px;
@@ -141,12 +238,11 @@ margin: 0 auto;
 
 .checkbox-round-sleep,
 .checkbox-round-shutdown{
-width: 1.6em;
-height: 1.6em;
+width: 1.3em;
+height: 1.3em;
 border-radius: 50%;
 vertical-align: middle;
 appearance: none;
--webkit-appearance: none;
 outline: none;
 cursor: pointer;
 }
@@ -168,19 +264,16 @@ background-color: #C70039;
 /* ----------- ---------- ----------- */
 
 .big-screen-class {
-	color: #C70039;
 	display: none;
 }
 
 .landscape-screen-class {
-	color: #C70039;
-	display: none
+	display: none;
 	height: 100vh;
 	line-height: 100vh;
 }
 
 .shutdown-class {
-	color: #C70039;
 	margin: 15px;
 	display: none;
 }
@@ -200,7 +293,7 @@ background-color: #C70039;
 
 .navbar { 
 	overflow: hidden;
-	background-color: #333; 
+	background-color: var(--border-color-dark); 
 	display: flex; 
 	justify-content: space-around; 
 	align-items: center; 
@@ -213,7 +306,6 @@ background-color: #C70039;
 
 .navbar a { 
 	
-	color: #fff; 
 	text-align: center; 
 	padding: 8px 8px; 
 	text-decoration: none; 
@@ -222,12 +314,12 @@ background-color: #C70039;
 } 
 
 .navbar a:hover { 
-	background-color: #C70039; 
+	background-color: var(--accent-color); 
 } 
 /* ----------- ---------- ----------- */
 .info .bulle{	
 	display:none;
-	color:#fff;
+	color: var(--text-color-dark);
 	background:rgba(51,51,51,0.75);
 	padding:20px;
 	border-radius:4px;
@@ -262,7 +354,7 @@ background: #333;
 background: rgba(0,0,0,.8);
 border-radius: 5px;
 bottom: 26px;
-color: #fff;
+color: var(--text-color-dark);
 content: attr(title);
 right: 20%;
 padding: 5px 15px;
@@ -272,7 +364,7 @@ width: 220px;
 }
 .tooltip:hover:before{
 border: solid;
-border-color: #333 transparent;
+border-color: var(--border-color-dark) transparent;
 border-width: 6px 6px 0 6px;
 bottom: 20px;
 content: "";
@@ -282,6 +374,68 @@ z-index: 99;
 }
 
 /* ----------- ---------- ----------- */
+
+/* The switch - the box around the slider */
+.switch {
+  display: block;
+  --width-of-switch: 2.5em;
+  --height-of-switch: 1.3em;
+  /* size of sliding icon -- sun and moon */
+  --size-of-icon: 1em;
+  /* it is like a inline-padding of switch */
+  --slider-offset: 0.3em;
+  position: relative;
+  width: var(--width-of-switch);
+  height: var(--height-of-switch);
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #f4f4f5;
+  transition: .4s;
+  border-radius: 30px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: var(--size-of-icon,1.4em);
+  width: var(--size-of-icon,1.4em);
+  border-radius: 20px;
+  left: var(--slider-offset,0.3em);
+  top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(40deg,#ff0080,#ff8c00 70%);
+  ;
+ transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #303136;
+}
+
+input:checked + .slider:before {
+  left: calc(100% - (var(--size-of-icon,1.4em) + var(--slider-offset,0.3em)));
+  background: #303136;
+  /* change the value of second inset in box-shadow to change the angle and direction of the moon  */
+  box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
+}
+
+/* ----------- ---------- ----------- */
+
 
 @media screen and (max-width: 800px){
 	.param-submit{width: 98%;}
