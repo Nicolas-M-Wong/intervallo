@@ -54,16 +54,17 @@ def photo_capture(nb_photo_loc,tmp_pose_loc,tmp_enregistrement_loc):
     #os.popen(command)
     return
 
-########################################## Reading HTML page###################
 
-# script = io.open("home-4.html", mode='r',encoding=('utf-8')).read()
+########################################## Reading HTML page####################
 
-########################################## Web server #########################
+script = io.open("home-5.html", mode='r',encoding=('utf-8')).read()
+
+########################################## Web server ##########################
 
 
 def shutdown_raspi ():
-    # os.popen("sleep 15")
-    # os.popen("sudo shutdown -h -now")
+    os.popen("sleep 15")
+    os.popen("sudo shutdown -h -now")
     return
 
 def JSON_data (msg):
@@ -158,7 +159,7 @@ def parsing_get_msg(data):
 # Accept and handle incoming connections one at a time
 while True:
     # for troubleshooting purposes#############################################
-    script = io.open("home-6.html", mode='r',encoding=('utf-8')).read()
+    # script = io.open("home-6.html", mode='r',encoding=('utf-8')).read()
     ###########################################################################
     client_socket, client_address = server_socket.accept()
     print(f'Accepted connection from {client_address}')
