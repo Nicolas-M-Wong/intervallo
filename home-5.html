@@ -2,18 +2,18 @@
 <html>
 <head>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="style-home-intervallo.css">
+<link rel="stylesheet" href="style-home-intervallo-2.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0", charset="UTF-8">
 <title>Intervallomètre</title>
 
 </head>
 
-<body>
+<body data-mode="dark">
 
 <div id="phone-screen" class="phone-screen-class">
 
 
-<div class="container" id="main">   
+<div class="container" id="main" data-mode="dark">   
               <!-- 
               <a href="stop">Arrêter serv</a>
               <a href="shutdown">Arrêter raspi</a> -->
@@ -25,6 +25,12 @@
         			<h3 class="Title-3">Paramètres</h3>
         		</div>
         		<div class="flex_column">
+				
+					<label class="switch">
+						<input type="checkbox" id="toggle-mode" checked>
+						<span class="slider" id="toggle-mode"></span>
+					</label>
+					
 					<input type="checkbox" class="checkbox-round-sleep" value="sleep" onchange="serverSleep()" checked>
 					<input type="checkbox" class="checkbox-round-shutdown" value="shutdown" onchange="shutDown()" checked>
         		</div>
@@ -38,19 +44,19 @@
 						<label for="nb_photo">Nombre de photo</label>
 						<span class="tooltip" title="Nombre de photo qui seront prise par l'appareil">&#x24D8</span>
             		</div>
-					<input type="number" name="nb_photo" id ="nb_photo" required />
+					<input type="number" name="nb_photo" id ="nb_photo" data-mode="dark" required />
 					
 					<div class="label-info">
 						<label for="tmp_pose">Temps d'expo</label>
 						<span class="tooltip" title="Temps d'exposition pour une photo">&#x24D8</span>
             		</div>
-            		<input type="number" step="0.01" name="tmp_pose" id ="tmp_pose" required />
+            		<input type="number" step="0.01" name="tmp_pose" id ="tmp_pose" data-mode="dark" required />
 					
 					<div class="label-info">
 						<label for="enregistrement">Intervalle</label>
 						<span class="tooltip" title="Intervalle de temps entre chaque photo">&#x24D8</span>
             		</div>
-            		<input type="number" step="0.01" name="tmp_enregistrement" id ="enregistrement" required />
+            		<input type="number" step="0.01" name="tmp_enregistrement" id ="enregistrement" data-mode="dark"required />
      
             		<input type="submit" id="form_submit" value="Ok"/>
                 </div>
@@ -67,7 +73,7 @@
             </form>
         </div>
     
-        <dialog id="dialogBox">
+        <dialog id="dialogBox" data-mode="dark">
             <h3>Temps restant :‎</h3>
             <h3 id="Compteur"></h3>
             <footer>
@@ -78,15 +84,15 @@
             </footer>
         </dialog>
 		<div class="navbar-container">
-			<nav class="navbar">
-				<a name="photo-distance" id="photo-distance" onclick="remoteTrigger()"><img src="camera.ico" width="32" height="32" alt="Déclencheur"></a>
-				<a name="intervallo-home" id="intervallo-home"><img width="32" height="32" src="intervallo.ico"></a>
-				<a name="photo-distance" id="photo-distance" onclick="remoteTrigger()"><img src="camera.ico" width="32" height="32" alt="Déclencheur"></a>
+			<nav class="navbar" id="navbar-id" data-mode="dark">
+				<a name="photo-distance" id="photo-distance" onclick="remoteTrigger()"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
+				<a name="intervallo-home" id="intervallo-home"><img width="32" height="32" src="ico-intervallo.ico"></a>
+				<a name="photo-distance" id="photo-distance" onclick="remoteTrigger()"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
 			</nav>
 		</div>
     </div>
     
-	 <div id="shutdown" class= "shutdown-class">
+	 <div id="shutdown" class= "shutdown-class" data-mode="dark">
 		<article class="title">
 			<h1 style="font-size:10vw">We&rsquo;ll be back soon!</h1>
 			<div class="title2">
@@ -99,7 +105,7 @@
 </div>
 
 
-<div id="big-screen" class="big-screen-class">
+<div id="big-screen" class="big-screen-class" data-mode="dark">
     
     <article>
         <h1 style="font-size:10vw">Please use a phone</h1>
@@ -110,7 +116,7 @@
 
 </div>
 
-<div id="landscape-screen" class="landscape-screen-class">
+<div id="landscape-screen" class="landscape-screen-class" data-mode="dark">
     
     <articles>
         <h1 style="text-align: center; font-size:3vw">Please use portrait mode</h1>
@@ -118,11 +124,12 @@
 
 </div>
 
+</div>
+
 <!-- ------------------------------------------------------------------------------- -->
 
-<script src="script-home-intervallo.js">
+<script src="script-home-intervallo-2.js">
 
 </script>
-
 </body>
 </html>
