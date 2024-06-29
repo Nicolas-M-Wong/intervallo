@@ -1,4 +1,3 @@
-
 *:root {
 	font-family: arial, sans-serif;
 	
@@ -10,7 +9,6 @@
     --border-color-dark: #333;
 	
 	/* ----------- Light mode color palette ----------- */
-	
 	--bg-color-light: #fff;
     --text-color-Light: #333;
     --secondary-text-color-light: #666;
@@ -18,7 +16,7 @@
     --border-color-light: #dfdfdf;
 	
 	/* ----------- Color Accent ----------- */
-	--accent-color: #C70039;
+	--accent-color: #C70039;   /* red accent*/
 }
 
 body{ 
@@ -99,8 +97,9 @@ body[data-mode="light"],
 	transition: background-color 0.3s, color 0.3s;
 }
 
-
 /* ----------- ---------- ----------- */
+/* Dialog box */
+
 #dialogBox {
 	border-radius: 8px;
 	border: none;
@@ -122,12 +121,13 @@ dialog::backdrop {
 }
 
 /* ----------- ---------- ----------- */
+/* Main containers and button */
 
 form { 
 	display: table; 
 	width: 100%;
 	padding: 10px;
-	margin: 0 auto; /* Center the elements horizontally */
+	margin: 0 auto;
 	margin-bottom: 20px;
 	font-size: 16px;
 	border: none;
@@ -142,14 +142,15 @@ form {
 	color: var(--text-color-dark);
 	font-weight: 600;
 }
+
 label { 
 	display: table-cell; 
 }
 
-/* ----------- ---------- ----------- */	
 .container{
-	margin: 15px 35px;
+	margin: 15px 25px;
 }
+
 .content{
 margin: 0 auto;
 }
@@ -220,7 +221,7 @@ margin: 0 auto;
 	display: block;
 	width: 45%;
 	padding: 10px;
-	margin: 0 auto; /* Center the elements horizontally */
+	margin: 0 auto;
 	margin-bottom: 10px;
 	font-size: 16px;
 	border: none;
@@ -235,33 +236,36 @@ margin: 0 auto;
 }
 
 /* ----------- ---------- ----------- */
+/* Switch off button */
 
 .checkbox-round-sleep,
 .checkbox-round-shutdown{
-width: 1.3em;
-height: 1.3em;
-border-radius: 50%;
-vertical-align: middle;
-appearance: none;
-outline: none;
-cursor: pointer;
+	width: 1.3em;
+	height: 1.3em;
+	border-radius: 50%;
+	vertical-align: middle;
+	appearance: none;
+	outline: none;
+	cursor: pointer;
 }
 
 .checkbox-round-shutdown {
-border: 2px solid #C70039;
+	border: 2px solid #C70039;
 }
 .checkbox-round-sleep {
-border: 2px solid #FFED00;
+	border: 2px solid #FFED00;
 }
 
 .checkbox-round-sleep:checked {
-background-color: #FFED00;
+	background-color: #FFED00;
 }
 .checkbox-round-shutdown:checked {
-background-color: #C70039;
+	background-color: #C70039;
 }
 
 /* ----------- ---------- ----------- */
+/* Screen depending on type of device &
+orientation */
 
 .big-screen-class {
 	display: none;
@@ -282,7 +286,7 @@ background-color: #C70039;
 }
 
 /* ----------- ---------- ----------- */
-
+/* Navigation bar */
 
 .navbar-container { 
 	display: flex; 
@@ -316,7 +320,10 @@ background-color: #C70039;
 .navbar a:hover { 
 	background-color: var(--accent-color); 
 } 
+
 /* ----------- ---------- ----------- */
+/* More info bubles */
+
 .info .bulle{	
 	display:none;
 	color: var(--text-color-dark);
@@ -346,96 +353,96 @@ background-color: #C70039;
 
 
 .tooltip{
-display: inline;
-position: relative;
+	display: inline;
+	position: relative;
 }
 .tooltip:hover:after{
-background: #333;
-background: rgba(0,0,0,.8);
-border-radius: 5px;
-bottom: 26px;
-color: var(--text-color-dark);
-content: attr(title);
-right: 20%;
-padding: 5px 15px;
-position: absolute;
-z-index: 98;
-width: 220px;
+	background: #333;
+	background: rgba(0,0,0,.8);
+	border-radius: 5px;
+	bottom: 26px;
+	color: var(--text-color-dark);
+	content: attr(title);
+	right: 20%;
+	padding: 5px 15px;
+	position: absolute;
+	z-index: 98;
+	width: 220px;
 }
 .tooltip:hover:before{
-border: solid;
-border-color: var(--border-color-dark) transparent;
-border-width: 6px 6px 0 6px;
-bottom: 20px;
-content: "";
-right: 50%;
-position: absolute;
-z-index: 99;
+	border: solid;
+	border-color: var(--border-color-dark) transparent;
+	border-width: 6px 6px 0 6px;
+	bottom: 20px;
+	content: "";
+	right: 50%;
+	position: absolute;
+	z-index: 99;
 }
 
 /* ----------- ---------- ----------- */
+/* light/dark mode switch */
 
 /* The switch - the box around the slider */
 .switch {
-  display: block;
-  --width-of-switch: 2.5em;
-  --height-of-switch: 1.3em;
-  /* size of sliding icon -- sun and moon */
-  --size-of-icon: 1em;
-  /* it is like a inline-padding of switch */
-  --slider-offset: 0.3em;
-  position: relative;
-  width: var(--width-of-switch);
-  height: var(--height-of-switch);
+	display: block;
+	--width-of-switch: 2.5em;
+	--height-of-switch: 1.3em;
+	/* size of sliding icon -- sun and moon */
+	--size-of-icon: 1em;
+	/* it is like a inline-padding of switch */
+	--slider-offset: 0.3em;
+	position: relative;
+	width: var(--width-of-switch);
+	height: var(--height-of-switch);
 }
 
 /* Hide default HTML checkbox */
 .switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+	opacity: 0;
+	width: 0;
+	height: 0;
 }
 
 /* The slider */
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #f4f4f5;
-  transition: .4s;
-  border-radius: 30px;
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #f4f4f5;
+	transition: .4s;
+	border-radius: 30px;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: var(--size-of-icon,1.4em);
-  width: var(--size-of-icon,1.4em);
-  border-radius: 20px;
-  left: var(--slider-offset,0.3em);
-  top: 50%;
-  transform: translateY(-50%);
-  background: linear-gradient(40deg,#ff0080,#ff8c00 70%);
-  ;
- transition: .4s;
+	position: absolute;
+	content: "";
+	height: var(--size-of-icon,1.4em);
+	width: var(--size-of-icon,1.4em);
+	border-radius: 20px;
+	left: var(--slider-offset,0.3em);
+	top: 50%;
+	transform: translateY(-50%);
+	background: linear-gradient(40deg,#ff0080,#ff8c00 70%);
+	;
+	transition: .4s;
 }
 
 input:checked + .slider {
-  background-color: #303136;
+	background-color: #303136;
 }
 
 input:checked + .slider:before {
-  left: calc(100% - (var(--size-of-icon,1.4em) + var(--slider-offset,0.3em)));
-  background: #303136;
-  /* change the value of second inset in box-shadow to change the angle and direction of the moon  */
-  box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
+	left: calc(100% - (var(--size-of-icon,1.4em) + var(--slider-offset,0.3em)));
+	background: #303136;
+	box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
 }
 
 /* ----------- ---------- ----------- */
-
+/* media querry screen width */
 
 @media screen and (max-width: 800px){
 	.param-submit{width: 98%;}
@@ -443,8 +450,6 @@ input:checked + .slider:before {
 	.confirmation-form {width: 98%;}
 	.back_button {width: 98%;}
 	.form-end {width: 98%;}
-	.gps-locate-submit {width: 96%;}
-	
 	.landscape-screen-class {display: none;}
 }
 
