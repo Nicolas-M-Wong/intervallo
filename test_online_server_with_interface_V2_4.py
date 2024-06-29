@@ -1,14 +1,12 @@
-# micro dedicated HTTP serveur...
-
 import socket
 import time
 import io
 import os
 
 
-directory = os.path.dirname(os.path.abspath(__file__))
-########################################## Capturing photo ####################
+directory = os.path.dirname(os.path.abspath(__file__)) #absolute path to file
 
+############################### HTTP Header attribute dictionnary #############
 # Constructing dictionnary for most of the possible header sent by the serv to the client
 http_type_header_dict = {}
 liste_header = [
@@ -233,7 +231,7 @@ while True:
         
         elif body == '"sleep"':
             break
-    
+
     # Close the client socket
     client_socket.close()
         
