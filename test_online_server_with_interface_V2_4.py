@@ -1,8 +1,13 @@
 # micro dedicated HTTP serveur...
 
 import socket
-from time import sleep
+import time
 import io
+import os
+
+
+directory = os.path.dirname(os.path.abspath(__file__))
+########################################## Capturing photo ####################
 
 # Constructing dictionnary for most of the possible header sent by the serv to the client
 http_type_header_dict = {}
@@ -31,13 +36,10 @@ http_type_header_dict.update({"jpg":"image/jpeg"}) #adding jpg files as jpeg
 http_type_header_dict.update({"ico":"image/x-icon"}) #adding.ico files
 http_type_header_dict.update({"js":"text/javascript"}) #adding .js files
 
-########################################## Capturing photo ####################
 
-# dir = os.getcwd()
+########################################## Capturing photo ####################
 # command = "sudo sh "+dir+"/compiler.sh"
 # result = os.popen(command)
-sleep(2)
-# command = "cd "+dir
 
 def sec_2_min_h (tmp_prise_loc):
     if 60 < tmp_prise_loc <3600:
@@ -50,71 +52,15 @@ def sec_2_min_h (tmp_prise_loc):
 
 def photo_capture(nb_photo_loc,tmp_pose_loc,tmp_enregistrement_loc):
     #Capture d'une unique photo
-    #command = "sudo ./interval_new "+str(tmp_pose_loc)+" "+str(nb_photo_loc)+" "+str(tmp_enregistrement_loc)
-    #os.popen(command)
+    addr_command = directory+"/interval_new "
+    command = "sudo "+addr_command+str(tmp_pose_loc)+" "+str(nb_photo_loc)+" "+str(tmp_enregistrement_loc)
+    os.popen(command)
+    print(command)
     return
-
-
-########################################## Reading HTML page####################
-
-script = io.open("home-5.html", mode='r',encoding=('utf-8')).read()
-
-########################################## Web server ##########################
-
-
-def shutdown_raspi ():
-    os.popen("sleep 15")
-    os.popen("sudo shutdown -h -now")
-    return
-
-def JSON_data (msg):
-    msg =msg.strip('{}')
-    msg = msg.split(',')
-    dict_parameters = {}
-    
-    for i in range(0,len(msg)):
-        pairs_key_value = msg[i].split(':')
-        try:
-            dict_parameters [pairs_key_value[0].strip('"')] = float(pairs_key_value[1].strip('"'))
-        except:
-            dict_parameters [pairs_key_value[0].strip('"')] = (pairs_key_value[1].strip('"'))
-    return dict_parameters
-
-def get_ip():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.settimeout(0)
-    try:
-        s.connect(('8.8.8.8',1))
-        IP = s.getsockname()[0]
-    except:
-        IP = '127.0.0.1'
-    
-    s.close()
-    return IP
-
-TCP_IP = get_ip()      # Local host
-TCP_IP = '127.0.0.1'
-BUFFER_SIZE = 1024
-TCP_PORT_list = [55000,54000,53000,52000]
-
-for i in TCP_PORT_list:
-    try:
-        TCP_PORT = i
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print("binding to ", TCP_IP, ":", TCP_PORT,"...")
-        s.bind((TCP_IP, TCP_PORT))
-        s.listen(2)
-        break
-    
-    except:
-        pass
-
-server_socket = s
-print(f'Serving on port {TCP_PORT}...')
 
 ###############################################################################
 
-def parsing_get_msg(data):
+def parsing_get_msg(data,active_dir):
     decrypted_data = ''
     # data should be the first line of the http msg
     # data should look like that: ['GET', '/intervallo.ico', 'HTTP/1.1']
@@ -133,14 +79,14 @@ def parsing_get_msg(data):
         # if the extension exists in the dictionnary
         if type_header.split('/')[0] == "text":
             # the extension is a text item
-            decrypted_data = (io.open(initial_data[1][1:], mode='r',encoding=('utf-8')).read())
+            decrypted_data = (io.open(active_dir+'/'+initial_data[1][1:], mode='r',encoding=('utf-8')).read())
             #read the file
             http_msg = 'HTTP/1.1 200 OK\r\nContent-Type: '+type_header +'\r\ncharset=UTF-8\r\n\r\n'
             decrypted_data = (http_msg + decrypted_data).encode('utf-8')
             
         if type_header.split('/')[0] == "image":
             # image item
-            image = io.open(initial_data[1][1:], mode='rb').read()
+            image = io.open(active_dir+'/'+initial_data[1][1:], mode='rb').read()
             decrypted_data = ('HTTP/1.1 200 OK\r\nContent-Type:'+ type_header +'\r\ncharset=UTF-8\r\n\r\n').encode('utf-8')+image
             
     else:
@@ -154,12 +100,77 @@ def parsing_get_msg(data):
         decrypted_data = response.encode('utf-8') 
     return(decrypted_data)
 
-###############################################################################
+########################################## Reading HTML page###################
 
+script = io.open(directory+"/home-5.html", mode='r',encoding=('utf-8')).read()
+
+########################################## Web server #########################
+
+
+def shutdown_raspi ():
+    os.popen("sleep 15")
+    os.popen("sudo shutdown -h now")
+    return
+
+def JSON_data (msg):
+    msg =msg.strip('{}')
+    msg = msg.split(',')
+    dict_parameters = {}
+    
+    for i in range(0,len(msg)):
+        pairs_key_value = msg[i].split(':')
+        
+        dict_parameters [pairs_key_value[0].strip('"')] = float(pairs_key_value[1].strip('"'))
+
+    return dict_parameters
+
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.settimeout(0)
+    try:
+        s.connect(('8.8.8.8',1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    
+    s.close()
+    return IP
+
+
+def header ():
+    script =  "HTTP/1.1 200 OK\r\n"
+    script += "Date: "+time.asctime(time.gmtime())+" GMT\r\n"
+    script += "Expires: -1\r\n"
+    script += "Cache-Control: private, must-revalidaten max-age=0\r\n"
+    script += "Content-Type: text/html;"
+    script += "charset=UTF-8\r\n"
+    script += "\r\n"
+    print(time.asctime(time.gmtime()))
+    return script
+
+TCP_IP = get_ip()      # Local host
+#TCP_IP = '127.0.0.1'
+
+
+BUFFER_SIZE = 1024
+TCP_PORT_list = [55000,54000,53000,52000]
+
+for i in TCP_PORT_list:
+    try:
+        TCP_PORT = i
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print("binding to ", TCP_IP, ":", TCP_PORT,"...")
+        s.bind((TCP_IP, TCP_PORT))
+        s.listen(2)
+        break
+    
+    except:
+        pass
+
+server_socket = s
+print(f'Serving on port {TCP_PORT}...')
 # Accept and handle incoming connections one at a time
 while True:
-    # for troubleshooting purposes#############################################
-    # script = io.open("home-6.html", mode='r',encoding=('utf-8')).read()
     ###########################################################################
     client_socket, client_address = server_socket.accept()
     print(f'Accepted connection from {client_address}')
@@ -175,7 +186,7 @@ while True:
     if method == 'GET':
         if str(first_line[1]).strip('/') != '':
             try:
-                response = parsing_get_msg(first_line)
+                response = parsing_get_msg(first_line,directory)
                 client_socket.send(response)
             except:
                 response = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'
@@ -200,9 +211,9 @@ while True:
                 "\r\n"
                 f"{response_body}"
             )
-        parameters = {}
-
+        client_socket.send(response.encode('utf-8'))
         
+        parameters = {}
         try:
             parameters = JSON_data(body)
             
@@ -213,7 +224,7 @@ while True:
             photo_capture(parameters.get('nb_photo',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
             tmp_prise = parameters.get('nb_photo',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photo',0)-1)
             print(tmp_prise)
-            sleep(tmp_prise)
+            time.sleep(tmp_prise)
         
         elif body == '"shutdown"':
             s.close()
@@ -223,8 +234,8 @@ while True:
         elif body == '"sleep"':
             break
 
+      
         # Send HTTP response
-        client_socket.send(response.encode('utf-8'))
     
     # Close the client socket
     client_socket.close()
