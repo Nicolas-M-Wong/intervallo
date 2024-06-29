@@ -233,9 +233,6 @@ while True:
         
         elif body == '"sleep"':
             break
-
-      
-        # Send HTTP response
     
     # Close the client socket
     client_socket.close()
