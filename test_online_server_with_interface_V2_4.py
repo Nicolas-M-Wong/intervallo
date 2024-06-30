@@ -52,8 +52,8 @@ def photo_capture(nb_photo_loc,tmp_pose_loc,tmp_enregistrement_loc):
     #Capture d'une unique photo
     addr_command = directory+"/./interval_new "
     command = "sudo "+addr_command+str(tmp_pose_loc)+" "+str(nb_photo_loc)+" "+str(tmp_enregistrement_loc)
-    os.popen(command)
     print(command)
+    os.popen(command).read()
     return
 
 ###############################################################################
@@ -147,7 +147,7 @@ def header ():
     return script
 
 TCP_IP = get_ip()      # Local host
-#TCP_IP = '127.0.0.1'
+# TCP_IP = '127.0.0.1'
 
 
 BUFFER_SIZE = 1024
@@ -165,10 +165,12 @@ for i in TCP_PORT_list:
     except:
         pass
 
+expct_end_date = 0
 server_socket = s
 print(f'Serving on port {TCP_PORT}...')
 # Accept and handle incoming connections one at a time
 while True:
+
     ###########################################################################
     client_socket, client_address = server_socket.accept()
     print(f'Accepted connection from {client_address}')
@@ -209,21 +211,29 @@ while True:
                 "\r\n"
                 f"{response_body}"
             )
-        client_socket.send(response.encode('utf-8'))
         
         parameters = {}
         try:
             parameters = JSON_data(body)
-            
         except:
             pass
 
         if "nb_photo" in parameters.keys():
-            photo_capture(parameters.get('nb_photo',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
             tmp_prise = parameters.get('nb_photo',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photo',0)-1)
             print(tmp_prise)
-            time.sleep(tmp_prise)
-        
+            new_cmd_date = parameters.get('date',0)
+            
+            #Avoid capturing pictures for command sent during the shoot
+            if new_cmd_date > expct_end_date:
+                
+                new_cmd_date +=1000*tmp_prise
+                expct_end_date = new_cmd_date
+                photo_capture(parameters.get('nb_photo',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
+            
+            else:
+                print("shot command during an existing shoot")
+
+            
         elif body == '"shutdown"':
             s.close()
             shutdown_raspi ()
@@ -231,7 +241,7 @@ while True:
         
         elif body == '"sleep"':
             break
-
+        client_socket.send(response.encode('utf-8'))
     # Close the client socket
     client_socket.close()
         
