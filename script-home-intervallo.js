@@ -177,3 +177,20 @@ function handleButtonClickBack(event) {
 	event.preventDefault();
 	closeDialog();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('toggle-mode');
+    const body = document.body;
+    const elementsToToggle = [body, document.getElementById('dialogBox'),
+	document.getElementById('main'),document.getElementById('navbar-id'),
+	document.getElementById('nb_photo'),document.getElementById('tmp_pose'),
+	document.getElementById('enregistrement'),document.getElementById('shutdown'),
+	document.getElementById('big-screen'),document.getElementById('landscape-screen')];
+
+    toggleBtn.addEventListener('click', () => {
+        const newMode = body.dataset.mode === 'dark' ? 'light' : 'dark';
+        elementsToToggle.forEach(element => {
+            element.dataset.mode = newMode;
+        });
+    });
+});
