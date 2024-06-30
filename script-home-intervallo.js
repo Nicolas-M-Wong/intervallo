@@ -111,6 +111,8 @@ function handleButtonClickTest() {
         const data = {};
         formData.forEach((value, key) => (data[key] = value));
 		data['nb_photo']=1;
+		var now = new Date().getTime();
+		data["date"] = now;
         sendPostRequest(data);
 				
 		const exposureTime_test = parseFloat(document.getElementById("tmp_pose").value);
@@ -125,6 +127,8 @@ function handleButtonClickTest() {
 
 function remoteTrigger(){
 const triggerMessage = {"nb_photo":"1", "tmp_pose":"0.1", "tmp_enregistrement":"0"};
+var now = new Date().getTime();
+triggerMessage["date"] = now;
 console.log(triggerMessage);
 sendPostRequest(triggerMessage)
 }
