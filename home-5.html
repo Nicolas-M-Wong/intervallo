@@ -2,7 +2,9 @@
 <html>
 <head>
 <link rel="stylesheet" href="style-home-intervallo.css">
+<link rel="stylesheet" href="fontawesome-free-6.5.2-web/css/all.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0", charset="UTF-8">
+
 <title>Intervallomètre</title>
 
 </head>
@@ -11,11 +13,7 @@
 
 <div id="phone-screen" class="phone-screen-class">
 
-
 <div class="container" id="main" data-mode="dark">   
-              <!-- 
-              <a href="stop">Arrêter serv</a>
-              <a href="shutdown">Arrêter raspi</a> -->
               
 	<div class="IntervalForm" id="interval-Form">
 	
@@ -25,13 +23,10 @@
         		</div>
         		<div class="flex_column">
 				
-					<label class="switch">
-						<input type="checkbox" id="toggle-mode" checked>
-						<span class="slider" id="toggle-mode"></span>
-					</label>
-					
-					<input type="checkbox" class="checkbox-round-sleep" value="sleep" onchange="serverSleep()" checked>
-					<input type="checkbox" class="checkbox-round-shutdown" value="shutdown" onchange="shutDown()" checked>
+
+					<a id="toggle-mode"><i class="fas fa-adjust" style="margin: 4px; font-size:18px;"></i></a>
+					<a id="round-sleep" onclick="serverSleep()"><i class="fa fa-circle" style="color: yellow; margin: 4px; font-size:18px;"></i></a>
+					<a id="round-shutdown" onclick="shutDown()"><i class="fa fa-circle" style="color: red; margin: 4px; font-size:18px;"></i></a>
         		</div>
     		</div>
     		
@@ -85,7 +80,7 @@
 		<div class="navbar-container">
 			<nav class="navbar" id="navbar-id" data-mode="dark">
 				<a name="photo-distance" id="photo-distance" onclick="remoteTrigger()"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
-				<a name="intervallo-home" id="intervallo-home"><img width="32" height="32" src="ico-intervallo.ico"></a>
+				<a name="intervallo-home" id="intervallo-home"><img width="32" height="32" src="ico-intervallo.ico" ></a>
 				<a name="photo-distance" id="photo-distance" onclick="remoteTrigger()"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
 			</nav>
 		</div>
@@ -98,6 +93,9 @@
 				<p style="font-size:4vw">L'intervallomètre va s'éteindre dans 15 secondes</p>
 			</div>
 		</article>
+		<div style="position: absolute; top: 50%; left: 50%;transform: translate(-50%, -50%);">
+			<i class="fa fa-spinner fa-spin" style="font-size:64px;" data-mode="dark"></i>
+		</div>
 	</div>
 		
 	<!-- -------------------------------------------------------- -->
