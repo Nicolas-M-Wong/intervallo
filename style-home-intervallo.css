@@ -3,17 +3,17 @@
 	
 	/* ----------- Dark mode color palette ----------- */
 	--bg-color-dark: #111;
-	--text-color-dark: #E0E0E0;
-	--secondary-text-color-dark: #B0B0B0;
-	--highlight-bg-color-dark: #1E1E1E;
-	--border-color-dark: #333;
+    --text-color-dark: #E0E0E0;
+    --secondary-text-color-dark: #B0B0B0;
+    --highlight-bg-color-dark: #1E1E1E;
+    --border-color-dark: #333;
 	
 	/* ----------- Light mode color palette ----------- */
 	--bg-color-light: #fff;
-	--text-color-Light: #333;
-	--secondary-text-color-light: #666;
-	--highlight-bg-color-light: #CCCCCC;
-	--border-color-light: #dfdfdf;
+    --text-color-Light: #333;
+    --secondary-text-color-light: #666;
+    --highlight-bg-color-light: #CCCCCC;
+    --border-color-light: #dfdfdf;
 	
 	/* ----------- Color Accent ----------- */
 	--accent-color: #C70039;   /* red accent*/
@@ -35,7 +35,7 @@ body[data-mode="dark"],
 #shutdown[data-mode="dark"],
 #big-screen[data-mode="dark"],
 #landscape-screen[data-mode="dark"]{
-	background-color: var(--bg-color-dark);
+    background-color: var(--bg-color-dark);
 	transition: background-color 0.3s, color 0.3s;
 }
 
@@ -52,12 +52,12 @@ body[data-mode="dark"],
 #shutdown[data-mode="dark"],
 #big-screen[data-mode="dark"],
 #landscape-screen[data-mode="dark"] {
-    	color: var(--accent-color);
+    color: var(--accent-color);
 }
 
 #main[data-mode="dark"],
 #navbar-id[data-mode="dark"] {
-	background-color: var(--border-color-dark);
+    background-color: var(--border-color-dark);
 	transition: background-color 0.3s, color 0.3s;
 }
 
@@ -71,7 +71,7 @@ body[data-mode="light"],
 #shutdown[data-mode="light"],
 #big-screen[data-mode="light"],
 #landscape-screen[data-mode="light"]{
-   	background-color: var(--bg-color-light);
+    background-color: var(--bg-color-light);
 	transition: background-color 0.3s, color 0.3s;
 }
 
@@ -88,12 +88,12 @@ body[data-mode="light"],
 #shutdown[data-mode="light"],
 #big-screen[data-mode="light"],
 #landscape-screen[data-mode="light"] {
-   	color: var(--accent-color);
+    color: var(--accent-color);
 }
 
 #main[data-mode="light"],
 #navbar-id[data-mode="light"] {
-   	background-color: var(--border-color-light);
+    background-color: var(--border-color-light);
 	transition: background-color 0.3s, color 0.3s;
 }
 
@@ -153,7 +153,7 @@ label {
 }
 
 .content{
-	margin: 0 auto;
+margin: 0 auto;
 }
 
 .container,
@@ -236,33 +236,6 @@ label {
 	justify-content: space-between;
 }
 
-/* ----------- ---------- ----------- */
-/* Switch off button */
-
-.checkbox-round-sleep,
-.checkbox-round-shutdown{
-	width: 1.3em;
-	height: 1.3em;
-	border-radius: 50%;
-	vertical-align: middle;
-	appearance: none;
-	outline: none;
-	cursor: pointer;
-}
-
-.checkbox-round-shutdown {
-	border: 2px solid #C70039;
-}
-.checkbox-round-sleep {
-	border: 2px solid #FFED00;
-}
-
-.checkbox-round-sleep:checked {
-	background-color: #FFED00;
-}
-.checkbox-round-shutdown:checked {
-	background-color: #C70039;
-}
 
 /* ----------- ---------- ----------- */
 /* Screen depending on type of device &
@@ -293,7 +266,7 @@ orientation */
 	display: flex; 
 	flex-direction: column; 
 	align-items: center;
-	
+	margin: 0px 25px 0px 25px;
 } 
 
 .navbar { 
@@ -304,9 +277,9 @@ orientation */
 	align-items: center; 
 	position: fixed; 
 	bottom: 15px; 
-	width: 90%;
+	width: 95%;
 	border-radius: 25px;
-	
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 } 
 
 .navbar a { 
@@ -379,67 +352,6 @@ orientation */
 	right: 50%;
 	position: absolute;
 	z-index: 99;
-}
-
-/* ----------- ---------- ----------- */
-/* light/dark mode switch */
-
-/* The switch - the box around the slider */
-.switch {
-	display: block;
-	--width-of-switch: 2.5em;
-	--height-of-switch: 1.3em;
-	/* size of sliding icon -- sun and moon */
-	--size-of-icon: 1em;
-	/* it is like a inline-padding of switch */
-	--slider-offset: 0.3em;
-	position: relative;
-	width: var(--width-of-switch);
-	height: var(--height-of-switch);
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-	opacity: 0;
-	width: 0;
-	height: 0;
-}
-
-/* The slider */
-.slider {
-	position: absolute;
-	cursor: pointer;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: #f4f4f5;
-	transition: .4s;
-	border-radius: 30px;
-}
-
-.slider:before {
-	position: absolute;
-	content: "";
-	height: var(--size-of-icon,1.4em);
-	width: var(--size-of-icon,1.4em);
-	border-radius: 20px;
-	left: var(--slider-offset,0.3em);
-	top: 50%;
-	transform: translateY(-50%);
-	background: linear-gradient(40deg,#ff0080,#ff8c00 70%);
-	;
-	transition: .4s;
-}
-
-input:checked + .slider {
-	background-color: #303136;
-}
-
-input:checked + .slider:before {
-	left: calc(100% - (var(--size-of-icon,1.4em) + var(--slider-offset,0.3em)));
-	background: #303136;
-	box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
 }
 
 /* ----------- ---------- ----------- */
