@@ -17,6 +17,9 @@
 	
 	/* ----------- Color Accent ----------- */
 	--accent-color: #C70039;   /* red accent*/
+	
+	--opacity-transparent: 0;
+	--opacity-solid: 1;
 }
 
 body{ 
@@ -95,6 +98,16 @@ body[data-mode="light"],
 #navbar-id[data-mode="light"] {
     background-color: var(--border-color-light);
 	transition: background-color 0.3s, color 0.3s;
+}
+
+#toggle-mode2[data-mode="dark"]{
+    color: var(--border-color-light);
+    opacity: 0;
+}
+
+#toggle-mode2[data-mode="light"]{
+    color: var(--border-color-dark);
+    opacity: 1;
 }
 
 /* ----------- ---------- ----------- */
@@ -294,6 +307,47 @@ orientation */
 .navbar a:hover { 
 	background-color: var(--accent-color); 
 } 
+
+/* ----------- ---------- ----------- */
+
+.checkbox-round-sleep,
+.checkbox-round-shutdown,
+.checkbox-toggle{
+width: 16px;
+height: 16px;
+border-radius: 50%;
+vertical-align: middle;
+appearance: none;
+-webkit-appearance: none;
+outline: none;
+cursor: pointer;
+}
+
+.checkbox-toggle {
+box-shadow: -5px 0px 0px var(--border-color-dark);
+
+}
+
+.checkbox-toggle:checked {
+    background-color: var(--border-color-dark);
+    box-shadow: -5px 0px 0px var(--border-color-light);
+
+}
+
+.checkbox-round-shutdown {
+border: 2px solid #C70039;
+margin-left: 9px;
+}
+.checkbox-round-sleep {
+border: 2px solid #FFED00;
+}
+
+.checkbox-round-sleep:checked {
+background-color: #FFED00;
+}
+.checkbox-round-shutdown:checked {
+background-color: #C70039;
+}
 
 /* ----------- ---------- ----------- */
 /* More info bubles */
