@@ -147,10 +147,10 @@ form {
 	border-radius: 5px;
 }
 
-#form_submit,
+#form-submit,
 #openDialogBox,
-#test_shot,
-#back_button{
+#test-shot,
+#back-button{
 	background-color: var(--accent-color);
 	color: var(--text-color-dark);
 	font-weight: 600;
@@ -225,13 +225,14 @@ margin: 0 auto;
 
 /* ----------- ---------- ----------- */
 
-.flex_column {
+.flex-column-title,
+.flex-column-confirm {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 }
 
-.flex_column button {
+.flex-column-confirm button {
 	display: block;
 	width: 45%;
 	padding: 10px;
@@ -243,7 +244,7 @@ margin: 0 auto;
 	box-sizing: border-box;
 }
 
-.flex_container {
+.flex-container-title {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -415,7 +416,7 @@ background-color: #C70039;
 	.param-submit{width: 98%;}
 	.IntervalForm {width: 98%;}
 	.confirmation-form {width: 98%;}
-	.back_button {width: 98%;}
+	.back-button {width: 98%;}
 	.form-end {width: 98%;}
 	.landscape-screen-class {display: none;}
 }

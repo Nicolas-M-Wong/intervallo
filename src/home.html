@@ -15,11 +15,11 @@
               
 	<div class="IntervalForm" id="interval-Form">
 	
-        	<div class="flex_container">
-            	<div class="flex_column">
+        	<div class="flex-container-title">
+            	<div class="flex-column-title">
         			<h3 class="Title-3">Paramètres</h3>
         		</div>
-        		<div class="flex_column">
+        		<div class="flex-column-title">
                     <input id="toggle-mode" type="checkbox" class="checkbox-toggle" checked>
 					<input type="checkbox" class="checkbox-round-sleep" value="sleep" onchange="serverSleep()" data-mode="dark" checked>
 					<input type="checkbox" class="checkbox-round-shutdown" value="shutdown" onchange="shutDown()" checked>
@@ -48,7 +48,7 @@
             		</div>
             		<input type="number" step="0.01" name="tmp_enregistrement" id ="enregistrement" data-mode="dark"required />
      
-            		<input type="submit" id="form_submit" value="Ok"/>
+            		<input type="submit" id="form-submit" value="Ok"/>
                 </div>
             </form>  
     	</div>
@@ -56,9 +56,9 @@
         <div id="confirmation" style="display: none;">
             <h3>Temps de prise de vue estimé : </h3><h3 id="estimation_tmp"></h3>
             <form action = "" method="post" class = "confirmation-form">
-                <div class="flex_column">
+                <div class="flex-column-confirm">
                     <button name="confirm" value="Confirmer" id="openDialogBox">Confirmer</button>
-                    <button name="test_shot" value="Photo_test" id="test_shot">Photo test</button>
+                    <button name="test-shot" value="Photo_test" id="test-shot">Photo test</button>
                 </div>
             </form>
         </div>
@@ -67,8 +67,8 @@
             <h3>Temps restant :‎</h3>
             <h3 id="Compteur"></h3>
             <footer>
-            <div class="back_button">
-                <button id="back_button" onclick="handleButtonClickBack(event)" type="button">
+            <div class="back-button">
+                <button id="back-button" onclick="handleButtonClickBack(event)" type="button">
                 Retour </button>
             </div>
             </footer>
