@@ -77,14 +77,14 @@ def parsing_get_msg(data,active_dir):
         # if the extension exists in the dictionnary
         if type_header.split('/')[0] == "text":
             # the extension is a text item
-            decrypted_data = (io.open(active_dir+'/'+initial_data[1][1:], mode='r',encoding=('utf-8')).read())
+            decrypted_data = (io.open(active_dir+'/src/'+initial_data[1][1:], mode='r',encoding=('utf-8')).read())
             #read the file
             http_msg = 'HTTP/1.1 200 OK\r\nContent-Type: '+type_header +'\r\ncharset=UTF-8\r\n\r\n'
             decrypted_data = (http_msg + decrypted_data).encode('utf-8')
             
         if type_header.split('/')[0] == "image":
             # image item
-            image = io.open(active_dir+'/'+initial_data[1][1:], mode='rb').read()
+            image = io.open(active_dir+'/assets/'+initial_data[1][1:], mode='rb').read()
             decrypted_data = ('HTTP/1.1 200 OK\r\nContent-Type:'+ type_header +'\r\ncharset=UTF-8\r\n\r\n').encode('utf-8')+image
             
     else:
@@ -100,13 +100,13 @@ def parsing_get_msg(data,active_dir):
 
 ########################################## Reading HTML page###################
 
-script = io.open(directory+"/home-5.html", mode='r',encoding=('utf-8')).read()
+script = io.open(directory+"/src/home.html", mode='r',encoding=('utf-8')).read()
 
 ########################################## Web server #########################
 
 
 def shutdown_raspi ():
-    os.popen("sleep 15")
+    os.popen("sleep 15").read()
     os.popen("sudo shutdown -h now")
     return
 
@@ -235,15 +235,17 @@ while True:
 
             
         elif body == '"shutdown"':
+            client_socket.close()
             s.close()
             shutdown_raspi ()
             break
         
         elif body == '"sleep"':
+            client_socket.close()
+            s.close()
             break
         client_socket.send(response.encode('utf-8'))
     # Close the client socket
     client_socket.close()
         
-s.close()
 print("fin")
