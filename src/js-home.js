@@ -63,7 +63,7 @@ function formatTime(totalSeconds) {
 // Add event listener to the form submit event
 document.getElementById("interval-Form").addEventListener("submit", handleSubmit);
 document.getElementById("openDialogBox").addEventListener("click", handleButtonClick);
-document.getElementById("test_shot").addEventListener("click", handleButtonClickTest);
+document.getElementById("test-shot").addEventListener("click", handleButtonClickTest);
 
 let formData; // Define formData in the global scope
 
