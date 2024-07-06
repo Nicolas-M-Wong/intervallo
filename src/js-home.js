@@ -169,12 +169,46 @@ function DetectDevice() {
     return false;
 }
 
+function sendGetRequest(fileName) {
+    const url = `/${fileName}`;
+
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'text/plain', // Adjust the content type if necessary
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text(); // You can change this to response.json() if the response is JSON
+    })
+    .then(data => {
+	document.getElementById('screen-container').innerHTML = data;
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
+
+function detectLandscapeOrientation() {
+    const orientation = window.matchMedia("(orientation: landscape)").matches;
+    const wideScreen= window.innerWidth > 800;
+    return orientation||wideScreen;
+}
+
+
 const phone = DetectDevice()
 
 if (phone == false) {
-	document.getElementById('landscape-screen').style.display = "none";
 	document.getElementById('phone-screen').style.display = "none";
-	document.getElementById('big-screen').style.display = "block";
+	sendGetRequest(document.getElementById('big-screen').getAttribute('href'));
+}
+
+else if (detectLandscapeOrientation()) {
+	document.getElementById('phone-screen').style.display = "none";
+	sendGetRequest(document.getElementById('landscape-screen').getAttribute('href'));
 }
 
 function handleButtonClickBack(event) {
@@ -198,3 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+
+

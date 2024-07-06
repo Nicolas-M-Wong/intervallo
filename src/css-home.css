@@ -256,11 +256,10 @@ margin: 0 auto;
 orientation */
 
 .big-screen-class {
-	display: none;
+	margin: 15px;
 }
 
 .landscape-screen-class {
-	display: none;
 	height: 100vh;
 	line-height: 100vh;
 }
@@ -418,11 +417,5 @@ background-color: #C70039;
 	.confirmation-form {width: 98%;}
 	.back-button {width: 98%;}
 	.form-end {width: 98%;}
-	.landscape-screen-class {display: none;}
 }
 
-@media (min-width: 800px){
-	.landscape-screen-class {display: block;}
-	.big-screen-class {display: none;}
-	.phone-screen-class {display: none;}
-}
