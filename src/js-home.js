@@ -1,13 +1,15 @@
 function shutDown() { 
     document.getElementById('main').style.display = "none";
-    document.getElementById('shutdown').style.display = "block";
-    sendPostRequest("shutdown")
+    document.getElementById('shutdown').style.display = "flex";
+	document.getElementById('shutdown').style.justifyContent = 'center';
+    sendPostRequest("shutdown");
 }
 
 function serverSleep() { 
     document.getElementById('main').style.display = "none";
-    document.getElementById('shutdown').style.display = "block";
-    sendPostRequest("sleep")
+    document.getElementById('shutdown').style.display = "flex";
+	document.getElementById('shutdown').style.justifyContent = 'center';
+    sendPostRequest("sleep");
 }
 
 // Dialog Box

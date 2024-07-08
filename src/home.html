@@ -23,9 +23,9 @@
         			<h3 class="Title-3">Paramètres</h3>
         		</div>
         		<div class="flex-column-title">
-                    <input id="toggle-mode" type="checkbox" class="checkbox-toggle" checked>
-					<input type="checkbox" class="checkbox-round-sleep" value="sleep" onchange="serverSleep()" data-mode="dark" checked>
-					<input type="checkbox" class="checkbox-round-shutdown" value="shutdown" onchange="shutDown()" checked>
+                    <a id="toggle-mode">&#x25D0;</a>
+					<a class="checkbox-round-sleep" value="sleep" onclick="serverSleep()">&bull;</a>
+					<a class="checkbox-round-shutdown" value="shutdown" onclick="shutDown()">&bull;</a>
         		</div>
     		</div>
     		
@@ -85,13 +85,19 @@
 		</div>
     </div>
     
-	 <div id="shutdown" class= "shutdown-class" data-mode="dark">
-		<article class="title">
-			<h1 style="font-size:10vw">We&rsquo;ll be back soon!</h1>
-			<div class="title2">
-				<p style="font-size:4vw">L'intervallomètre va s'éteindre dans 15 secondes</p>
-			</div>
-		</article>
+    <div id="shutdown" class="shutdown-class" data-mode="dark">
+		<div id="shutdown-inf">
+        <div class="shutdown-wrapper" data-mode="dark">
+            <div class="shutdown-content" >
+                <h1 class="shutdown-title">Hop au dodo</h1>
+                <p class="shutdown-message">L'intervallomètre va s'éteindre dans 15 sec</p>
+            </div>
+            <div class="loading-wrapper">
+                <div class="rotating-object"></div>
+            </div>
+        </div>
+		</div>
+    </div>
 	</div>
 		
 	<!-- -------------------------------------------------------- -->
@@ -101,8 +107,7 @@
 
 <!-- ------------------------------------------------------------------------------- -->
 
-<script src="js-home.js">
-
-</script>
+<script src="js-home.js"></script>
+<script src="js-shutdown.js"></script>
 </body>
 </html>
