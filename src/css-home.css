@@ -310,43 +310,25 @@ orientation */
 
 /* ----------- ---------- ----------- */
 
+#toggle-mode{
+	font-size: 24px;
+}
 .checkbox-round-sleep,
+.checkbox-round-shutdown{
+	font-size: 68px;
+}
+
 .checkbox-round-shutdown,
-.checkbox-toggle{
-width: 16px;
-height: 16px;
-border-radius: 50%;
-vertical-align: middle;
-appearance: none;
--webkit-appearance: none;
-outline: none;
-cursor: pointer;
-}
-
-.checkbox-toggle {
-box-shadow: -5px 0px 0px var(--border-color-dark);
-
-}
-
-.checkbox-toggle:checked {
-    background-color: var(--border-color-dark);
-    box-shadow: -5px 0px 0px var(--border-color-light);
-
-}
-
-.checkbox-round-shutdown {
-border: 2px solid #C70039;
+.checkbox-round-sleep,
+#toggle-mode{
 margin-left: 9px;
 }
-.checkbox-round-sleep {
-border: 2px solid #FFED00;
-}
 
-.checkbox-round-sleep:checked {
-background-color: #FFED00;
+.checkbox-round-sleep{
+color: #FFED00;
 }
-.checkbox-round-shutdown:checked {
-background-color: #C70039;
+.checkbox-round-shutdown{
+color: #C70039;
 }
 
 /* ----------- ---------- ----------- */
@@ -418,4 +400,3 @@ background-color: #C70039;
 	.back-button {width: 98%;}
 	.form-end {width: 98%;}
 }
-
