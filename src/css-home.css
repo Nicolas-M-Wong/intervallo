@@ -12,8 +12,8 @@
 	--bg-color-light: #fff;
     --text-color-Light: #333;
     --secondary-text-color-light: #666;
-    --highlight-bg-color-light: #CCCCCC;
     --border-color-light: #dfdfdf;
+    --highlight-bg-color-light: #CCCCCC;
 	
 	/* ----------- Color Accent ----------- */
 	--accent-color: #C70039;   /* red accent*/
@@ -52,14 +52,14 @@ body[data-mode="dark"],
 	color: var(--text-color-dark);
 }
 
-#shutdown[data-mode="dark"],
 #big-screen[data-mode="dark"],
 #landscape-screen[data-mode="dark"] {
     color: var(--accent-color);
 }
 
 #main[data-mode="dark"],
-#navbar-id[data-mode="dark"] {
+#navbar-id[data-mode="dark"],
+.shutdown-wrapper[data-mode="dark"] {
     background-color: var(--border-color-dark);
 	transition: background-color 0.3s, color 0.3s;
 }
@@ -88,26 +88,17 @@ body[data-mode="light"],
 	color: var(--text-color-light);
 }
 
-#shutdown[data-mode="light"],
 #big-screen[data-mode="light"],
 #landscape-screen[data-mode="light"] {
     color: var(--accent-color);
 }
 
 #main[data-mode="light"],
-#navbar-id[data-mode="light"] {
+#navbar-id[data-mode="light"],
+.shutdown-wrapper[data-mode="light"] {
+	color: var(--text-color-light);
     background-color: var(--border-color-light);
 	transition: background-color 0.3s, color 0.3s;
-}
-
-#toggle-mode2[data-mode="dark"]{
-    color: var(--border-color-light);
-    opacity: 0;
-}
-
-#toggle-mode2[data-mode="light"]{
-    color: var(--border-color-dark);
-    opacity: 1;
 }
 
 /* ----------- ---------- ----------- */
@@ -250,6 +241,54 @@ margin: 0 auto;
 	justify-content: space-between;
 }
 
+/* ----------- ---------- ----------- */
+
+.shutdown-wrapper {
+	color: var(--text-color-dark);
+	text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+	height: 175px;
+	width: 90%;
+}
+
+#shutdown-inf {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+	width: 100%;
+}
+
+.shutdown-content {
+    margin-bottom: 20px;
+}
+
+.loading-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rotating-object {
+    width: 50px;
+    height: 50px;
+    border: 5px solid;
+	border-color: var(--accent-color);
+    border-top: 5px solid transparent;
+    border-radius: 50%;
+    animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 
 /* ----------- ---------- ----------- */
 /* Screen depending on type of device &
@@ -268,6 +307,7 @@ orientation */
 	margin: 15px;
 	display: none;
 }
+
 .phone-screen-class {
 	display: block;
 }
