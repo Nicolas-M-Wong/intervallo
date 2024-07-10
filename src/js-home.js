@@ -225,7 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('main'),document.getElementById('navbar-id'),
 	document.getElementById('nb_photo'),document.getElementById('tmp_pose'),
 	document.getElementById('enregistrement'),document.getElementById('shutdown'),
-	document.getElementById('big-screen'),document.getElementById('landscape-screen')];
+	document.getElementById('big-screen'),document.getElementById('landscape-screen'),
+	document.getElementById('shutdown-wrapper')];
 
     toggleBtn.addEventListener('click', () => {
         const newMode = body.dataset.mode === 'dark' ? 'light' : 'dark';
@@ -234,7 +235,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-
-
-
