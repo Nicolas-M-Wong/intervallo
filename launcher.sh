@@ -18,8 +18,9 @@ ping -c 1 google.com &> /dev/null
 if [ $? -ne 0 ]; then
     echo "No internet connection."
     exit 1
-fi
-
+else
 git init
 git pull https://www.github.com/Nicolas-M-Wong/intervallo main
+fi
+
 python3 intervallo-server-1.py
