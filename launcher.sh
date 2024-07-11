@@ -9,18 +9,7 @@ cd "$DESKTOP_DIR"
 mkdir main
 cd main
 #go to main
-
-
-# Check for internet connectivity
-echo "Checking internet connectivity..."
-ping -c 1 google.com &> /dev/null
-
-if [ $? -ne 0 ]; then
-    echo "No internet connection."
-    exit 1
-else
-    git init
-    git pull https://www.github.com/Nicolas-M-Wong/intervallo main
-fi
+git init
+git pull https://www.github.com/Nicolas-M-Wong/intervallo main
 
 python3 intervallo-server-1.py
