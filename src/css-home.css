@@ -372,8 +372,8 @@ color: #C70039;
 }
 
 .circle {
-    width: 0.1vh;
-    height: 0.1vh;
+    width: 1vh;
+    height: 1vh;
 	border: solid;
 	border-width: 2px;
 	border-radius: 50%;
