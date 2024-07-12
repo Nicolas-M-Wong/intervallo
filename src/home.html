@@ -23,10 +23,18 @@
         			<h3 class="Title-3">Paramètres</h3>
         		</div>
         		<div class="flex-column-title">
-                    <a id="toggle-mode">&#x25D0;</a>
-					<a class="checkbox-round-sleep" value="sleep" onclick="serverSleep()">&bull;</a>
-					<a class="checkbox-round-shutdown" value="shutdown" onclick="shutDown()">&bull;</a>
-        		</div>
+				<a id="toggle-mode">
+				<div class="circle" id="half-circle" data-mode="dark"></div>
+				</a>
+				
+				<a class="checkbox-round-sleep" value="sleep" onclick="serverSleep()">
+				<div class="circle" id="full-circle-sleep"></div>
+				</a>
+				
+				<a class="checkbox-round-shutdown" value="shutdown" onclick="shutDown()">
+				<div class="circle" id="full-circle-shutdown"></div>
+				</a>
+			</div>
     		</div>
     		
     		<form method="post" class="param-submit">
