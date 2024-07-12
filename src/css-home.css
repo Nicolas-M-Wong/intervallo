@@ -371,10 +371,9 @@ color: #FFED00;
 color: #C70039;
 }
 
-
 .circle {
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
 	border: solid;
 	border-width: 2px;
 	border-radius: 50%;
