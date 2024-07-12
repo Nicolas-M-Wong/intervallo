@@ -53,7 +53,7 @@ def photo_capture(nb_photo_loc,tmp_pose_loc,tmp_enregistrement_loc):
     addr_command = "./Trigger.exe "
     command = "sudo "+addr_command+str(tmp_pose_loc)+" "+str(nb_photo_loc)+" "+str(tmp_enregistrement_loc)
     print(command)
-    os.popen(command).read()
+    os.popen(command)
     return
 
 ###############################################################################
