@@ -1,23 +1,12 @@
-function shutDown() { 
-    document.getElementById('main').style.display = "none";
-    document.getElementById('shutdown').style.display = "flex";
-	document.getElementById('shutdown').style.justifyContent = 'center';
-    sendPostRequest("shutdown");
-}
-
-function serverSleep() { 
-    document.getElementById('main').style.display = "none";
-    document.getElementById('shutdown').style.display = "flex";
-	document.getElementById('shutdown').style.justifyContent = 'center';
-    sendPostRequest("sleep");
-}
-
 // Dialog Box
 let dialogBoxId = document.getElementById("dialogBox");
 let countdownInterval;
 let countDownDate;
 
 function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
+	toggleNotif();
+	document.getElementById("notif-photo").innerHTML = nbPhotos;
+	document.getElementById("notif-expo").innerHTML = exposureTime;
     dialogBoxId.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
             e.preventDefault();
@@ -200,6 +189,12 @@ function detectLandscapeOrientation() {
     return orientation||wideScreen;
 }
 
+function toggleNotif(){
+	const elementsToToggle = [document.getElementById('notification')];
+	elementsToToggle.forEach(element => {
+		element.dataset.mode = 'show';
+	});
+}
 
 const phone = DetectDevice()
 
@@ -225,7 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('main'),document.getElementById('navbar-id'),
 	document.getElementById('nb_photo'),document.getElementById('tmp_pose'),
 	document.getElementById('enregistrement'),document.getElementById('shutdown'),
-	document.getElementById('big-screen'),document.getElementById('landscape-screen')];
+	document.getElementById('big-screen'),document.getElementById('landscape-screen'),
+	document.getElementById('shutdown-wrapper'),document.getElementById('half-circle')];
 
     toggleBtn.addEventListener('click', () => {
         const newMode = body.dataset.mode === 'dark' ? 'light' : 'dark';
@@ -235,6 +231,105 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('toggle-notif');
+	const body = document.getElementById('notification');
+    const elementsToToggle = [document.getElementById('notification')];
+
+    closeBtn.addEventListener('click', () => {
+        const newMode = body.dataset.mode === 'show' ? 'hide' : 'show';
+        elementsToToggle.forEach(element => {
+            element.dataset.mode = newMode;
+        });
+    });
+});
+
+function shutDown() { 
+    document.getElementById('main').style.display = "none";
+    document.getElementById('shutdown').style.display = "flex";
+	document.getElementById('shutdown').style.justifyContent = 'center';
+    sendPostRequest("shutdown");
+}
 
 
+function serverSleep() { 
+    document.getElementById('main').style.display = "none";
+    document.getElementById('shutdown').style.display = "flex";
+	document.getElementById('shutdown').style.justifyContent = 'center';
+	
+	document.addEventListener('DOMContentLoaded', (event) => {
+    const titleElement = document.querySelector('.shutdown-title');
+	const messageElement = document.querySelector('.shutdown-message');
+    const rotatingObject = document.querySelector('.rotating-object');
+	 
+    setTimeout(() => {
+        // Update title and optionally perform other actions
+        titleElement.textContent = "Bonne nuit";
+		messageElement.textContent = "L'intervallomètre est éteint";
+        rotatingObject.style.animation = 'none';
+		
+		titleElement.transition = 'opacity 0.7s ease-in-out';
+		messageElement.transition = 'opacity 0.7s ease-in-out';
+        //Optionally, redirect or perform other actions after a delay
+        // Stop rotating animation
+        rotatingObject.style.animation = 'none';
+        
+        // Smoothly hide rotating object
+        rotatingObject.style.transition = 'opacity 0.7s ease-in-out';
+        rotatingObject.style.opacity = '0';
+        
+        // Optionally, redirect or perform other actions after animation completes
+        setTimeout(() => {
+            rotatingObject.style.display = 'none'; // Hide the rotating object
+            // Optionally, redirect or perform other actions here
+            // window.location.href = 'maintenance.html';
+            titleElement.classList.add('hide'); // Optional: Hide the title after transition
+			sendPostRequest("sleep");
+		}, 500); // Hide after 0.5 seconds (500 milliseconds) of fading out
+        
+    }, 15000); // 15 seconds (15000 milliseconds)
+	});
+	 sendPostRequest("sleep");
 
+}
+
+function serverSleep() { 
+    document.getElementById('main').style.display = "none";
+    document.getElementById('shutdown').style.display = "flex";
+	document.getElementById('shutdown').style.justifyContent = 'center';
+	
+	document.addEventListener('DOMContentLoaded', (event) => {
+    const titleElement = document.querySelector('.shutdown-title');
+	const messageElement = document.querySelector('.shutdown-message');
+    const rotatingObject = document.querySelector('.rotating-object');
+	 
+    setTimeout(() => {
+        // Update title and optionally perform other actions
+        titleElement.textContent = "Bonne nuit";
+		messageElement.textContent = "L'intervallomètre est éteint";
+        rotatingObject.style.animation = 'none';
+		
+		titleElement.transition = 'opacity 0.7s ease-in-out';
+		messageElement.transition = 'opacity 0.7s ease-in-out';
+        //Optionally, redirect or perform other actions after a delay
+        // Stop rotating animation
+        rotatingObject.style.animation = 'none';
+        
+        // Smoothly hide rotating object
+        rotatingObject.style.transition = 'opacity 0.7s ease-in-out';
+        rotatingObject.style.opacity = '0';
+        
+        // Optionally, redirect or perform other actions after animation completes
+        setTimeout(() => {
+            rotatingObject.style.display = 'none'; // Hide the rotating object
+            // Optionally, redirect or perform other actions here
+            // window.location.href = 'maintenance.html';
+            titleElement.classList.add('hide'); // Optional: Hide the title after transition
+			sendPostRequest("sleep");
+		}, 500); // Hide after 0.5 seconds (500 milliseconds) of fading out
+        
+    }, 15000); // 15 seconds (15000 milliseconds)
+	});
+	 sendPostRequest("sleep");
+
+}

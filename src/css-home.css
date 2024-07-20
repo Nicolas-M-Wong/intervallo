@@ -323,14 +323,13 @@ orientation */
 } 
 
 .navbar { 
-	overflow: hidden;
 	background-color: var(--border-color-dark); 
 	display: flex; 
 	justify-content: space-around; 
 	align-items: center; 
 	position: fixed; 
 	bottom: 15px; 
-	width: 95%;
+	width: 90%;
 	border-radius: 25px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 } 
@@ -351,11 +350,11 @@ orientation */
 /* ----------- ---------- ----------- */
 
 #toggle-mode{
-	font-size: 24px;
+	font-size: 0px;
 }
 .checkbox-round-sleep,
 .checkbox-round-shutdown{
-	font-size: 68px;
+	font-size: 0px;
 }
 
 .checkbox-round-shutdown,
@@ -369,6 +368,36 @@ color: #FFED00;
 }
 .checkbox-round-shutdown{
 color: #C70039;
+}
+
+.circle {
+    width: 1.7vh;
+    height: 1.7vh;
+	border: solid;
+	border-width: 2px;
+	border-radius: 50%;
+}
+
+#full-circle-sleep{
+background-color: yellow;
+border-color: yellow;
+}
+
+#full-circle-shutdown{
+background-color: red;
+border-color: red;
+}
+
+
+#half-circle[data-mode="light"] {
+	border-color: #333;
+    background: linear-gradient(to right, #E0E0E0 50%, #333 50%);
+	
+}
+#half-circle[data-mode="dark"] {
+	border-color: #E0E0E0;
+    background: linear-gradient(to right, #E0E0E0 50%, #333 50%);
+	
 }
 
 /* ----------- ---------- ----------- */
@@ -428,6 +457,29 @@ color: #C70039;
 	right: 50%;
 	position: absolute;
 	z-index: 99;
+}
+
+/* ----------- ---------- ----------- */
+
+#notification{
+	background-color: var(--accent-color);
+	padding: 15px;
+	border-radius: 7px;
+	justify-content: space-between;
+	transition:
+    opacity 0.5s,
+    display 0.5s allow-discrete;
+}
+
+#notification[data-mode="show"]{
+	display: flex;
+	opacity: 1;
+	color: var(--bg-color-light);
+}
+
+#notification[data-mode="hide"]{
+	display: none;
+	opacity: 0;
 }
 
 /* ----------- ---------- ----------- */
