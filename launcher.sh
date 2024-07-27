@@ -1,3 +1,4 @@
+#!/bin/bash
 # Determine terminal width
 
 center_text() {
