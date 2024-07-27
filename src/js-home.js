@@ -4,9 +4,10 @@ let countdownInterval;
 let countDownDate;
 
 function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
+	const notificationMessage = document.getElementById("notificationMessage");
+	notificationMessage.textContent = `${nbPhotos} photos prises, exposition ${exposureTime}.`;
+
 	toggleNotif();
-	document.getElementById("notif-photo").innerHTML = nbPhotos;
-	document.getElementById("notif-expo").innerHTML = exposureTime;
     dialogBoxId.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
             e.preventDefault();
