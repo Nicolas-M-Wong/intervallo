@@ -42,7 +42,7 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
         if (distance < 0) {
             clearInterval(countdownInterval);
             document.getElementById("Compteur").innerHTML = "00:00:00";
-			navigator.vibrate([1000, 750, 1000, 750, 2500]); // vibrate for 200ms
+			navigator.vibrate([1000, 750, 1000, 750, 2500]); // vibrate following this pattern 1000ms - (blank) 750 ms - 1000ms - (blankà 750 ms - 2500ms
         }
     }, 1000);
 }
