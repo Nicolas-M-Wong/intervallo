@@ -32,7 +32,7 @@ cd main
 
 git init
 git config pull.rebase false
-git pull https://www.github.com/Nicolas-M-Wong/intervallo main &
+git pull https://www.github.com/Nicolas-M-Wong/intervallo main
 
 DIR=$(xdg-user-dir DESKTOP)/main
 
