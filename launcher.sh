@@ -1,3 +1,5 @@
+# Determine terminal width
+
 center_text() {
     local msg="$1"
     local character="$2"
@@ -18,7 +20,7 @@ center_text() {
 
 center_text "$(date)" "-"
 
-sleep 10
+sleep 8
 
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 #find the user desktop directory
@@ -30,8 +32,22 @@ cd main
 
 git init
 git config pull.rebase false
-git pull https://www.github.com/Nicolas-M-Wong/intervallo main
+git pull https://www.github.com/Nicolas-M-Wong/intervallo main &
 
+DIR=$(xdg-user-dir DESKTOP)/main
+
+if [ ! -f "$DIR/Trigger.exe" ]; then
+    echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
+    # Compile trigger.cpp
+    sh "$DIR/trigger_compiler.sh" &
+    if [ $? -eq 1 ]; then
+        echo "Compilation failed." 
+    fi
+else
+    echo "Trigger.exe already exists in $DIR."
+fi
+
+sleep 2.5
 python3 intervallo-server-1.py
 
-center_text "fin" "-"
+center_text "" "-"
