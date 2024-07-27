@@ -3,18 +3,18 @@
 	
 	/* ----------- Dark mode color palette ----------- */
 	--bg-color-dark: #111;
-    --text-color-dark: #E0E0E0;
-    --secondary-text-color-dark: #B0B0B0;
-    --highlight-bg-color-dark: #1E1E1E;
-    --border-color-dark: #333;
+	--text-color-dark: #E0E0E0;
+	--secondary-text-color-dark: #B0B0B0;
+	--highlight-bg-color-dark: #1E1E1E;
+	--border-color-dark: #333;
 	
 	/* ----------- Light mode color palette ----------- */
 	--bg-color-light: #fff;
-    --text-color-Light: #333;
-    --secondary-text-color-light: #666;
-    --border-color-light: #dfdfdf;
-    --highlight-bg-color-light: #CCCCCC;
-	
+	--text-color-Light: #333;
+	--secondary-text-color-light: #666;
+	--border-color-light: #dfdfdf;
+	--highlight-bg-color-light: #CCCCCC;
+
 	/* ----------- Color Accent ----------- */
 	--accent-color: #C70039;   /* red accent*/
 	
@@ -143,7 +143,7 @@ form {
 #test-shot,
 #back-button{
 	background-color: var(--accent-color);
-	color: var(--text-color-dark);
+	color: var(--bg-color-light);
 	font-weight: 600;
 }
 
