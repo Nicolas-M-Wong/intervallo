@@ -31,7 +31,7 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
     const currentTime = `${hours}:${minutes}`;
     
     // Update notification message and title
-    notificationMessage.textContent = `${nbPhotos} photos prises, exposition ${exposureTime}.`;
+    notificationMessage.textContent = `${nbPhotos} photos prises, exposition ${exposureTime} sec.`;
     notificationTitle.textContent = `Session se termine à ${currentTime}`;
 	toggleNotif();
     // Start the countdown
