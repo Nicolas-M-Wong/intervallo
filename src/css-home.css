@@ -1,5 +1,5 @@
 *:root {
-	font-family: arial, sans-serif;
+	font-family: Segoe UI, sans-serif;
 	
 	/* ----------- Dark mode color palette ----------- */
 	--bg-color-dark: #111;
@@ -469,6 +469,16 @@ border-color: red;
 	transition:
     opacity 0.5s,
     display 0.5s allow-discrete;
+}
+
+.notification-title {
+	font-weight: bold;
+	font-size: clamp(1em, 2.5vw, 1.4em);
+}
+
+.notification-message {
+	margin-top: 5px;
+	font-size: clamp(0.85em, 2vw, 1.2em);
 }
 
 #notification[data-mode="show"]{
