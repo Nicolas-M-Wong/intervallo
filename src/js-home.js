@@ -31,7 +31,7 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
     const currentTime = `${hours}:${minutes}`;
     
     // Update notification message and title
-    notificationMessage.textContent = `${nbPhotos} photos prises, exposition ${exposureTime} sec.`;
+    notificationMessage.textContent = `${nbPhotos} photos prises, exposition ${exposureTime}.`;
     notificationTitle.textContent = `Session se termine à ${currentTime}`;
 	toggleNotif();
     // Start the countdown
@@ -42,7 +42,7 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
         if (distance < 0) {
             clearInterval(countdownInterval);
             document.getElementById("Compteur").innerHTML = "00:00:00";
-			navigator.vibrate([1000, 750, 1000, 750, 2500]); // vibrate following this pattern 1000ms - (blank) 750 ms - 1000ms - (blankà 750 ms - 2500ms
+			navigator.vibrate([1000, 200, 1000]); // vibrate for 200ms
         }
     }, 1000);
 }
@@ -263,18 +263,15 @@ function shutDown() {
     sendPostRequest("shutdown");
 }
 
-
-function serverSleep() { 
+function serverEnd(status_var) { 
     document.getElementById('main').style.display = "none";
     document.getElementById('shutdown').style.display = "flex";
 	document.getElementById('shutdown').style.justifyContent = 'center';
-	
-	document.addEventListener('DOMContentLoaded', (event) => {
-    const titleElement = document.querySelector('.shutdown-title');
-	const messageElement = document.querySelector('.shutdown-message');
-    const rotatingObject = document.querySelector('.rotating-object');
 	 
     setTimeout(() => {
+		const titleElement = document.querySelector('.shutdown-title');
+		const messageElement = document.querySelector('.shutdown-message');
+		const rotatingObject = document.querySelector('.rotating-object');
         // Update title and optionally perform other actions
         titleElement.textContent = "Bonne nuit";
 		messageElement.textContent = "L'intervallomètre est éteint";
@@ -289,59 +286,7 @@ function serverSleep() {
         // Smoothly hide rotating object
         rotatingObject.style.transition = 'opacity 0.7s ease-in-out';
         rotatingObject.style.opacity = '0';
-        
-        // Optionally, redirect or perform other actions after animation completes
-        setTimeout(() => {
-            rotatingObject.style.display = 'none'; // Hide the rotating object
-            // Optionally, redirect or perform other actions here
-            // window.location.href = 'maintenance.html';
-            titleElement.classList.add('hide'); // Optional: Hide the title after transition
-			sendPostRequest("sleep");
-		}, 500); // Hide after 0.5 seconds (500 milliseconds) of fading out
-        
     }, 15000); // 15 seconds (15000 milliseconds)
-	});
-	 sendPostRequest("sleep");
-
-}
-
-function serverSleep() { 
-    document.getElementById('main').style.display = "none";
-    document.getElementById('shutdown').style.display = "flex";
-	document.getElementById('shutdown').style.justifyContent = 'center';
-	
-	document.addEventListener('DOMContentLoaded', (event) => {
-    const titleElement = document.querySelector('.shutdown-title');
-	const messageElement = document.querySelector('.shutdown-message');
-    const rotatingObject = document.querySelector('.rotating-object');
+	 sendPostRequest(status_var);
 	 
-    setTimeout(() => {
-        // Update title and optionally perform other actions
-        titleElement.textContent = "Bonne nuit";
-		messageElement.textContent = "L'intervallomètre est éteint";
-        rotatingObject.style.animation = 'none';
-		
-		titleElement.transition = 'opacity 0.7s ease-in-out';
-		messageElement.transition = 'opacity 0.7s ease-in-out';
-        //Optionally, redirect or perform other actions after a delay
-        // Stop rotating animation
-        rotatingObject.style.animation = 'none';
-        
-        // Smoothly hide rotating object
-        rotatingObject.style.transition = 'opacity 0.7s ease-in-out';
-        rotatingObject.style.opacity = '0';
-        
-        // Optionally, redirect or perform other actions after animation completes
-        setTimeout(() => {
-            rotatingObject.style.display = 'none'; // Hide the rotating object
-            // Optionally, redirect or perform other actions here
-            // window.location.href = 'maintenance.html';
-            titleElement.classList.add('hide'); // Optional: Hide the title after transition
-			sendPostRequest("sleep");
-		}, 500); // Hide after 0.5 seconds (500 milliseconds) of fading out
-        
-    }, 15000); // 15 seconds (15000 milliseconds)
-	});
-	 sendPostRequest("sleep");
-
 }
