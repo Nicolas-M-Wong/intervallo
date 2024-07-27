@@ -5,9 +5,8 @@ let countDownDate;
 
 function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
 	const notificationMessage = document.getElementById("notificationMessage");
-	notificationMessage.textContent = `${nbPhotos} photos prises, exposition ${exposureTime}.`;
-
-	toggleNotif();
+	const notificationTitle = document.getElementById("notificationTitle");
+	
     dialogBoxId.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
             e.preventDefault();
@@ -21,8 +20,20 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
     const totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
     
      // Set countdown date to current time plus total time
-    countDownDate = new Date().getTime() + totalTime * 1000;
+     
+    const now = new Date().getTime();
+    const countDownDate = now + totalTime * 1000;
 
+    // Convert countdown date to readable format
+    const countDownDateObj = new Date(countDownDate);
+    const hours = countDownDateObj.getHours().toString().padStart(2, '0');
+    const minutes = countDownDateObj.getMinutes().toString().padStart(2, '0');
+    const currentTime = `${hours}:${minutes}`;
+    
+    // Update notification message and title
+    notificationMessage.textContent = `${nbPhotos} photos prises, exposition ${exposureTime}.`;
+    notificationTitle.textContent = `Session se termine à ${currentTime}`;
+	toggleNotif();
     // Start the countdown
     countdownInterval = setInterval(function() {
         var now = new Date().getTime();
