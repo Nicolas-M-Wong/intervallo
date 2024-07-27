@@ -47,7 +47,6 @@ else
     echo "Trigger.exe already exists in $DIR."
 fi
 
-sleep 2.5
 python3 intervallo-server-1.py
 
 center_text "" "-"
