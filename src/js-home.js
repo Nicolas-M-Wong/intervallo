@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('big-screen'),document.getElementById('landscape-screen'),
 	document.getElementById('shutdown-wrapper'),document.getElementById('half-circle')];
 
-    const currentTheme = sessionStorage.getItem('theme') || 'light';
+    const currentTheme = sessionStorage.getItem('theme') || 'dark';
     elementsToToggle.forEach(element => {
         element.dataset.mode = currentTheme;
     });
