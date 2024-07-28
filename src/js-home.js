@@ -204,6 +204,7 @@ function detectLandscapeOrientation() {
 function toggleNotif(){
 	const elementsToToggle = [document.getElementById('notification')];
 	elementsToToggle.forEach(element => {
+		localStorage.setItem('notifState', 'show');
 		element.dataset.mode = 'show';
 	});
 }
@@ -240,6 +241,26 @@ document.addEventListener('DOMContentLoaded', () => {
         elementsToToggle.forEach(element => {
             element.dataset.mode = newMode;
         });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('toggle-notif');
+	const body = document.getElementById('notification');
+	const elementsToToggle = [document.getElementById('notification')];
+	
+	const notifState = localStorage.getItem('notifState') || 'hide';
+	elementsToToggle.forEach(element => {
+		element.dataset.mode = notifState;
+	});
+	
+    closeBtn.addEventListener('click', () => {
+        const newMode = body.dataset.mode === 'show' ? 'hide' : 'show';
+        elementsToToggle.forEach(element => {
+            element.dataset.mode = newMode;
+        });
+        console.log(newMode);
+		localStorage.setItem('notifState', newMode);
     });
 });
 
