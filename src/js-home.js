@@ -243,19 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const closeBtn = document.getElementById('toggle-notif');
-	const body = document.getElementById('notification');
-    const elementsToToggle = [document.getElementById('notification')];
-
-    closeBtn.addEventListener('click', () => {
-        const newMode = body.dataset.mode === 'show' ? 'hide' : 'show';
-        elementsToToggle.forEach(element => {
-            element.dataset.mode = newMode;
-        });
-    });
-});
-
 function shutDown() { 
     document.getElementById('main').style.display = "none";
     document.getElementById('shutdown').style.display = "flex";
