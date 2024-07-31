@@ -106,7 +106,6 @@ script = io.open(directory+"/src/home.html", mode='r',encoding=('utf-8')).read()
 
 
 def shutdown_raspi ():
-    os.popen("sleep 15").read()
     os.popen("sudo shutdown -h now")
     return
 
