@@ -297,18 +297,38 @@ function shutDown() {
 }
 
 function serverEnd(status_var) { 
+
+	const theme = sessionStorage.getItem('theme');
+	
+	const titleElement = document.querySelector('.shutdown-title');
+	const messageElement = document.querySelector('.shutdown-message');
+	const rotatingObject = document.querySelector('.rotating-object');
+	
+	if (theme === 'dark'){
+			// Update title
+			titleElement.textContent = "Hop au dodo";}
+			
+	if (theme === 'light'){
+			// Update title
+			titleElement.textContent = "Hop ça dégage";}
+			
     document.getElementById('main').style.display = "none";
     document.getElementById('shutdown').style.display = "flex";
 	document.getElementById('shutdown').style.justifyContent = 'center';
 	 
     setTimeout(() => {
-		const titleElement = document.querySelector('.shutdown-title');
-		const messageElement = document.querySelector('.shutdown-message');
-		const rotatingObject = document.querySelector('.rotating-object');
-        // Update title and optionally perform other actions
-        titleElement.textContent = "Bonne nuit";
+		rotatingObject.style.animation = 'none';
+		if (theme === 'dark'){
+	        	// Update title
+	        	titleElement.textContent = "Bonne nuit";}
+			//messageElement.textContent = "L'intervallomètre est éteint";}
+		
+		if (theme === 'light'){
+	        	// Update title
+	        	titleElement.textContent = "Bonne journée";}
+		//messageElement.textContent = "L'intervallomètre est éteint";}
 		messageElement.textContent = "L'intervallomètre est éteint";
-        rotatingObject.style.animation = 'none';
+        	rotatingObject.style.animation = 'none';
 		
 		titleElement.transition = 'opacity 0.7s ease-in-out';
 		messageElement.transition = 'opacity 0.7s ease-in-out';
@@ -320,6 +340,6 @@ function serverEnd(status_var) {
         rotatingObject.style.transition = 'opacity 0.7s ease-in-out';
         rotatingObject.style.opacity = '0';
     }, 15000); // 15 seconds (15000 milliseconds)
-	 sendPostRequest(status_var);
+	// sendPostRequest(status_var);
 	 
 }
