@@ -340,6 +340,6 @@ function serverEnd(status_var) {
         rotatingObject.style.transition = 'opacity 0.7s ease-in-out';
         rotatingObject.style.opacity = '0';
     }, 15000); // 15 seconds (15000 milliseconds)
-	// sendPostRequest(status_var);
+sendPostRequest(status_var);
 	 
 }
