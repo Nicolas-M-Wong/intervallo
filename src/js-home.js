@@ -345,8 +345,8 @@ sendPostRequest(status_var);
 }
 
 function changeColor() {
-	document.getElementById('test').style.backgroundColor = "#C70039"
+	document.getElementById('photo-distanceL').style.backgroundColor = "#C70039"
 	setTimeout(() => {
-	document.getElementById('test').style.backgroundColor = "#007bff";
+	document.getElementById('photo-distanceL').style.backgroundColor = "#007bff";
 	}, 500); // Temps en millisecondes
 }
