@@ -344,9 +344,9 @@ sendPostRequest(status_var);
 	 
 }
 
-function changeColor() {
-	document.getElementById('photo-distanceL').style.backgroundColor = "#C70039"
+function changeColor(side) {
+	document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
 	setTimeout(() => {
-	document.getElementById('photo-distanceL').style.backgroundColor = "transparent";
+	document.getElementById(`photo-distance-${side}`).style.backgroundColor = "transparent";
 	}, 500); // Temps en millisecondes
 }
