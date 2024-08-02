@@ -348,5 +348,5 @@ function changeColor(side) {
 	document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
 	setTimeout(() => {
 	document.getElementById(`photo-distance-${side}`).style.backgroundColor = "transparent";
-	}, 500); // Temps en millisecondes
+	}, 350); // Temps en millisecondes
 }
