@@ -97,13 +97,8 @@ def parsing_get_msg(data,active_dir):
                 f"{response_body}")
         decrypted_data = response.encode('utf-8') 
     return(decrypted_data)
-
-########################################## Reading HTML page###################
-
-script = io.open(directory+"/src/home.html", mode='r',encoding=('utf-8')).read()
-
+    
 ########################################## Web server #########################
-
 
 def shutdown_raspi ():
     os.popen("sudo shutdown -h now")
@@ -170,18 +165,16 @@ print(f'Serving on port {TCP_PORT}...')
 # Accept and handle incoming connections one at a time
 while True:
 
-    ###########################################################################
     client_socket, client_address = server_socket.accept()
     print(f'Accepted connection from {client_address}')
         # Receive the request data
     request = client_socket.recv(1024).decode('utf-8')
-    
-
     # Parse the request to determine the type of request (GET/POST)
     headers = request.split('\r\n')
     first_line = headers[0].split(' ')
     method = first_line[0]
-    print(f'Received request:\n{first_line}\n')
+    print(f'Received request: {first_line}\n')
+    
     if method == 'GET':
         if str(first_line[1]).strip('/') != '':
             try:
@@ -194,7 +187,8 @@ while True:
                 pass
         else:
         # Serve the HTML file
-            response = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'+script
+            home = io.open(directory+"/src/home.html", mode='r',encoding=('utf-8')).read()
+            response = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'+home
             client_socket.send(response.encode('utf-8'))
     
     elif method == 'POST':
