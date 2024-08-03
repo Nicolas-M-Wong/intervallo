@@ -175,13 +175,13 @@ while True:
     print(f'Accepted connection from {client_address}')
         # Receive the request data
     request = client_socket.recv(1024).decode('utf-8')
-    print(f'Received request:\n{request}\n')
+    
 
     # Parse the request to determine the type of request (GET/POST)
     headers = request.split('\r\n')
     first_line = headers[0].split(' ')
     method = first_line[0]
-
+    print(f'Received request:\n{first_line}')
     if method == 'GET':
         if str(first_line[1]).strip('/') != '':
             try:
