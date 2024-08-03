@@ -124,7 +124,7 @@ def get_ip():
         IP = s.getsockname()[0]
     except:
         IP = '127.0.0.1'
-    
+        raise RuntimeError("Not connected to a network")
     s.close()
     return IP
 
