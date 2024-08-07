@@ -142,12 +142,12 @@ def header ():
 
 time_delay = 0
 while get_ip()=="127.0.0.1":
-    print("waiting for a network connexion")
+    print("waiting for a network connection")
     time.sleep(1.5)
     time_delay += 1.5
     if time_delay > 300:
         break
-        print("Network connexion impossible")
+        print("Network connection impossible")
         #If the raspi is waiting for more than 5 minutes end the loop
     
 TCP_IP = get_ip()      # Local host
