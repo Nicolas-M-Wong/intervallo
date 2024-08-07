@@ -124,7 +124,7 @@ def get_ip():
         IP = s.getsockname()[0]
     except:
         IP = '127.0.0.1'
-        raise RuntimeError("Not connected to a network")
+    
     s.close()
     return IP
 
@@ -140,105 +140,112 @@ def header ():
     print(time.asctime(time.gmtime()))
     return script
 
-TCP_IP = get_ip()      # Local host
-# TCP_IP = '127.0.0.1'
-
-
-BUFFER_SIZE = 1024
-TCP_PORT_list = [55000,54000,53000,52000]
-
-for i in TCP_PORT_list:
-    try:
-        TCP_PORT = i
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print("binding to ", TCP_IP, ":", TCP_PORT,"...")
-        s.bind((TCP_IP, TCP_PORT))
-        s.listen(2)
+time_delay = 0
+while get_ip()=="127.0.0.1":
+    print("waiting of a network connexion")
+    time.sleep(1.5)
+    time_delay += 1.5
+    if time_delay > 300:
         break
+        #If the raspi is waiting for more than 5 minutes end the loop
     
-    except:
-        pass
+TCP_IP = get_ip()      # Local host
+if TCP_IP != "127.0.0.1":
+    #only start the server if the IP of the server is not itself
+    BUFFER_SIZE = 1024
+    TCP_PORT_list = [55000,54000,53000,52000]
 
-expct_end_date = 0
-server_socket = s
-print(f'Serving on port {TCP_PORT}...')
-# Accept and handle incoming connections one at a time
-while True:
-
-    client_socket, client_address = server_socket.accept()
-    print(f'Accepted connection from {client_address}')
-        # Receive the request data
-    request = client_socket.recv(1024).decode('utf-8')
-    # Parse the request to determine the type of request (GET/POST)
-    headers = request.split('\r\n')
-    first_line = headers[0].split(' ')
-    method = first_line[0]
-    print(f'Received request: {first_line}\n')
-    
-    if method == 'GET':
-        if str(first_line[1]).strip('/') != '':
-            try:
-                response = parsing_get_msg(first_line,directory)
-                client_socket.send(response)
-            except:
-                response = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'
-                client_socket.send(response.encode('utf-8'))
-                print("failed")
-                pass
-        else:
-        # Serve the HTML file
-            home = io.open(directory+"/src/home.html", mode='r',encoding=('utf-8')).read()
-            response = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'+home
-            client_socket.send(response.encode('utf-8'))
-    
-    elif method == 'POST':
-        # Parse the request to extract form data
-        body = headers[-1]
-    
-        response_body = "Data received"
-        response = (
-                "HTTP/1.1 200 OK\r\n"
-                f"Content-Length: {len(response_body)}\r\n"
-                "Content-Type: text/plain\r\n"
-                "Connection: close\r\n"
-                "\r\n"
-                f"{response_body}"
-            )
-        
-        parameters = {}
+    for i in TCP_PORT_list:
         try:
-            parameters = JSON_data(body)
+            TCP_PORT = i
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            print("binding to ", TCP_IP, ":", TCP_PORT,"...")
+            s.bind((TCP_IP, TCP_PORT))
+            s.listen(2)
+            break
+        
         except:
             pass
 
-        if "nb_photo" in parameters.keys():
-            tmp_prise = parameters.get('nb_photo',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photo',0)-1)
-            print(tmp_prise)
-            new_cmd_date = parameters.get('date',0)
-            
-            #Avoid capturing pictures for command sent during the shoot
-            if new_cmd_date > expct_end_date:
-                
-                new_cmd_date +=1000*tmp_prise
-                expct_end_date = new_cmd_date
-                photo_capture(parameters.get('nb_photo',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
-            
-            else:
-                print("shot command during an existing shoot")
+    expct_end_date = 0
+    server_socket = s
+    print(f'Serving on port {TCP_PORT}...')
+    # Accept and handle incoming connections one at a time
+    while True:
 
+        client_socket, client_address = server_socket.accept()
+        print(f'Accepted connection from {client_address}')
+            # Receive the request data
+        request = client_socket.recv(1024).decode('utf-8')
+        # Parse the request to determine the type of request (GET/POST)
+        headers = request.split('\r\n')
+        first_line = headers[0].split(' ')
+        method = first_line[0]
+        print(f'Received request: {first_line}\n')
+        
+        if method == 'GET':
+            if str(first_line[1]).strip('/') != '':
+                try:
+                    response = parsing_get_msg(first_line,directory)
+                    client_socket.send(response)
+                except:
+                    response = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'
+                    client_socket.send(response.encode('utf-8'))
+                    print("failed")
+                    pass
+            else:
+            # Serve the HTML file
+                home = io.open(directory+"/src/home.html", mode='r',encoding=('utf-8')).read()
+                response = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'+home
+                client_socket.send(response.encode('utf-8'))
+        
+        elif method == 'POST':
+            # Parse the request to extract form data
+            body = headers[-1]
+        
+            response_body = "Data received"
+            response = (
+                    "HTTP/1.1 200 OK\r\n"
+                    f"Content-Length: {len(response_body)}\r\n"
+                    "Content-Type: text/plain\r\n"
+                    "Connection: close\r\n"
+                    "\r\n"
+                    f"{response_body}"
+                )
             
-        elif body == '"shutdown"':
-            client_socket.close()
-            s.close()
-            shutdown_raspi ()
-            break
-        
-        elif body == '"sleep"':
-            client_socket.close()
-            s.close()
-            break
-        client_socket.send(response.encode('utf-8'))
-    # Close the client socket
-    client_socket.close()
-        
-print("fin")
+            parameters = {}
+            try:
+                parameters = JSON_data(body)
+            except:
+                pass
+
+            if "nb_photo" in parameters.keys():
+                tmp_prise = parameters.get('nb_photo',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photo',0)-1)
+                print(tmp_prise)
+                new_cmd_date = parameters.get('date',0)
+                
+                #Avoid capturing pictures for command sent during the shoot
+                if new_cmd_date > expct_end_date:
+                    
+                    new_cmd_date +=1000*tmp_prise
+                    expct_end_date = new_cmd_date
+                    photo_capture(parameters.get('nb_photo',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
+                
+                else:
+                    print("shot command during an existing shoot")
+
+                
+            elif body == '"shutdown"':
+                client_socket.close()
+                s.close()
+                shutdown_raspi ()
+                break
+            
+            elif body == '"sleep"':
+                client_socket.close()
+                s.close()
+                break
+            client_socket.send(response.encode('utf-8'))
+        # Close the client socket
+        client_socket.close()
+
