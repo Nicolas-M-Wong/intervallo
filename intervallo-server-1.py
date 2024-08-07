@@ -142,7 +142,7 @@ def header ():
 
 time_delay = 0
 while get_ip()=="127.0.0.1":
-    print("waiting of a network connexion")
+    print("waiting for a network connexion")
     time.sleep(1.5)
     time_delay += 1.5
     if time_delay > 300:
