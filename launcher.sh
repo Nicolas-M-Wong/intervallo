@@ -21,8 +21,6 @@ center_text() {
 
 center_text "$(date)" "-"
 
-sleep 8
-
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 #find the user desktop directory
 cd "$DESKTOP_DIR"
