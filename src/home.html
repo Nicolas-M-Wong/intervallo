@@ -16,6 +16,24 @@
 <div id="phone-screen" class="phone-screen-class">
 <div class="container" id="main" data-mode="dark">
 
+<div id="header-bar" class="header-bar" data-mode="dark">
+	<div id="left-side" class="flex-column-title">
+	
+	</div>
+	<div id="right-side" class="flex-column-title">
+		<a id="toggle-mode">
+		<div class="circle" id="half-circle" data-mode="dark"></div>
+		</a>
+
+		<a class="checkbox-round-sleep" value="sleep" onclick="serverEnd('sleep')">
+		<div class="circle" id="full-circle-sleep"></div>
+		</a>
+
+		<a class="checkbox-round-shutdown" value="shutdown" onclick="serverEnd('shutdown')">
+		<div class="circle" id="full-circle-shutdown"></div>
+		</a>
+		</div>
+	</div>
 <div id="notification" data-mode="hide">
 	<div class="txt-notif"><span class="notification-title" id="notificationTitle">La série se termine à X</span>
 	</br><span class="notification-message" id="notificationMessage">X photos prises, exposition X sec.</span>
@@ -31,19 +49,6 @@
             	<div class="flex-column-title">
         			<h3 class="Title-3">Paramètres</h3>
         		</div>
-        		<div class="flex-column-title">
-				<a id="toggle-mode">
-				<div class="circle" id="half-circle" data-mode="dark"></div>
-				</a>
-				
-				<a class="checkbox-round-sleep" value="sleep" onclick="serverEnd('sleep')">
-				<div class="circle" id="full-circle-sleep"></div>
-				</a>
-				
-				<a class="checkbox-round-shutdown" value="shutdown" onclick="serverEnd('shutdown')">
-				<div class="circle" id="full-circle-shutdown"></div>
-				</a>
-			</div>
     		</div>
     		
     		<form method="post" class="param-submit">
