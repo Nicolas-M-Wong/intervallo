@@ -2,7 +2,6 @@
 let dialogBoxId = document.getElementById("dialogBox");
 let countdownInterval;
 let countDownDate;
-
 function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
 	const notificationMessage = document.getElementById("notificationMessage");
 	const notificationTitle = document.getElementById("notificationTitle");
@@ -16,14 +15,12 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
     dialogBoxId.showModal();
     
     // Calculate the total time
-
     const totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
     
      // Set countdown date to current time plus total time
      
     const now = new Date().getTime();
     const countDownDate = now + totalTime * 1000;
-
     // Convert countdown date to readable format
     const countDownDateObj = new Date(countDownDate);
     const hours = countDownDateObj.getHours().toString().padStart(2, '0');
@@ -32,7 +29,6 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
     sessionStorage.nbPhotosNotif = nbPhotos;
     sessionStorage.exposureTimeNotif = exposureTime;
     sessionStorage.currentTimeNotif = currentTime;
-
 	toggleNotif();
     // Start the countdown
     countdownInterval = setInterval(function() {
@@ -42,17 +38,15 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
         if (distance < 0) {
             clearInterval(countdownInterval);
             document.getElementById("Compteur").innerHTML = "00:00:00";
-			navigator.vibrate([1000, 200, 1000]); // vibrate for 200ms
+			navigator.vibrate([1000, 250, 1000, 500, 2500]); // vibrate for 200ms
         }
     }, 1000);
 }
-
 function closeDialog() {
     dialogBoxId.close(); 
     // Clear the countdown interval when the dialog box is closed
     clearInterval(countdownInterval);
 }
-
 // Function to format time in hh:mm:ss
 function formatTime(totalSeconds) {
     const hours = Math.floor(totalSeconds / 3600);
@@ -60,37 +54,28 @@ function formatTime(totalSeconds) {
     const seconds = Math.floor(totalSeconds % 60);
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------
-
 // Add event listener to the form submit event
 document.getElementById("interval-Form").addEventListener("submit", handleSubmit);
 document.getElementById("openDialogBox").addEventListener("click", handleButtonClick);
 document.getElementById("test-shot").addEventListener("click", handleButtonClickTest);
-
 let formData; // Define formData in the global scope
-
 function handleSubmit(event) {
 	// Prevent the default form submission behavior
 	event.preventDefault();
-
 	// Get the values of the form fields
 	const nbPhotos = parseInt(document.getElementById("nb_photo").value);
 	const exposureTime = parseFloat(document.getElementById("tmp_pose").value);
 	const timeBetweenPhotos = parseFloat(document.getElementById("enregistrement").value);
-
 	// Calculate the total time
 	const totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
 	console.log("Total time for the interval:", totalTime, "seconds");
-
 	// Display formatted time in confirmation
 	document.getElementById("estimation_tmp").innerHTML = formatTime(totalTime);
 	document.getElementById("confirmation").style.display = "block";
-
 	// Prepare form data for the POST request
 	formData = new FormData(event.target);
 }
-
 function handleButtonClick() {
     if (formData) {
         const data = {};
@@ -108,7 +93,6 @@ function handleButtonClick() {
         console.error('Form data is not available. Please submit the form first.');
     }
 }
-
 function handleButtonClickTest() {
     if (formData) {
         const data = {};
@@ -127,7 +111,6 @@ function handleButtonClickTest() {
         console.error('Form data is not available. Please submit the form first.');
     }
 }
-
 function remoteTrigger(){
 const triggerMessage = {"nb_photo":"1", "tmp_pose":"0.1", "tmp_enregistrement":"0"};
 var now = new Date().getTime();
@@ -135,14 +118,12 @@ triggerMessage["date"] = now;
 console.log(triggerMessage);
 sendPostRequest(triggerMessage)
 }
-
 function sendPostRequest(data) {
     const xhr = new XMLHttpRequest();
     var ip = location.host;
     var http_head = 'http://'
     xhr.open('POST', http_head.concat(ip), true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
@@ -152,17 +133,13 @@ function sendPostRequest(data) {
             }
         }
     };
-
     xhr.send(JSON.stringify(data));
 }
-
 // Prevent the dialog box from closing when the confirm button is clicked
 document.getElementById("confirmation").addEventListener("click", function(event) {
     event.preventDefault();
-
     // Add any additional actions you want to perform on confirm
 });
-
 function DetectDevice() {
     let isMobile = window.matchMedia || window.msMatchMedia;
     if(isMobile) {
@@ -171,10 +148,8 @@ function DetectDevice() {
     }
     return false;
 }
-
 function sendGetRequest(fileName) {
     const url = `/${fileName}`;
-
     fetch(url, {
         method: 'GET',
         headers: {
@@ -194,46 +169,50 @@ function sendGetRequest(fileName) {
         console.error('There was a problem with the fetch operation:', error);
     });
 }
-
 function detectLandscapeOrientation() {
     const orientation = window.matchMedia("(orientation: landscape)").matches;
     const wideScreen= window.innerWidth > 800;
     return orientation||wideScreen;
 }
-
 function toggleNotif(){
 	// Update notification message and title
 	var locPhotos = sessionStorage.getItem("nbPhotosNotif");
 	var locExpo = sessionStorage.getItem("exposureTimeNotif");
 	var locTime = sessionStorage.getItem("currentTimeNotif");
 
-	notificationMessage.textContent = `${locPhotos} photos prises, exposition ${locExpo}.`;
+	notificationMessage.textContent = `${locPhotos} photos prises, exposition ${locExpo} sec.`;
 	notificationTitle.textContent = `Session se termine à ${locTime}`;
 
 	const elementsToToggle = [document.getElementById('notification')];
+
+    
+          
+            
+    
+
+          
+          Expand Down
+    
+    
+  
 	elementsToToggle.forEach(element => {
 		sessionStorage.setItem('notifState', 'show');
 		element.dataset.mode = 'show';
 	});
 }
-
 const phone = DetectDevice()
-
 if (phone == false) {
 	document.getElementById('phone-screen').style.display = "none";
 	sendGetRequest(document.getElementById('big-screen').getAttribute('href'));
 }
-
 else if (detectLandscapeOrientation()) {
 	document.getElementById('phone-screen').style.display = "none";
 	sendGetRequest(document.getElementById('landscape-screen').getAttribute('href'));
 }
-
 function handleButtonClickBack(event) {
 	event.preventDefault();
 	closeDialog();
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('toggle-mode');
     const body = document.body;
@@ -243,12 +222,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('enregistrement'),document.getElementById('shutdown'),
 	document.getElementById('big-screen'),document.getElementById('landscape-screen'),
 	document.getElementById('shutdown-wrapper'),document.getElementById('half-circle')];
-
     const currentTheme = sessionStorage.getItem('theme') || 'dark';
     elementsToToggle.forEach(element => {
         element.dataset.mode = currentTheme;
     });
-
     toggleBtn.addEventListener('click', () => {
         const newMode = body.dataset.mode === 'dark' ? 'light' : 'dark';
         elementsToToggle.forEach(element => {
@@ -257,24 +234,19 @@ document.addEventListener('DOMContentLoaded', () => {
         sessionStorage.setItem('theme', newMode);
     });
 });
-
 document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.getElementById('toggle-notif');
 	const body = document.getElementById('notification');
 	const elementsToToggle = [document.getElementById('notification')];
 	
 	const notifState = sessionStorage.getItem('notifState') || 'hide';
-
 	if (notifState === 'show'){
 		var locPhotos = sessionStorage.getItem("nbPhotosNotif");
 		var locExpo = sessionStorage.getItem("exposureTimeNotif");
 		var locTime = sessionStorage.getItem("currentTimeNotif");
-
 		notificationMessage.textContent = `${locPhotos} photos prises, exposition ${locExpo}.`;
 		notificationTitle.textContent = `La série se termine à ${locTime}`;
 	}
-
-
 	elementsToToggle.forEach(element => {
 		element.dataset.mode = notifState;
 	});
@@ -288,16 +260,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		sessionStorage.setItem('notifState', newMode);
     });
 });
-
 function shutDown() { 
     document.getElementById('main').style.display = "none";
     document.getElementById('shutdown').style.display = "flex";
 	document.getElementById('shutdown').style.justifyContent = 'center';
     sendPostRequest("shutdown");
 }
-
 function serverEnd(status_var) { 
-
 	const theme = sessionStorage.getItem('theme');
 	
 	const titleElement = document.querySelector('.shutdown-title');
@@ -340,8 +309,14 @@ function serverEnd(status_var) {
         rotatingObject.style.transition = 'opacity 0.7s ease-in-out';
         rotatingObject.style.opacity = '0';
     }, 15000); // 15 seconds (15000 milliseconds)
-	sendPostRequest(status_var);
+sendPostRequest(status_var);
 	 
+}
+function changeColor(side) {
+	document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
+	setTimeout(() => {
+	document.getElementById(`photo-distance-${side}`).style.backgroundColor = "transparent";
+	}, 350); // Temps en millisecondes
 }
 
 countdownInterval = setInterval(function() {
