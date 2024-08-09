@@ -79,13 +79,13 @@ def parsing_get_msg(data,active_dir):
             # the extension is a text item
             decrypted_data = (io.open(active_dir+'/src/'+initial_data[1][1:], mode='r',encoding=('utf-8')).read())
             #read the file
-            http_msg = 'HTTP/1.1 200 OK\r\nCache-Control: max-age=1000\r\nContent-Type: '+type_header +'\r\ncharset=UTF-8\r\n\r\n'
+            http_msg = 'HTTP/1.1 200 OK\r\nCache-Control: private, max-age=1000\r\nContent-Type: '+type_header +'\r\ncharset=UTF-8\r\n\r\n'
             decrypted_data = (http_msg + decrypted_data).encode('utf-8')
             
         if type_header.split('/')[0] == "image":
             # image item
             image = io.open(active_dir+'/assets/'+initial_data[1][1:], mode='rb').read()
-            decrypted_data = ('HTTP/1.1 200 OK\r\nContent-Type:'+ type_header +'\r\ncharset=UTF-8\r\n\r\n').encode('utf-8')+image
+            decrypted_data = ('HTTP/1.1 200 OK\r\nCache-Control: private, max-age=1000\r\nContent-Type:'+ type_header +'\r\ncharset=UTF-8\r\n\r\n').encode('utf-8')+image
             
     else:
         response_body = "Data received"
@@ -133,7 +133,7 @@ def header ():
     script =  "HTTP/1.1 200 OK\r\n"
     script += "Date: "+time.asctime(time.gmtime())+" GMT\r\n"
     script += "Expires: -1\r\n"
-    script += "Cache-Control: private, must-revalidaten max-age=0\r\n"
+    script += "Cache-Control: private, max-age=1000\r\n"
     script += "Content-Type: text/html;"
     script += "charset=UTF-8\r\n"
     script += "\r\n"
@@ -190,14 +190,14 @@ if TCP_IP != "127.0.0.1":
                     response = parsing_get_msg(first_line,directory)
                     client_socket.send(response)
                 except:
-                    response = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'
+                    response = 'HTTP/1.1 200 OK\r\nCache-Control: private, max-age=1000\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'
                     client_socket.send(response.encode('utf-8'))
                     print("failed")
                     pass
             else:
             # Serve the HTML file
                 home = io.open(directory+"/src/home.html", mode='r',encoding=('utf-8')).read()
-                response = 'HTTP/1.1 200 OK\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'+home
+                response = 'HTTP/1.1 200 OK\r\nCache-Control: private, max-age=1000\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'+home
                 client_socket.send(response.encode('utf-8'))
         
         elif method == 'POST':
