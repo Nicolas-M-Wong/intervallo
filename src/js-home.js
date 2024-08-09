@@ -97,7 +97,7 @@ function handleButtonClick() {
         formData.forEach((value, key) => (data[key] = value));
 		var now = new Date().getTime();
 		data["date"] = now;
-        // sendPostRequest(data);
+        sendPostRequest(data);
 		
 		const nbPhotos_button = parseInt(document.getElementById("nb_photo").value);
 		const exposureTime_button = parseFloat(document.getElementById("tmp_pose").value);
@@ -340,7 +340,7 @@ function serverEnd(status_var) {
         rotatingObject.style.transition = 'opacity 0.7s ease-in-out';
         rotatingObject.style.opacity = '0';
     }, 15000); // 15 seconds (15000 milliseconds)
-	// sendPostRequest(status_var);
+	sendPostRequest(status_var);
 	 
 }
 
