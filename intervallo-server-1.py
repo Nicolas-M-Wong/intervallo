@@ -79,7 +79,7 @@ def parsing_get_msg(data,active_dir):
             # the extension is a text item
             decrypted_data = (io.open(active_dir+'/src/'+initial_data[1][1:], mode='r',encoding=('utf-8')).read())
             #read the file
-            http_msg = 'HTTP/1.1 200 OK\r\nContent-Type: '+type_header +'\r\ncharset=UTF-8\r\n\r\n'
+            http_msg = 'HTTP/1.1 200 OK\r\nCache-Control: max-age=1000\r\nContent-Type: '+type_header +'\r\ncharset=UTF-8\r\n\r\n'
             decrypted_data = (http_msg + decrypted_data).encode('utf-8')
             
         if type_header.split('/')[0] == "image":
