@@ -179,21 +179,10 @@ function toggleNotif(){
 	var locPhotos = sessionStorage.getItem("nbPhotosNotif");
 	var locExpo = sessionStorage.getItem("exposureTimeNotif");
 	var locTime = sessionStorage.getItem("currentTimeNotif");
-
 	notificationMessage.textContent = `${locPhotos} photos prises, exposition ${locExpo} sec.`;
 	notificationTitle.textContent = `Session se termine à ${locTime}`;
 
 	const elementsToToggle = [document.getElementById('notification')];
-
-    
-          
-            
-    
-
-          
-          Expand Down
-    
-    
   
 	elementsToToggle.forEach(element => {
 		sessionStorage.setItem('notifState', 'show');
