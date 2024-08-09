@@ -465,7 +465,19 @@ border-color: red;
 
 /* ----------- ---------- ----------- */
 
+#header-bar {
+	display: flex;
+	justify-content: space-between;
+}
+
+#left-side {
+	font-size: 18px;
+}
+
+/* ----------- ---------- ----------- */
+
 #notification{
+	margin-top: 15px;
 	background-color: var(--accent-color);
 	padding: 15px;
 	border-radius: 7px;
