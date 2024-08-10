@@ -25,15 +25,15 @@ DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 #find the user desktop directory
 cd "$DESKTOP_DIR"
 #go to desktop
-mkdir main-batterylevel
-cd main-batterylevel
+mkdir main-update
+cd main-update
 #go to main
 
 git init
 git config pull.rebase false
 git pull https://www.github.com/Nicolas-M-Wong/intervallo update
 
-DIR=$(xdg-user-dir DESKTOP)/main-batterylevel
+DIR=$(xdg-user-dir DESKTOP)/main-update
 
 if [ ! -f "$DIR/Trigger.exe" ]; then
     echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
