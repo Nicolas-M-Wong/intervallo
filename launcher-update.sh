@@ -31,7 +31,7 @@ cd main-update
 
 git init
 git config pull.rebase false
-git pull https://www.github.com/Nicolas-M-Wong/intervallo update
+git pull https://www.github.com/Nicolas-M-Wong/intervallo Update
 
 DIR=$(xdg-user-dir DESKTOP)/main-update
 
