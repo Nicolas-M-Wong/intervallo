@@ -362,11 +362,11 @@ function update_time() {
 	timerHeader.textContent = currentTimeHeader;
 }
 
-function update_battery(batteyLevel){
+function update_battery(batteyLevel) {
 	const batteryHeader = document.getElementById('battery-header');
 	batteryHeader.textContent = `${batteyLevel}%`;
 }
-function startUp(){
+function startUp() {
    update_time();
    sendPostRequest("battery");
  }
