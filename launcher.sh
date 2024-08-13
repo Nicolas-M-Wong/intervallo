@@ -21,19 +21,26 @@ center_text() {
 
 center_text "$(date)" "-"
 
+if [ "$#" -lt 1 ]; then
+    echo "$0 missing branch to launch"
+    center_text "fatal error" "-"
+    exit 1
+fi
+
+branch="$1"
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 #find the user desktop directory
-cd "$DESKTOP_DIR"
-#go to desktop
-mkdir main
-cd main
+if ! cd "$DESKTOP_DIR/intervallo-$1"; then
+    center_text "fatal error" "-"
+    exit 1
+fi
+cd "$DESKTOP_DIR/intervallo-$1"
 #go to main
 
-git init
 git config pull.rebase false
 git pull https://www.github.com/Nicolas-M-Wong/intervallo main
 
-DIR=$(xdg-user-dir DESKTOP)/main
+DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
 
 if [ ! -f "$DIR/Trigger.exe" ]; then
     echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
@@ -46,6 +53,9 @@ else
     echo "Trigger.exe already exists in $DIR."
 fi
 
+cd $DIR
 python3 intervallo-server-1.py
 
 center_text "" "-"
+
+
