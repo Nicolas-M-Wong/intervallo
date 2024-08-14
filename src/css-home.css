@@ -474,6 +474,14 @@ border-color: red;
 	font-size: 18px;
 }
 
+#timer-header {
+    margin-right: 18px;
+}
+
+#battery-header{
+    margin-right: 18px;
+}
+
 /* ----------- ---------- ----------- */
 
 #notification{

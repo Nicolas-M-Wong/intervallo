@@ -30,11 +30,13 @@ fi
 branch="$1"
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 #find the user desktop directory
+
 if ! cd "$DESKTOP_DIR/intervallo-$1"; then
     center_text "fatal error" "-"
     exit 1
 fi
 cd "$DESKTOP_DIR/intervallo-$1"
+
 #go to main
 
 git config pull.rebase false
@@ -57,5 +59,4 @@ cd $DIR
 python3 intervallo-server-1.py
 
 center_text "" "-"
-
 

@@ -147,6 +147,13 @@ function sendPostRequest(data) {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 console.log('Success:', xhr.responseText);
+                if (data === 'battery'){
+                    if (isNaN(xhr.responseText) === false){
+                        update_battery(xhr.responseText);
+                        } else {
+                        update_battery("");
+                        }
+                }
             } else {
                 console.error('Error:', xhr.statusText);
             }
@@ -160,7 +167,6 @@ function sendPostRequest(data) {
 document.getElementById("confirmation").addEventListener("click", function(event) {
     event.preventDefault();
 
-    // Add any additional actions you want to perform on confirm
 });
 
 function DetectDevice() {
@@ -306,32 +312,31 @@ function serverEnd(status_var) {
 	
 	if (theme === 'dark'){
 			// Update title
-			titleElement.textContent = "Hop au dodo";}
-			
-	if (theme === 'light'){
-			// Update title
-			titleElement.textContent = "Hop ça dégage";}
-			
+            titleElement.textContent = "Hop au dodo";}
+
+    if (theme === 'light'){
+            // Update title
+            titleElement.textContent = "Hop ça dégage";}
+
     document.getElementById('main').style.display = "none";
     document.getElementById('shutdown').style.display = "flex";
-	document.getElementById('shutdown').style.justifyContent = 'center';
-	 
+    document.getElementById('shutdown').style.justifyContent = 'center';
+
     setTimeout(() => {
-		rotatingObject.style.animation = 'none';
-		if (theme === 'dark'){
-	        	// Update title
-	        	titleElement.textContent = "Bonne nuit";}
-			//messageElement.textContent = "L'intervallomètre est éteint";}
-		
-		if (theme === 'light'){
-	        	// Update title
-	        	titleElement.textContent = "Bonne journée";}
-		//messageElement.textContent = "L'intervallomètre est éteint";}
-		messageElement.textContent = "L'intervallomètre est éteint";
-        	rotatingObject.style.animation = 'none';
-		
-		titleElement.transition = 'opacity 0.7s ease-in-out';
-		messageElement.transition = 'opacity 0.7s ease-in-out';
+        rotatingObject.style.animation = 'none';
+        if (theme === 'dark'){
+                // Update title
+                titleElement.textContent = "Bonne nuit";}
+                //messageElement.textContent = "L'intervallomètre est éteint";}
+        if (theme === 'light'){
+            // Update title
+        titleElement.textContent = "Bonne journée";}
+        //messageElement.textContent = "L'intervallomètre est éteint";}
+        messageElement.textContent = "L'intervallomètre est éteint";
+            rotatingObject.style.animation = 'none';
+
+        titleElement.transition = 'opacity 0.7s ease-in-out';
+        messageElement.transition = 'opacity 0.7s ease-in-out';
         //Optionally, redirect or perform other actions after a delay
         // Stop rotating animation
         rotatingObject.style.animation = 'none';
@@ -340,22 +345,38 @@ function serverEnd(status_var) {
         rotatingObject.style.transition = 'opacity 0.7s ease-in-out';
         rotatingObject.style.opacity = '0';
     }, 15000); // 15 seconds (15000 milliseconds)
-	sendPostRequest(status_var);
-	 
+    sendPostRequest(status_var);
 }
 
 function changeColor(side) {
-	document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
-	setTimeout(() => {
-	document.getElementById(`photo-distance-${side}`).style.backgroundColor = "transparent";
-	}, 350); // Temps en millisecondes
+    document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
+    setTimeout(() => {
+    document.getElementById(`photo-distance-${side}`).style.backgroundColor = "transparent";
+    }, 350); // Temps en millisecondes
+}
+function update_time() {
+    const now = new Date();
+    const hoursHeader = now.getHours().toString().padStart(2, '0');
+    const minutesHeader = now.getMinutes().toString().padStart(2, '0');
+    const secondsHeader = now.getSeconds().toString().padStart(2, '0');
+    const currentTimeHeader = `${hoursHeader}:${minutesHeader}`;
+    const timerHeader = document.getElementById('timer-header');
+    timerHeader.textContent = currentTimeHeader;
 }
 
-countdownInterval = setInterval(function() {
-	const timeHeader = new Date();
-	const hoursHeader = timeHeader.getHours().toString().padStart(2, '0');
-	const minutesHeader = timeHeader.getMinutes().toString().padStart(2, '0');
-	const currentTimeHeader = `${hoursHeader}:${minutesHeader}`;
-	const header = document.getElementById('left-side');
-	header.textContent = currentTimeHeader;
-	},)
+function update_battery(batteyLevel) {
+    const batteryHeader = document.getElementById('battery-header');
+    batteryHeader.textContent = `${batteyLevel}%`;
+    if (batteryLevel === ""){
+        sendPostRequest("battery");
+    }
+}
+function startUp() {
+   update_time();
+   sendPostRequest("battery");
+ }
+ 
+startUp();
+setInterval(function(){update_time();}, 1000)
+setInterval(function(){
+    sendPostRequest("battery");},300000)

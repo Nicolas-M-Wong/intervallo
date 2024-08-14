@@ -2,7 +2,9 @@ import socket
 import time
 import io
 import os
+import MAX17043
 
+battery = MAX17043.max17043()
 
 directory = os.path.dirname(os.path.abspath(__file__)) #absolute path to file
 
@@ -183,9 +185,10 @@ if TCP_IP != "127.0.0.1":
         headers = request.split('\r\n')
         first_line = headers[0].split(' ')
         method = first_line[0]
-        print(f'Received request: {first_line}\n')
+        print(f'Received request: {first_line}')
         
         if method == 'GET':
+            print(f'\n')
             if str(first_line[1]).strip('/') != '':
                 try:
                     response = parsing_get_msg(first_line,directory)
@@ -204,24 +207,14 @@ if TCP_IP != "127.0.0.1":
         elif method == 'POST':
             # Parse the request to extract form data
             body = headers[-1]
-        
+            print(f"POST = {body}\n")
             response_body = "Data received"
-            response = (
-                    "HTTP/1.1 200 OK\r\n"
-                    f"Content-Length: {len(response_body)}\r\n"
-                    "Cache-Control: private, no-store, no-cache\r\n"
-                    "Content-Type: text/plain\r\n"
-                    "Connection: close\r\n"
-                    "\r\n"
-                    f"{response_body}"
-                )
-            
             parameters = {}
             try:
                 parameters = JSON_data(body)
             except:
                 pass
-
+            
             if "nb_photo" in parameters.keys():
                 tmp_prise = parameters.get('nb_photo',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photo',0)-1)
                 print(tmp_prise)
@@ -248,6 +241,20 @@ if TCP_IP != "127.0.0.1":
                 client_socket.close()
                 s.close()
                 break
+            
+            elif body == '"battery"':
+                soc=battery.getSoc()
+                response_body=f"{round(soc)}"
+            
+            response = (
+                    "HTTP/1.1 200 OK\r\n"
+                    f"Content-Length: {len(response_body)}\r\n"
+                    "Cache-Control: private, no-store, no-cache\r\n"
+                    "Content-Type: text/plain\r\n"
+                    "Connection: close\r\n"
+                    "\r\n"
+                    f"{response_body}"
+                )
             client_socket.send(response.encode('utf-8'))
         # Close the client socket
         client_socket.close()
