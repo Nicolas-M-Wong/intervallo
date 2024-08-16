@@ -65,20 +65,18 @@ function formatTime(totalSeconds) {
 
 // Add event listener to the form submit event
 document.getElementById("interval-Form").addEventListener("submit", handleSubmit);
-document.getElementById("openDialogBox").addEventListener("click", handleButtonClick);
-document.getElementById("test-shot").addEventListener("click", handleButtonClickTest);
 
 let formData; // Define formData in the global scope
 
 function handleSubmit(event) {
 	// Prevent the default form submission behavior
 	event.preventDefault();
+	
+	let nbPhotos = getCurrentValue(document.getElementById('nb_photo'),step1);
+	let exposureTime = getCurrentValue(document.getElementById('tmp_pose'),step2);
+	let timeBetweenPhotos = getCurrentValue(document.getElementById('enregistrement'),step2);
 
 	// Get the values of the form fields
-	const nbPhotos = parseInt(document.getElementById("nb_photo").value);
-	const exposureTime = parseFloat(document.getElementById("tmp_pose").value);
-	const timeBetweenPhotos = parseFloat(document.getElementById("enregistrement").value);
-
 	// Calculate the total time
 	const totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
 	console.log("Total time for the interval:", totalTime, "seconds");
@@ -91,39 +89,26 @@ function handleSubmit(event) {
 	formData = new FormData(event.target);
 }
 
-function handleButtonClick() {
+function handleButtonClick(test_status) {
     if (formData) {
         const data = {};
-        formData.forEach((value, key) => (data[key] = value));
-		var now = new Date().getTime();
-		data["date"] = now;
-        sendPostRequest(data);
-		
-		const nbPhotos_button = parseInt(document.getElementById("nb_photo").value);
-		const exposureTime_button = parseFloat(document.getElementById("tmp_pose").value);
-		const timeBetweenPhotos_button = parseFloat(document.getElementById("enregistrement").value);
-		
-        showDialog(nbPhotos_button, exposureTime_button, timeBetweenPhotos_button); // Show the dialog box with the countdown
-    } else {
-        console.error('Form data is not available. Please submit the form first.');
-    }
-}
+        const nbPhotos = getCurrentValue(document.getElementById('nb_photo'),step1);
+		data["nb_photo"] = nbPhotos;
+		if (test_status === "Yes"){
+            data["nb_photo"] = 1;
+            }
+		let exposureTime = getCurrentValue(document.getElementById('tmp_pose'),step2);
+		let timeBetweenPhotos = getCurrentValue(document.getElementById('enregistrement'),step2);
 
-function handleButtonClickTest() {
-    if (formData) {
-        const data = {};
-        formData.forEach((value, key) => (data[key] = value));
-		data['nb_photo']=1;
 		var now = new Date().getTime();
+		
+		data["tmp_pose"] = exposureTime;
+		data["tmp_enregistrement"] = timeBetweenPhotos
+		console.log(data["nb_photo"])
 		data["date"] = now;
         sendPostRequest(data);
-				
-		const exposureTime_test = parseFloat(document.getElementById("tmp_pose").value);
-		const timeBetweenPhotos_test = parseFloat(document.getElementById("enregistrement").value);
-		
-		showDialog(1, exposureTime_test, timeBetweenPhotos_test)
-        } 
-	else {
+        showDialog(data["nb_photo"], exposureTime, timeBetweenPhotos); // Show the dialog box with the countdown
+    } else {
         console.error('Form data is not available. Please submit the form first.');
     }
 }
@@ -375,6 +360,130 @@ function startUp() {
    update_time();
    sendPostRequest("battery");
  }
+ 
+       function createWheel_sec(elementId, step, length) {
+            const wheel = document.getElementById(elementId);
+            const paddingDiv = document.createElement('div');
+            paddingDiv.style.height = '75px';
+            wheel.appendChild(paddingDiv);
+            for (let i = 0; i <= length; i += step) {  // <--- LIGNE POUR DÉFINIR LE PAS DES ROUES
+                const numberDiv = document.createElement('div');
+                numberDiv.className = 'number';
+                numberDiv.innerText = i;
+                wheel.appendChild(numberDiv);
+            }
+            const paddingDivEnd = document.createElement('div');
+            paddingDivEnd.style.height = '75px';
+            wheel.appendChild(paddingDivEnd);
+        }
+		
+        function createWheel_sec_ms(elementId, step_s, step_ms, length) {
+            const wheel = document.getElementById(elementId);
+            const paddingDiv = document.createElement('div');
+            paddingDiv.style.height = '75px';
+            wheel.appendChild(paddingDiv);
+            for (let i = 0; i <= 1-step_ms; i += step_ms) {  // <--- LIGNE POUR DÉFINIR LE PAS DES ROUES
+                const numberDiv = document.createElement('div');
+                numberDiv.className = 'number';
+                numberDiv.innerText = i.toFixed(countDecimalPlaces(step_ms));
+                wheel.appendChild(numberDiv);
+            }
+			for (let i = 1; i <= 5-5*step_ms; i += 5*step_ms) {  // <--- LIGNE POUR DÉFINIR LE PAS DES ROUES
+                const numberDiv = document.createElement('div');
+                numberDiv.className = 'number';
+                numberDiv.innerText = i.toFixed(countDecimalPlaces(step_ms));
+                wheel.appendChild(numberDiv);
+            }
+			for (let i = 5; i < 60; i += step_s) {  // <--- LIGNE POUR DÉFINIR LE PAS DES ROUES
+                const numberDiv = document.createElement('div');
+                numberDiv.className = 'number';
+                numberDiv.innerText = i;
+                wheel.appendChild(numberDiv);
+            }
+			
+			for (let i = 60; i <= length; i += 10*step_s) {  // <--- LIGNE POUR DÉFINIR LE PAS DES ROUES
+                const numberDiv = document.createElement('div');
+                numberDiv.className = 'number';
+                numberDiv.innerText = i;
+                wheel.appendChild(numberDiv);
+            }
+			
+            const paddingDivEnd = document.createElement('div');
+            paddingDivEnd.style.height = '75px';
+            wheel.appendChild(paddingDivEnd);
+        }
+		
+		function getCurrentValue(wheel,step_ms) {
+			const numbers = wheel.querySelectorAll('.number');
+			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/ - 25)/50);
+			return parseFloat(numbers[middleIndex].innerText, 10).toFixed(countDecimalPlaces(step_ms));
+		}
+
+		function adjustScroll(wheel) {
+			const numbers = wheel.querySelectorAll('.number');
+			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 25)/50);
+			const targetScrollTop = middleIndex * 50 - wheel.clientHeight/3 + 25;
+
+			wheel.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+			updateSelectedNumber(wheel);
+		}
+
+
+        function attachWheelEvents(wheelId) {
+            const wheel = document.getElementById(wheelId);
+            let scrollTimeout;
+            wheel.addEventListener('scroll', () => {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    adjustScroll(wheel);
+                }, 100);
+            });
+        }
+
+		function updateSelectedNumber(wheel) {
+			const numbers = wheel.querySelectorAll('.number');
+			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/12 - 25)/50);
+			console.log(middleIndex, wheel.scrollTop, wheel.clientHeight/12)
+			
+			numbers.forEach(num => num.classList.remove('selected'));
+			if (middleIndex >= 0 && middleIndex < numbers.length) {
+				numbers[middleIndex].classList.add('selected');
+			}
+		}
+
+		function countDecimalPlaces(num) {
+			let numStr = num.toString();
+			let decimalIndex = numStr.indexOf('.');
+			if (decimalIndex === -1) {
+				return 0;
+			}
+			return numStr.length - decimalIndex - 1;
+			//Compte les chiffres après la virgule du pas décimal
+			//Compte les caractères pour éviter une boucle while
+		}
+
+		const step1 = 1
+		const step2 = 0.1
+		
+        createWheel_sec('nb_photo', step1, 500);  // Changez le pas ici pour chaque roue
+        createWheel_sec_ms('tmp_pose', step1, step2, 240);  // Changez le pas ici pour chaque roue
+        createWheel_sec_ms('enregistrement', step1, step2, 600);  // Changez le pas ici pour chaque roue
+
+        attachWheelEvents('nb_photo');
+        attachWheelEvents('tmp_pose');
+        attachWheelEvents('enregistrement');
+
+		document.getElementById('wheelForm').addEventListener('submit', function(event) {
+			event.preventDefault();
+
+			const nbPhotos = getCurrentValue(document.getElementById('nb_photo'),step1);
+			const tmp_pose = getCurrentValue(document.getElementById('tmp_pose'),step2);
+			const tmp_enregistrement = getCurrentValue(document.getElementById('enregistrement'),step2);
+
+			// Simulate form submission
+			// sendPostRequest(nbPhotos,tmp_pose,tmp_enregistrement);
+			// showDialog(value1,value2,value3);
+		});
  
 startUp();
 setInterval(function(){update_time();}, 1000)
