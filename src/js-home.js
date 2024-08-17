@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		var locExpo = sessionStorage.getItem("exposureTimeNotif");
 		var locTime = sessionStorage.getItem("currentTimeNotif");
 
-		notificationMessage.textContent = `${locPhotos} photos prises, exposition ${locExpo}.`;
+		notificationMessage.textContent = `${locPhotos} photos, exposition ${locExpo} sec.`;
 		notificationTitle.textContent = `La série se termine à ${locTime}`;
 	}
 
@@ -361,57 +361,95 @@ function startUp() {
    sendPostRequest("battery");
  }
  
-       function createWheel_sec(elementId, step, length) {
-            const wheel = document.getElementById(elementId);
-            const paddingDiv = document.createElement('div');
-            paddingDiv.style.height = '75px';
-            wheel.appendChild(paddingDiv);
-            for (let i = 0; i <= length; i += step) {  // <--- LIGNE POUR DÉFINIR LE PAS DES ROUES
-                const numberDiv = document.createElement('div');
-                numberDiv.className = 'number';
-                numberDiv.innerText = i;
-                wheel.appendChild(numberDiv);
-            }
-            const paddingDivEnd = document.createElement('div');
-            paddingDivEnd.style.height = '75px';
-            wheel.appendChild(paddingDivEnd);
+function createWheel_sec(elementId, step, length) {
+    const wheel = document.getElementById(elementId);
+
+    // Ensure the element with the provided id exists
+    if (!wheel) {
+        console.error(`Element with id "${elementId}" not found.`);
+        return;
+    }
+
+    // Create and append the starting padding div
+    const paddingDiv = document.createElement('div');
+    paddingDiv.style.height = '75px';
+    wheel.appendChild(paddingDiv);
+
+    let isFirst = true; // Flag to identify the first number div
+
+    // Create number divs with specified steps
+    for (let i = 0; i <= length; i += step) {
+        const numberDiv = document.createElement('div');
+        numberDiv.className = 'number';
+        numberDiv.innerText = i;
+
+        // Apply attributes to the first numberDiv in this loop
+        if (isFirst) {
+            numberDiv.id = 'number_selected_' + elementId;
+            numberDiv.classList.add('selected');
+            isFirst = false; // Reset the flag after the first div
         }
+
+        // Append the numberDiv to the wheel
+        wheel.appendChild(numberDiv);
+    }
+
+    // Create and append the ending padding div
+    const paddingDivEnd = document.createElement('div');
+    paddingDivEnd.style.height = '75px';
+    wheel.appendChild(paddingDivEnd);
+}
+
 		
-        function createWheel_sec_ms(elementId, step_s, step_ms, length) {
-            const wheel = document.getElementById(elementId);
-            const paddingDiv = document.createElement('div');
-            paddingDiv.style.height = '75px';
-            wheel.appendChild(paddingDiv);
-            for (let i = 0; i <= 1-step_ms; i += step_ms) {  // <--- LIGNE POUR DÉFINIR LE PAS DES ROUES
-                const numberDiv = document.createElement('div');
-                numberDiv.className = 'number';
-                numberDiv.innerText = i.toFixed(countDecimalPlaces(step_ms));
-                wheel.appendChild(numberDiv);
-            }
-			for (let i = 1; i <= 5-5*step_ms; i += 5*step_ms) {  // <--- LIGNE POUR DÉFINIR LE PAS DES ROUES
-                const numberDiv = document.createElement('div');
-                numberDiv.className = 'number';
-                numberDiv.innerText = i.toFixed(countDecimalPlaces(step_ms));
-                wheel.appendChild(numberDiv);
-            }
-			for (let i = 5; i < 60; i += step_s) {  // <--- LIGNE POUR DÉFINIR LE PAS DES ROUES
-                const numberDiv = document.createElement('div');
-                numberDiv.className = 'number';
-                numberDiv.innerText = i;
-                wheel.appendChild(numberDiv);
-            }
-			
-			for (let i = 60; i <= length; i += 10*step_s) {  // <--- LIGNE POUR DÉFINIR LE PAS DES ROUES
-                const numberDiv = document.createElement('div');
-                numberDiv.className = 'number';
-                numberDiv.innerText = i;
-                wheel.appendChild(numberDiv);
-            }
-			
-            const paddingDivEnd = document.createElement('div');
-            paddingDivEnd.style.height = '75px';
-            wheel.appendChild(paddingDivEnd);
+function createWheel_sec_ms(elementId, step_s, step_ms, length) {
+    const wheel = document.getElementById(elementId);
+    const paddingDiv = document.createElement('div');
+    paddingDiv.style.height = '75px';
+    wheel.appendChild(paddingDiv);
+
+    // Flag to determine if this is the first element in the first loop
+    let isFirst = true; // <-- Added line
+
+    for (let i = 0; i <= 1 - step_ms; i += step_ms) {  // Define the step for the wheel
+        const numberDiv = document.createElement('div');
+        numberDiv.className = 'number';
+        numberDiv.innerText = i.toFixed(countDecimalPlaces(step_ms));
+        
+        // Apply attributes to the first numberDiv in this loop
+        if (isFirst) { // <-- Added condition
+            numberDiv.id = 'number_selected_'+elementId; // <-- Added line
+            numberDiv.classList.add('selected'); // <-- Added line
+            isFirst = false; // <-- Added line to reset the flag
         }
+        
+        wheel.appendChild(numberDiv);
+    }
+
+    for (let i = 1; i <= 5 - 5 * step_ms; i += 5 * step_ms) {  // Define the step for the wheel
+        const numberDiv = document.createElement('div');
+        numberDiv.className = 'number';
+        numberDiv.innerText = i.toFixed(countDecimalPlaces(step_ms));
+        wheel.appendChild(numberDiv);
+    }
+
+    for (let i = 5; i < 60; i += step_s) {  // Define the step for the wheel
+        const numberDiv = document.createElement('div');
+        numberDiv.className = 'number';
+        numberDiv.innerText = i;
+        wheel.appendChild(numberDiv);
+    }
+
+    for (let i = 60; i <= length; i += 10 * step_s) {  // Define the step for the wheel
+        const numberDiv = document.createElement('div');
+        numberDiv.className = 'number';
+        numberDiv.innerText = i;
+        wheel.appendChild(numberDiv);
+    }
+
+    const paddingDivEnd = document.createElement('div');
+    paddingDivEnd.style.height = '75px';
+    wheel.appendChild(paddingDivEnd);
+}
 		
 		function getCurrentValue(wheel,step_ms) {
 			const numbers = wheel.querySelectorAll('.number');
@@ -419,13 +457,13 @@ function startUp() {
 			return parseFloat(numbers[middleIndex].innerText, 10).toFixed(countDecimalPlaces(step_ms));
 		}
 
-		function adjustScroll(wheel) {
+		function adjustScroll(wheel,wheelId) {
 			const numbers = wheel.querySelectorAll('.number');
 			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 25)/50);
 			const targetScrollTop = middleIndex * 50 - wheel.clientHeight/3 + 25;
 
 			wheel.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
-			updateSelectedNumber(wheel);
+			updateSelectedNumber(wheel,wheelId);
 		}
 
 
@@ -435,20 +473,34 @@ function startUp() {
             wheel.addEventListener('scroll', () => {
                 clearTimeout(scrollTimeout);
                 scrollTimeout = setTimeout(() => {
-                    adjustScroll(wheel);
+                    adjustScroll(wheel,wheelId);
                 }, 100);
             });
         }
 
-		function updateSelectedNumber(wheel) {
+		function updateSelectedNumber(wheel,wheelId) {
 			const numbers = wheel.querySelectorAll('.number');
 			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/12 - 25)/50);
 			console.log(middleIndex, wheel.scrollTop, wheel.clientHeight/12)
 			
-			numbers.forEach(num => num.classList.remove('selected'));
+			numbers.forEach(num => {
+				num.classList.remove('selected'); 
+				delete num.dataset.mode;
+				num.removeAttribute('id');
+				});
+				
 			if (middleIndex >= 0 && middleIndex < numbers.length) {
 				numbers[middleIndex].classList.add('selected');
+				let selectedElements = document.getElementsByClassName('number selected');
+				let themeMode = sessionStorage.getItem('theme') || 'dark';
+				
+				for (let i = 0; i < selectedElements.length; i++) {
+					selectedElements[i].id = 'number_selected_'+wheelId;
+					selectedElements[i].dataset.mode = themeMode;
+				}
 			}
+
+
 		}
 
 		function countDecimalPlaces(num) {
