@@ -130,12 +130,17 @@ dialog::backdrop {
 form { 
 	display: table; 
 	width: 100%;
-	padding: 10px;
 	margin: 0 auto;
-	margin-bottom: 20px;
+	margin-top: 10px;
+	margin-bottom: 5px;
 	font-size: 16px;
 	border: none;
 	border-radius: 5px;
+}
+
+.IntervalForm{
+	display: flex;
+	flex-direction: column;
 }
 
 #form-submit,
@@ -152,6 +157,8 @@ label {
 }
 
 .container{
+	display: flex;
+	flex-direction: column;
 	margin: 15px 25px;
 	margin-bottom: 90px;
 }
@@ -189,7 +196,7 @@ margin: 0 auto;
 	display: block;
 	width: 100%;
 	padding: 10px;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	font-size: 16px;
 	border: none;
 	border-radius: 5px;
@@ -518,50 +525,73 @@ border-color: red;
 
 /* ----------- ---------- ----------- */
 
+.container-wheel {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	column-gap: 10%;
+}
+.wheel-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: relative;
+}
+.wheel-title {
+	margin-bottom: 10px;
+	font-size: 18px;
+	font-weight: bold;
+}
+.number-wheel {
+	width: 75px;
+	height: 150px;
+	overflow-y: scroll;
+	text-align: center;
+	border-radius: 8px;
+	scrollbar-width: none;  /* For Firefox */
+	margin-bottom: 15px;
+}
 
-        .container-wheel {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
-        .wheel-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-        }
-        .wheel-title {
-            margin-bottom: 10px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .number-wheel {
-            width: 80px;
-            height: 150px;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            background: white;
-            text-align: center;
-            scrollbar-width: none;  /* For Firefox */
-        }
-        .number-wheel::-webkit-scrollbar {
-            display: none;  /* For Chrome, Safari, and Opera */
-        }
-        .number {
-            height: 50px;
-            line-height: 50px;
-            font-size: 24px;
-        }
-		
-		.number.selected {
-			background-color: lightyellow;
-			color: red;
-			font-weight: bold;
-		}
+.number-wheel::before {
+	content: "";
+	position: absolute;
+	top: 55%;
+	left: 3px;
+	width: 15%;
+	border-top: 2px solid var(--border-color-dark);
+	opacity: 0.5;
+	transform: translateY(-50%);
+}
 
+.number-wheel::after {
+	content: "";
+	position: absolute;
+	top: 55%;
+	right: 3px;
+	width: 15%;
+	border-top: 2px solid var(--border-color-dark);
+	opacity: 0.5;
+	transform: translateY(-50%);
+}
 
+.number-wheel::-webkit-scrollbar {
+	display: none;  /* For Chrome, Safari, and Opera */
+}
+.number {
+	height: 50px;
+	line-height: 50px;
+	font-size: 24px;
+}
 
+.number.selected {
+	color: var(--accent-color);
+	/* background-color: var(--border-color-dark); */
+	font-weight: bold;
+}
+
+#wheelForm {
+	display: flex;
+}
 
 /* media querry screen width */
 
