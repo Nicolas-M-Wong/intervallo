@@ -372,7 +372,7 @@ function createWheel_sec(elementId, step, length) {
 
     // Create and append the starting padding div
     const paddingDiv = document.createElement('div');
-    paddingDiv.style.height = '75px';
+    paddingDiv.style.height = '50px';
     wheel.appendChild(paddingDiv);
 
     let isFirst = true; // Flag to identify the first number div
@@ -396,7 +396,7 @@ function createWheel_sec(elementId, step, length) {
 
     // Create and append the ending padding div
     const paddingDivEnd = document.createElement('div');
-    paddingDivEnd.style.height = '75px';
+    paddingDivEnd.style.height = '50px';
     wheel.appendChild(paddingDivEnd);
 }
 
@@ -404,7 +404,7 @@ function createWheel_sec(elementId, step, length) {
 function createWheel_sec_ms(elementId, step_s, step_ms, length) {
     const wheel = document.getElementById(elementId);
     const paddingDiv = document.createElement('div');
-    paddingDiv.style.height = '75px';
+    paddingDiv.style.height = '50px';
     wheel.appendChild(paddingDiv);
 
     // Flag to determine if this is the first element in the first loop
@@ -447,7 +447,7 @@ function createWheel_sec_ms(elementId, step_s, step_ms, length) {
     }
 
     const paddingDivEnd = document.createElement('div');
-    paddingDivEnd.style.height = '75px';
+    paddingDivEnd.style.height = '50px';
     wheel.appendChild(paddingDivEnd);
 }
 		
