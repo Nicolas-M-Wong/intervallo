@@ -40,7 +40,7 @@ cd "$DESKTOP_DIR/intervallo-$1"
 #go to main
 
 git config pull.rebase false
-git pull https://www.github.com/Nicolas-M-Wong/intervallo main
+git pull https://www.github.com/Nicolas-M-Wong/intervallo "$1"
 
 DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
 
