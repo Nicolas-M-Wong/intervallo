@@ -453,14 +453,14 @@ function createWheel_sec_ms(elementId, step_s, step_ms, length) {
 		
 		function getCurrentValue(wheel,step_ms) {
 			const numbers = wheel.querySelectorAll('.number');
-			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 25)/50);
+			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
 			return parseFloat(numbers[middleIndex].innerText, 10).toFixed(countDecimalPlaces(step_ms));
 		}
 
 		function adjustScroll(wheel,wheelId) {
 			const numbers = wheel.querySelectorAll('.number');
-			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 25)/50);
-			const targetScrollTop = middleIndex * 50 - wheel.clientHeight/3 + 25;
+			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
+			const targetScrollTop = middleIndex * 50 - wheel.clientHeight/3 + 50;
 
 			wheel.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
 			updateSelectedNumber(wheel,wheelId);
