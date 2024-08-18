@@ -349,9 +349,9 @@ function update_time() {
     timerHeader.textContent = currentTimeHeader;
 }
 
-function update_battery(batteyLevel) {
+function update_battery(batteryLevel) {
     const batteryHeader = document.getElementById('battery-header');
-    batteryHeader.textContent = `${batteyLevel}%`;
+    batteryHeader.textContent = `${batteryLevel}%`;
     if (batteryLevel === ""){
         sendPostRequest("battery");
     }
@@ -451,91 +451,91 @@ function createWheel_sec_ms(elementId, step_s, step_ms, length) {
     wheel.appendChild(paddingDivEnd);
 }
 		
-		function getCurrentValue(wheel,step_ms) {
-			const numbers = wheel.querySelectorAll('.number');
-			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
-			return parseFloat(numbers[middleIndex].innerText, 10).toFixed(countDecimalPlaces(step_ms));
-		}
+function getCurrentValue(wheel,step_ms) {
+	const numbers = wheel.querySelectorAll('.number');
+	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
+	return parseFloat(numbers[middleIndex].innerText, 10).toFixed(countDecimalPlaces(step_ms));
+}
 
-		function adjustScroll(wheel,wheelId) {
-			const numbers = wheel.querySelectorAll('.number');
-			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
-			const targetScrollTop = middleIndex * 50 - wheel.clientHeight/3 + 50;
+function adjustScroll(wheel,wheelId) {
+	const numbers = wheel.querySelectorAll('.number');
+	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
+	const targetScrollTop = middleIndex * 50 - wheel.clientHeight/3 + 50;
 
-			wheel.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
-			updateSelectedNumber(wheel,wheelId);
-		}
-
-
-        function attachWheelEvents(wheelId) {
-            const wheel = document.getElementById(wheelId);
-            let scrollTimeout;
-            wheel.addEventListener('scroll', () => {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    adjustScroll(wheel,wheelId);
-                }, 100);
-            });
-        }
-
-		function updateSelectedNumber(wheel,wheelId) {
-			const numbers = wheel.querySelectorAll('.number');
-			const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/12 - 25)/50);
-			console.log(middleIndex, wheel.scrollTop, wheel.clientHeight/12)
-			
-			numbers.forEach(num => {
-				num.classList.remove('selected'); 
-				delete num.dataset.mode;
-				num.removeAttribute('id');
-				});
-				
-			if (middleIndex >= 0 && middleIndex < numbers.length) {
-				numbers[middleIndex].classList.add('selected');
-				let selectedElements = document.getElementsByClassName('number selected');
-				let themeMode = sessionStorage.getItem('theme') || 'dark';
-				
-				for (let i = 0; i < selectedElements.length; i++) {
-					selectedElements[i].id = 'number_selected_'+wheelId;
-					selectedElements[i].dataset.mode = themeMode;
-				}
-			}
+	wheel.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+	updateSelectedNumber(wheel,wheelId);
+}
 
 
-		}
+function attachWheelEvents(wheelId) {
+	const wheel = document.getElementById(wheelId);
+	let scrollTimeout;
+	wheel.addEventListener('scroll', () => {
+		clearTimeout(scrollTimeout);
+		scrollTimeout = setTimeout(() => {
+			adjustScroll(wheel,wheelId);
+		}, 100);
+	});
+}
 
-		function countDecimalPlaces(num) {
-			let numStr = num.toString();
-			let decimalIndex = numStr.indexOf('.');
-			if (decimalIndex === -1) {
-				return 0;
-			}
-			return numStr.length - decimalIndex - 1;
-			//Compte les chiffres après la virgule du pas décimal
-			//Compte les caractères pour éviter une boucle while
-		}
-
-		const step1 = 1
-		const step2 = 0.1
-		
-        createWheel_sec('nb_photo', step1, 500);  // Changez le pas ici pour chaque roue
-        createWheel_sec_ms('tmp_pose', step1, step2, 240);  // Changez le pas ici pour chaque roue
-        createWheel_sec_ms('enregistrement', step1, step2, 600);  // Changez le pas ici pour chaque roue
-
-        attachWheelEvents('nb_photo');
-        attachWheelEvents('tmp_pose');
-        attachWheelEvents('enregistrement');
-
-		document.getElementById('wheelForm').addEventListener('submit', function(event) {
-			event.preventDefault();
-
-			const nbPhotos = getCurrentValue(document.getElementById('nb_photo'),step1);
-			const tmp_pose = getCurrentValue(document.getElementById('tmp_pose'),step2);
-			const tmp_enregistrement = getCurrentValue(document.getElementById('enregistrement'),step2);
-
-			// Simulate form submission
-			// sendPostRequest(nbPhotos,tmp_pose,tmp_enregistrement);
-			// showDialog(value1,value2,value3);
+function updateSelectedNumber(wheel,wheelId) {
+	const numbers = wheel.querySelectorAll('.number');
+	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/12 - 25)/50);
+	console.log(middleIndex, wheel.scrollTop, wheel.clientHeight/12)
+	
+	numbers.forEach(num => {
+		num.classList.remove('selected'); 
+		delete num.dataset.mode;
+		num.removeAttribute('id');
 		});
+		
+	if (middleIndex >= 0 && middleIndex < numbers.length) {
+		numbers[middleIndex].classList.add('selected');
+		let selectedElements = document.getElementsByClassName('number selected');
+		let themeMode = sessionStorage.getItem('theme') || 'dark';
+		
+		for (let i = 0; i < selectedElements.length; i++) {
+			selectedElements[i].id = 'number_selected_'+wheelId;
+			selectedElements[i].dataset.mode = themeMode;
+		}
+	}
+
+
+}
+
+function countDecimalPlaces(num) {
+	let numStr = num.toString();
+	let decimalIndex = numStr.indexOf('.');
+	if (decimalIndex === -1) {
+		return 0;
+	}
+	return numStr.length - decimalIndex - 1;
+	//Compte les chiffres après la virgule du pas décimal
+	//Compte les caractères pour éviter une boucle while
+}
+
+const step1 = 1
+const step2 = 0.1
+
+createWheel_sec('nb_photo', step1, 500);  // Changez le pas ici pour chaque roue
+createWheel_sec_ms('tmp_pose', step1, step2, 240);  // Changez le pas ici pour chaque roue
+createWheel_sec_ms('enregistrement', step1, step2, 600);  // Changez le pas ici pour chaque roue
+
+attachWheelEvents('nb_photo');
+attachWheelEvents('tmp_pose');
+attachWheelEvents('enregistrement');
+
+document.getElementById('wheelForm').addEventListener('submit', function(event) {
+	event.preventDefault();
+
+	const nbPhotos = getCurrentValue(document.getElementById('nb_photo'),step1);
+	const tmp_pose = getCurrentValue(document.getElementById('tmp_pose'),step2);
+	const tmp_enregistrement = getCurrentValue(document.getElementById('enregistrement'),step2);
+
+	// Simulate form submission
+	// sendPostRequest(nbPhotos,tmp_pose,tmp_enregistrement);
+	// showDialog(value1,value2,value3);
+});
  
 startUp();
 setInterval(function(){update_time();}, 1000)
