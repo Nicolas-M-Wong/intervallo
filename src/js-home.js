@@ -612,6 +612,7 @@ function changeToV1() {
 }
 
 function updating_values() {
+	parseInt(sessionStorage.getItem("nb_photos_page_change"), 10);
 	document.getElementById('nb_photos').value = sessionStorage.getItem("nb_photos_page_change");
 	document.getElementById('tmp_pose').value = sessionStorage.getItem("tmp_pose_page_change");
 	document.getElementById('enregistrement').value = sessionStorage.getItem("enregistrement_page_change");
