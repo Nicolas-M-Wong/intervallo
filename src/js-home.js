@@ -591,12 +591,17 @@ function changeToV1() {
 	sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
 	sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
 	// store current data in the session storage to fill the next page with the current values set
-	sendGetRequest('home-V1.html')
+	sendGetRequest('home-V1.html').then(() => {
 	// Request the home page
 	document.getElementById('nb_photos').value = sessionStorage.getItem("nb_photos_page_change");
 	document.getElementById('tmp_pose').value = sessionStorage.getItem("tmp_pose_page_change");
 	document.getElementById('enregistrement').value = sessionStorage.getItem("enregistrement_page_change");
 	// set the values accordingly in the new home page displayed
+		}).catch(error => {
+		console.error('Error loading content:', error);
+	});
+	sendPostRequest("battery");
+	// Update the battery level
 	sessionStorage.nb_photos_page_change = 0;
 	sessionStorage.tmp_pose_page_change = 0;
 	sessionStorage.enregistrement_page_change = 0;
