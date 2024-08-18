@@ -197,7 +197,7 @@ function sendPostRequest(data) {
 function sendGetRequest(fileName) {
     const url = `/${fileName}`;
 
-    fetch(url, {
+    return fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'text/plain', // Adjust the content type if necessary
@@ -207,13 +207,12 @@ function sendGetRequest(fileName) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.text(); // You can change this to response.json() if the response is JSON
-    })
-    .then(data => {
-	document.getElementById('screen-container').innerHTML = data;
+        return response.text(); // Change this to response.json() if the response is JSON
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
+        // Optionally, you might want to return a rejected promise or a default value here
+        return Promise.reject(error);
     });
 }
 
@@ -268,12 +267,16 @@ const phone = DetectDevice()
 
 if (phone == false) {
 	document.getElementById('phone-screen').style.display = "none";
-	sendGetRequest(document.getElementById('big-screen').getAttribute('href'));
+	sendGetRequest(document.getElementById('big-screen').getAttribute('href')).then(data => {
+	document.getElementById('screen-container').innerHTML = data;
+    });
 }
 
 else if (detectLandscapeOrientation()) {
 	document.getElementById('phone-screen').style.display = "none";
-	sendGetRequest(document.getElementById('landscape-screen').getAttribute('href'));
+	sendGetRequest(document.getElementById('landscape-screen').getAttribute('href')).then(data => {
+	document.getElementById('screen-container').innerHTML = data;
+    });
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
