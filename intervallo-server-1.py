@@ -50,8 +50,6 @@ http_type_header_dict.update({"js":"text/javascript"}) #adding .js files
 
 
 ########################################## Capturing photo ####################
-# command = "sudo sh "+dir+"/compiler.sh"
-# result = os.popen(command)
 
 def sec_2_min_h (tmp_prise_loc):
     if 60 < tmp_prise_loc <3600:
@@ -62,10 +60,10 @@ def sec_2_min_h (tmp_prise_loc):
         tmp_min_h = str(round(tmp_prise_loc))+"s"
     return(tmp_min_h)
 
-def photo_capture(nb_photo_loc,tmp_pose_loc,tmp_enregistrement_loc):
+def photo_capture(nb_photos_loc,tmp_pose_loc,tmp_enregistrement_loc):
     #Capture d'une unique photo
     addr_command = "./Trigger.exe "
-    command = "sudo "+addr_command+str(tmp_pose_loc)+" "+str(nb_photo_loc)+" "+str(tmp_enregistrement_loc)
+    command = "sudo "+addr_command+str(tmp_pose_loc)+" "+str(nb_photos_loc)+" "+str(tmp_enregistrement_loc)
     print(command)
     os.popen(command)
     return
@@ -227,8 +225,8 @@ if TCP_IP != "127.0.0.1":
             except:
                 pass
             
-            if "nb_photo" in parameters.keys():
-                tmp_prise = parameters.get('nb_photo',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photo',0)-1)
+            if "nb_photos" in parameters.keys():
+                tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
                 print(tmp_prise)
                 new_cmd_date = parameters.get('date',0)
                 
@@ -237,7 +235,7 @@ if TCP_IP != "127.0.0.1":
                     
                     new_cmd_date +=1000*tmp_prise
                     expct_end_date = new_cmd_date
-                    photo_capture(parameters.get('nb_photo',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
+                    photo_capture(parameters.get('nb_photos',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
                 
                 else:
                     print("shot command during an existing shoot")

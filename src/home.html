@@ -53,39 +53,37 @@
         		</div>
     		</div>
     		
-    		<form method="post" class="param-submit">
-    		
-        		<div class="param-submit">
-				
-					<div class="label-info">
-						<label for="nb_photo">Nombre de photo</label>
-						<span class="tooltip" title="Nombre de photo qui seront prise par l'appareil">&#x24D8</span>
-            		</div>
-					<input type="number" name="nb_photo" id ="nb_photo" data-mode="dark" required />
-					
-					<div class="label-info">
-						<label for="tmp_pose">Temps d'expo</label>
-						<span class="tooltip" title="Temps d'exposition pour une photo">&#x24D8</span>
-            		</div>
-            		<input type="number" step="0.01" name="tmp_pose" id ="tmp_pose" data-mode="dark" required />
-					
-					<div class="label-info">
-						<label for="enregistrement">Intervalle</label>
-						<span class="tooltip" title="Intervalle de temps entre chaque photo">&#x24D8</span>
-            		</div>
-            		<input type="number" step="0.01" name="tmp_enregistrement" id ="enregistrement" data-mode="dark"required />
-     
-            		<input type="submit" id="form-submit" value="Ok"/>
-                </div>
-            </form>  
+    		    <div class="container-wheel">
+					<div class="wheel-wrapper">
+						<div class="wheel-title">Photos</div>
+						<div id="nb_photos" class="number-wheel"></div>
+					   
+					</div>
+					<div class="wheel-wrapper">
+						<div class="wheel-title">Expo</div>
+						<div id="tmp_pose" class="number-wheel"></div>
+					   
+					</div>
+					<div class="wheel-wrapper">
+						<div class="wheel-title">Intervalle</div>
+						<div id="enregistrement" class="number-wheel"></div>
+						
+					</div>
+				</div>
+				<form id="wheelForm">
+					<input type="hidden" id="value1" name="value1">
+					<input type="hidden" id="value2" name="value2">
+					<input type="hidden" id="value3" name="value3">
+					<button type="submit" id="form-submit" value="Ok">Ok</button>
+				</form>
     	</div>
     
         <div id="confirmation" style="display: none;">
             <h3>Temps de prise de vue estimé : </h3><h3 id="estimation_tmp"></h3>
             <form action = "" method="post" class = "confirmation-form">
                 <div class="flex-column-confirm">
-                    <button name="confirm" value="Confirmer" id="openDialogBox">Confirmer</button>
-                    <button name="test-shot" value="Photo_test" id="test-shot">Photo test</button>
+                    <button name="confirm" value="Confirmer" id="openDialogBox" onclick="handleButtonClick('No')">Confirmer</button>
+                    <button name="test-shot" value="Photo_test" id="test-shot" onclick="handleButtonClick('Yes')">Photo test</button>
                 </div>
             </form>
         </div>
@@ -113,7 +111,7 @@
 		<div id="shutdown-inf">
         <div class="shutdown-wrapper" id="shutdown-wrapper" data-mode="dark">
             <div class="shutdown-content" data-mode="dark">
-                <h1 class="shutdown-title">Hop au dodo</h1>
+                <h1 class="shutdown-title">Bonne nuit!</h1>
                 <p class="shutdown-message">L'intervallomètre va s'éteindre dans 15 sec</p>
             </div>
             <div class="loading-wrapper">
