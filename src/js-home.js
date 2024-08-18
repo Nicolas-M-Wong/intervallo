@@ -606,12 +606,15 @@ function changeToV1() {
 		}).catch(error => {
 		console.error('Error loading content:', error);
 	});
-	document.getElementById('nb_photos').value = sessionStorage.getItem("nb_photos_page_change");
-	document.getElementById('tmp_pose').value = sessionStorage.getItem("tmp_pose_page_change");
-	document.getElementById('enregistrement').value = sessionStorage.getItem("enregistrement_page_change");
 	sendPostRequest("battery");
 	// Update the battery level
 	// Delete the value stored
+}
+
+function updating_values() {
+	document.getElementById('nb_photos').value = sessionStorage.getItem("nb_photos_page_change");
+	document.getElementById('tmp_pose').value = sessionStorage.getItem("tmp_pose_page_change");
+	document.getElementById('enregistrement').value = sessionStorage.getItem("enregistrement_page_change");
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
