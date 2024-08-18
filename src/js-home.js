@@ -611,9 +611,6 @@ function changeToV1() {
 	document.getElementById('enregistrement').value = sessionStorage.getItem("enregistrement_page_change");
 	sendPostRequest("battery");
 	// Update the battery level
-	sessionStorage.nb_photos_page_change = 0;
-	sessionStorage.tmp_pose_page_change = 0;
-	sessionStorage.enregistrement_page_change = 0;
 	// Delete the value stored
 }
 
