@@ -3,6 +3,45 @@ let dialogBoxId = document.getElementById("dialogBox");
 let countdownInterval;
 let countDownDate;
 
+const step_s = 1
+const step_ms = 0.1
+const length_photo = 500;
+const length_pose = 240;
+const length_enregistrement = 600;
+
+const step_photo = [
+	{ start: 0, end: length_photo, step: step_s, fixed: false } //Between 0 and 500, 1 picture step
+];
+
+const step_pose = [
+	{ start: step_ms, end: 1-step_ms, step: step_ms, fixed: true }, //Between 0 and 1, 0.1s step
+	{ start: 1, end: 5, step: 5 * step_ms, fixed: true }, //Between 1 and 5, 0.5s step
+	{ start: 5, end: 60-step_s, step: step_s, fixed: false }, //Between 5 and 60, 1s step
+	{ start: 60, end: length_pose, step: 10*step_s, fixed: false } //Between 60 to the end, 10s step
+];
+
+const step_enregistrement = [
+	{ start: step_ms, end: 1-step_ms, step: step_ms, fixed: true }, //Between 0 and 1, 0.1s step
+	{ start: 1, end: 5, step: 5 * step_ms, fixed: true }, //Between 1 and 5, 0.5s step
+	{ start: 5, end: 60-step_s, step: step_s, fixed: false }, //Between 5 and 60, 1s step
+	{ start: 60, end: length_enregistrement, step: 10*step_s, fixed: false } //Between 60 to the end, 10s step
+];
+
+createWheel('nb_photos', step_photo);
+createWheel('tmp_pose', step_pose);
+createWheel('enregistrement', step_enregistrement);
+
+attachWheelEvents('nb_photos');
+attachWheelEvents('tmp_pose');
+attachWheelEvents('enregistrement');
+ 
+startUp();
+setInterval(function(){update_time();}, 1000)
+setInterval(function(){
+    sendPostRequest("battery");},300000)
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
 	const notificationMessage = document.getElementById("notificationMessage");
 	const notificationTitle = document.getElementById("notificationTitle");
@@ -47,11 +86,15 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
     }, 1000);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function closeDialog() {
     dialogBoxId.close(); 
     // Clear the countdown interval when the dialog box is closed
     clearInterval(countdownInterval);
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 // Function to format time in hh:mm:ss
 function formatTime(totalSeconds) {
@@ -63,63 +106,64 @@ function formatTime(totalSeconds) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-// Add event listener to the form submit event
-document.getElementById("interval-Form").addEventListener("submit", handleSubmit);
-
 let formData; // Define formData in the global scope
 
-function handleSubmit(event) {
-	// Prevent the default form submission behavior
+document.getElementById('wheelForm').addEventListener('submit', function(event) {
 	event.preventDefault();
-	
-	let nbPhotos = getCurrentValue(document.getElementById('nb_photo'),step1);
-	let exposureTime = getCurrentValue(document.getElementById('tmp_pose'),step2);
-	let timeBetweenPhotos = getCurrentValue(document.getElementById('enregistrement'),step2);
 
+	const nb_photos = getCurrentValue(document.getElementById('nb_photos'),step_photo);
+	const tmp_pose = getCurrentValue(document.getElementById('tmp_pose'),step_pose);
+	const tmp_enregistrement = getCurrentValue(document.getElementById('enregistrement'),step_enregistrement);
+	
 	// Get the values of the form fields
 	// Calculate the total time
-	const totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
+	const totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
 	console.log("Total time for the interval:", totalTime, "seconds");
 
 	// Display formatted time in confirmation
-	document.getElementById("estimation_tmp").innerHTML = formatTime(totalTime);
+	document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
 	document.getElementById("confirmation").style.display = "block";
 
 	// Prepare form data for the POST request
 	formData = new FormData(event.target);
-}
+});
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function handleButtonClick(test_status) {
     if (formData) {
         const data = {};
-        const nbPhotos = getCurrentValue(document.getElementById('nb_photo'),step1);
-		data["nb_photo"] = nbPhotos;
+        const nb_photos = getCurrentValue(document.getElementById('nb_photos'),step_photo);
+		data["nb_photos"] = nb_photos;
 		if (test_status === "Yes"){
-            data["nb_photo"] = 1;
+            data["nb_photos"] = 1;
             }
-		let exposureTime = getCurrentValue(document.getElementById('tmp_pose'),step2);
-		let timeBetweenPhotos = getCurrentValue(document.getElementById('enregistrement'),step2);
+		let tmp_pose = getCurrentValue(document.getElementById('tmp_pose'),step_pose);
+		let tmp_enregistrement = getCurrentValue(document.getElementById('enregistrement'),step_enregistrement);
 
 		var now = new Date().getTime();
 		
-		data["tmp_pose"] = exposureTime;
-		data["tmp_enregistrement"] = timeBetweenPhotos
-		console.log(data["nb_photo"])
+		data["tmp_pose"] = tmp_pose;
+		data["tmp_enregistrement"] = tmp_enregistrement
 		data["date"] = now;
         sendPostRequest(data);
-        showDialog(data["nb_photo"], exposureTime, timeBetweenPhotos); // Show the dialog box with the countdown
+        showDialog(data["nb_photos"], tmp_pose, tmp_enregistrement); // Show the dialog box with the countdown
     } else {
         console.error('Form data is not available. Please submit the form first.');
     }
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function remoteTrigger(){
-const triggerMessage = {"nb_photo":"1", "tmp_pose":"0.1", "tmp_enregistrement":"0"};
-var now = new Date().getTime();
-triggerMessage["date"] = now;
-console.log(triggerMessage);
-sendPostRequest(triggerMessage)
+	const triggerMessage = {"nb_photos":"1", "tmp_pose":"0.1", "tmp_enregistrement":"0"};
+	var now = new Date().getTime();
+	triggerMessage["date"] = now;
+	console.log(triggerMessage);
+	sendPostRequest(triggerMessage)
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function sendPostRequest(data) {
     const xhr = new XMLHttpRequest();
@@ -148,20 +192,7 @@ function sendPostRequest(data) {
     xhr.send(JSON.stringify(data));
 }
 
-// Prevent the dialog box from closing when the confirm button is clicked
-document.getElementById("confirmation").addEventListener("click", function(event) {
-    event.preventDefault();
-
-});
-
-function DetectDevice() {
-    let isMobile = window.matchMedia || window.msMatchMedia;
-    if(isMobile) {
-        let match_mobile = isMobile("(pointer:coarse)");
-        return match_mobile.matches;
-    }
-    return false;
-}
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function sendGetRequest(fileName) {
     const url = `/${fileName}`;
@@ -186,11 +217,34 @@ function sendGetRequest(fileName) {
     });
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+// Prevent the dialog box from closing when the confirm button is clicked
+document.getElementById("confirmation").addEventListener("click", function(event) {
+    event.preventDefault();
+
+});
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+function DetectDevice() {
+    let isMobile = window.matchMedia || window.msMatchMedia;
+    if(isMobile) {
+        let match_mobile = isMobile("(pointer:coarse)");
+        return match_mobile.matches;
+    }
+    return false;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function detectLandscapeOrientation() {
     const orientation = window.matchMedia("(orientation: landscape)").matches;
     const wideScreen= window.innerWidth > 800;
     return orientation||wideScreen;
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function toggleNotif(){
 	// Update notification message and title
@@ -208,6 +262,8 @@ function toggleNotif(){
 	});
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 const phone = DetectDevice()
 
 if (phone == false) {
@@ -220,17 +276,21 @@ else if (detectLandscapeOrientation()) {
 	sendGetRequest(document.getElementById('landscape-screen').getAttribute('href'));
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function handleButtonClickBack(event) {
 	event.preventDefault();
 	closeDialog();
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('toggle-mode');
     const body = document.body;
     const elementsToToggle = [body, document.getElementById('dialogBox'),
 	document.getElementById('main'),document.getElementById('navbar-id'),
-	document.getElementById('nb_photo'),document.getElementById('tmp_pose'),
+	document.getElementById('nb_photos'),document.getElementById('tmp_pose'),
 	document.getElementById('enregistrement'),document.getElementById('shutdown'),
 	document.getElementById('big-screen'),document.getElementById('landscape-screen'),
 	document.getElementById('shutdown-wrapper'),document.getElementById('half-circle')];
@@ -280,58 +340,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function shutDown() { 
-    document.getElementById('main').style.display = "none";
-    document.getElementById('shutdown').style.display = "flex";
-	document.getElementById('shutdown').style.justifyContent = 'center';
-    sendPostRequest("shutdown");
-}
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function serverEnd(status_var) { 
-
-	const theme = sessionStorage.getItem('theme');
-	
-	const titleElement = document.querySelector('.shutdown-title');
-	const messageElement = document.querySelector('.shutdown-message');
-	const rotatingObject = document.querySelector('.rotating-object');
-	
-	if (theme === 'dark'){
-			// Update title
-            titleElement.textContent = "Hop au dodo";}
-
-    if (theme === 'light'){
-            // Update title
-            titleElement.textContent = "Hop ça dégage";}
-
-    document.getElementById('main').style.display = "none";
-    document.getElementById('shutdown').style.display = "flex";
-    document.getElementById('shutdown').style.justifyContent = 'center';
-
-    setTimeout(() => {
-        rotatingObject.style.animation = 'none';
-        if (theme === 'dark'){
-                // Update title
-                titleElement.textContent = "Bonne nuit";}
-                //messageElement.textContent = "L'intervallomètre est éteint";}
-        if (theme === 'light'){
-            // Update title
-        titleElement.textContent = "Bonne journée";}
-        //messageElement.textContent = "L'intervallomètre est éteint";}
-        messageElement.textContent = "L'intervallomètre est éteint";
-            rotatingObject.style.animation = 'none';
-
-        titleElement.transition = 'opacity 0.7s ease-in-out';
-        messageElement.transition = 'opacity 0.7s ease-in-out';
-        //Optionally, redirect or perform other actions after a delay
-        // Stop rotating animation
-        rotatingObject.style.animation = 'none';
-        
-        // Smoothly hide rotating object
-        rotatingObject.style.transition = 'opacity 0.7s ease-in-out';
-        rotatingObject.style.opacity = '0';
-    }, 15000); // 15 seconds (15000 milliseconds)
-    sendPostRequest(status_var);
-}
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function changeColor(side) {
     document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
@@ -339,6 +350,9 @@ function changeColor(side) {
     document.getElementById(`photo-distance-${side}`).style.backgroundColor = "transparent";
     }, 350); // Temps en millisecondes
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function update_time() {
     const now = new Date();
     const hoursHeader = now.getHours().toString().padStart(2, '0');
@@ -349,6 +363,8 @@ function update_time() {
     timerHeader.textContent = currentTimeHeader;
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function update_battery(batteryLevel) {
     const batteryHeader = document.getElementById('battery-header');
     batteryHeader.textContent = `${batteryLevel}%`;
@@ -356,10 +372,15 @@ function update_battery(batteryLevel) {
         sendPostRequest("battery");
     }
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function startUp() {
    update_time();
    sendPostRequest("battery");
  }
+ 
+ // ---------------------------------------------------------------------------------------------------------------------------------------------
  
 function createWheel_sec(elementId, step, length) {
     const wheel = document.getElementById(elementId);
@@ -400,62 +421,61 @@ function createWheel_sec(elementId, step, length) {
     wheel.appendChild(paddingDivEnd);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 		
-function createWheel_sec_ms(elementId, step_s, step_ms, length) {
+function createWheel(elementId, step) {
     const wheel = document.getElementById(elementId);
     const paddingDiv = document.createElement('div');
     paddingDiv.style.height = '50px';
     wheel.appendChild(paddingDiv);
 
-    // Flag to determine if this is the first element in the first loop
-    let isFirst = true; // <-- Added line
+    // Flag to determine if this is the first element
+    let isFirst = true;
 
-    for (let i = 0; i <= 1 - step_ms; i += step_ms) {  // Define the step for the wheel
-        const numberDiv = document.createElement('div');
-        numberDiv.className = 'number';
-        numberDiv.innerText = i.toFixed(countDecimalPlaces(step_ms));
-        
-        // Apply attributes to the first numberDiv in this loop
-        if (isFirst) { // <-- Added condition
-            numberDiv.id = 'number_selected_'+elementId; // <-- Added line
-            numberDiv.classList.add('selected'); // <-- Added line
-            isFirst = false; // <-- Added line to reset the flag
+    step.forEach(({ start, end, step, fixed }) => {
+        for (let i = start; i <= end; i += step) {
+            const numberDiv = document.createElement('div');
+            numberDiv.className = 'number';
+            numberDiv.innerText = fixed ? i.toFixed(countDecimalPlaces(step)) : i;
+
+            // Apply attributes to the first numberDiv
+            if (isFirst) {
+                numberDiv.id = 'number_selected_' + elementId;
+                numberDiv.classList.add('selected');
+                isFirst = false;
+            }
+
+            wheel.appendChild(numberDiv);
         }
-        
-        wheel.appendChild(numberDiv);
-    }
-
-    for (let i = 1; i <= 5 - 5 * step_ms; i += 5 * step_ms) {  // Define the step for the wheel
-        const numberDiv = document.createElement('div');
-        numberDiv.className = 'number';
-        numberDiv.innerText = i.toFixed(countDecimalPlaces(step_ms));
-        wheel.appendChild(numberDiv);
-    }
-
-    for (let i = 5; i < 60; i += step_s) {  // Define the step for the wheel
-        const numberDiv = document.createElement('div');
-        numberDiv.className = 'number';
-        numberDiv.innerText = i;
-        wheel.appendChild(numberDiv);
-    }
-
-    for (let i = 60; i <= length; i += 10 * step_s) {  // Define the step for the wheel
-        const numberDiv = document.createElement('div');
-        numberDiv.className = 'number';
-        numberDiv.innerText = i;
-        wheel.appendChild(numberDiv);
-    }
+    });
 
     const paddingDivEnd = document.createElement('div');
     paddingDivEnd.style.height = '50px';
     wheel.appendChild(paddingDivEnd);
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 		
-function getCurrentValue(wheel,step_ms) {
+function getCurrentValue(wheel, step_array) {
 	const numbers = wheel.querySelectorAll('.number');
 	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
-	return parseFloat(numbers[middleIndex].innerText, 10).toFixed(countDecimalPlaces(step_ms));
+	const currentValue = parseFloat(numbers[middleIndex].innerText, 10);
+
+	// Function to get the current step based on value and step_pose
+	function getStep(value, step_array) {
+		for (let i = 0; i < step_array.length; i++) {
+			if (value >= step_array[i].start && value < step_array[i].end) {
+				return step_array[i].step;
+			}
+		}
+		return step_array[step_array.length - 1].step; // Default to the last step if not found
+	}
+
+	const step = getStep(currentValue, step_array);
+	return currentValue.toFixed(countDecimalPlaces(step));
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function adjustScroll(wheel,wheelId) {
 	const numbers = wheel.querySelectorAll('.number');
@@ -466,6 +486,7 @@ function adjustScroll(wheel,wheelId) {
 	updateSelectedNumber(wheel,wheelId);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function attachWheelEvents(wheelId) {
 	const wheel = document.getElementById(wheelId);
@@ -478,11 +499,11 @@ function attachWheelEvents(wheelId) {
 	});
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function updateSelectedNumber(wheel,wheelId) {
 	const numbers = wheel.querySelectorAll('.number');
 	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/12 - 25)/50);
-	console.log(middleIndex, wheel.scrollTop, wheel.clientHeight/12)
-	
 	numbers.forEach(num => {
 		num.classList.remove('selected'); 
 		delete num.dataset.mode;
@@ -499,9 +520,9 @@ function updateSelectedNumber(wheel,wheelId) {
 			selectedElements[i].dataset.mode = themeMode;
 		}
 	}
-
-
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function countDecimalPlaces(num) {
 	let numStr = num.toString();
@@ -514,30 +535,51 @@ function countDecimalPlaces(num) {
 	//Compte les caractères pour éviter une boucle while
 }
 
-const step1 = 1
-const step2 = 0.1
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
-createWheel_sec('nb_photo', step1, 500);  // Changez le pas ici pour chaque roue
-createWheel_sec_ms('tmp_pose', step1, step2, 240);  // Changez le pas ici pour chaque roue
-createWheel_sec_ms('enregistrement', step1, step2, 600);  // Changez le pas ici pour chaque roue
+function shutDown() { 
+    document.getElementById('main').style.display = "none";
+    document.getElementById('shutdown').style.display = "flex";
+	document.getElementById('shutdown').style.justifyContent = 'center';
+    sendPostRequest("shutdown");
+}
 
-attachWheelEvents('nb_photo');
-attachWheelEvents('tmp_pose');
-attachWheelEvents('enregistrement');
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
-document.getElementById('wheelForm').addEventListener('submit', function(event) {
-	event.preventDefault();
+function serverEnd(status_var) { 
 
-	const nbPhotos = getCurrentValue(document.getElementById('nb_photo'),step1);
-	const tmp_pose = getCurrentValue(document.getElementById('tmp_pose'),step2);
-	const tmp_enregistrement = getCurrentValue(document.getElementById('enregistrement'),step2);
+	const theme = sessionStorage.getItem('theme');
+	
+	const titleElement = document.querySelector('.shutdown-title');
+	const messageElement = document.querySelector('.shutdown-message');
+	const rotatingObject = document.querySelector('.rotating-object');
+	
+	if (theme === 'dark'){
+			// Update title
+            titleElement.textContent = "Bonne nuit";}
 
-	// Simulate form submission
-	// sendPostRequest(nbPhotos,tmp_pose,tmp_enregistrement);
-	// showDialog(value1,value2,value3);
-});
- 
-startUp();
-setInterval(function(){update_time();}, 1000)
-setInterval(function(){
-    sendPostRequest("battery");},300000)
+    if (theme === 'light'){
+            // Update title
+            titleElement.textContent = "Bonne journée";}
+
+    document.getElementById('main').style.display = "none";
+    document.getElementById('shutdown').style.display = "flex";
+    document.getElementById('shutdown').style.justifyContent = 'center';
+
+    setTimeout(() => {
+        rotatingObject.style.animation = 'none';
+        messageElement.textContent = "L'intervallomètre est éteint";
+            rotatingObject.style.animation = 'none';
+
+        titleElement.transition = 'opacity 0.7s ease-in-out';
+        messageElement.transition = 'opacity 0.7s ease-in-out';
+        //Optionally, redirect or perform other actions after a delay
+        // Stop rotating animation
+        rotatingObject.style.animation = 'none';
+        
+        // Smoothly hide rotating object
+        rotatingObject.style.transition = 'opacity 0.7s ease-in-out';
+        rotatingObject.style.opacity = '0';
+    }, 15000); // 15 seconds (15000 milliseconds)
+    sendPostRequest(status_var);
+}
