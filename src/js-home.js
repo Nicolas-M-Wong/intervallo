@@ -364,9 +364,9 @@ function update_time() {
     timerHeader.textContent = currentTimeHeader;
 }
 
-function update_battery(batteyLevel) {
+function update_battery(batteryLevel) {
     const batteryHeader = document.getElementById('battery-header');
-    batteryHeader.textContent = `${batteyLevel}%`;
+    batteryHeader.textContent = `${batteryLevel}%`;
     if (batteryLevel === ""){
         sendPostRequest("battery");
     }
