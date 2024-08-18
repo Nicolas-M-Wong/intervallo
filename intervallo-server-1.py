@@ -36,6 +36,18 @@ http_type_header_dict.update({"jpg":"image/jpeg"}) #adding jpg files as jpeg
 http_type_header_dict.update({"ico":"image/x-icon"}) #adding.ico files
 http_type_header_dict.update({"js":"text/javascript"}) #adding .js files
 
+################################# List of possible post request ###############
+
+
+# post_request={
+#     "nb_photo":"number of picture to take requested by the user",
+#     "tmp_pose": "exposure time for each picture",
+#     "tmp_enregistrement": "time interval between each frame",
+#     "date": "date & time at which the request has been sent by the user",
+#     "sleep": "shutdown the server but keeps the raspi online, used for testing purposes",
+#     "shutdown": "shutdown the raspi and the server",
+#     "battery": "request periodically the battery level to display to the user"}
+
 
 ########################################## Capturing photo ####################
 # command = "sudo sh "+dir+"/compiler.sh"
