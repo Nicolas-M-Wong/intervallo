@@ -583,3 +583,49 @@ function serverEnd(status_var) {
     }, 15000); // 15 seconds (15000 milliseconds)
     sendPostRequest(status_var);
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+function changeColor(side) {
+    document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
+    setTimeout(() => {
+    document.getElementById(`photo-distance-${side}`).style.backgroundColor = "transparent";
+    }, 350); // Temps en millisecondes
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+function update_time() {
+    const now = new Date();
+    const hoursHeader = now.getHours().toString().padStart(2, '0');
+    const minutesHeader = now.getMinutes().toString().padStart(2, '0');
+    const secondsHeader = now.getSeconds().toString().padStart(2, '0');
+    const currentTimeHeader = `${hoursHeader}:${minutesHeader}`;
+    const timerHeader = document.getElementById('timer-header');
+    timerHeader.textContent = currentTimeHeader;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+function update_battery(batteryLevel) {
+    const batteryHeader = document.getElementById('battery-header');
+    batteryHeader.textContent = `${batteryLevel}%`;
+    if (batteryLevel === ""){
+        sendPostRequest("battery");
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+function startUp() {
+   update_time();
+   sendPostRequest("battery");
+ }
+ 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+startUp();
+setInterval(function(){update_time();}, 1000)
+setInterval(function(){
+    sendPostRequest("battery");},300000)
+
