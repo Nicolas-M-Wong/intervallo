@@ -22,7 +22,7 @@ center_text() {
 branch="$1"
 
 if [ "$#" -lt 1 ]; then
-    echo "$0 missing branch to install"
+    echo "$0 missing branch to install\nCommand syntax: installer.sh [github-branch-name] "
     exit 1
 fi
 
