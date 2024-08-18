@@ -195,6 +195,7 @@ function sendPostRequest(data) {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function sendGetRequest(fileName) {
+    console.log(`Fetching ${fileName}`);
     const url = `/${fileName}`;
 
     return fetch(url, {
@@ -211,7 +212,6 @@ function sendGetRequest(fileName) {
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
-        // Optionally, you might want to return a rejected promise or a default value here
         return Promise.reject(error);
     });
 }
@@ -266,9 +266,15 @@ function toggleNotif(){
 const phone = DetectDevice()
 
 if (phone == false) {
-	document.getElementById('phone-screen').style.display = "none";
-	sendGetRequest(document.getElementById('big-screen').getAttribute('href')).then(data => {
-	document.getElementById('screen-container').innerHTML = data;
+    document.getElementById('phone-screen').style.display = "none";
+    const href = document.getElementById('big-screen').getAttribute('href');
+    console.log(`Fetching data from ${href}`);
+    
+    sendGetRequest(href).then(data => {
+        console.log(`Data received: ${data}`);
+        document.getElementById('screen-container').innerHTML = data;
+    }).catch(error => {
+        console.error('Fetch error:', error);
     });
 }
 
