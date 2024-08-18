@@ -195,7 +195,6 @@ function sendPostRequest(data) {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function sendGetRequest(fileName) {
-    console.log(`Fetching ${fileName}`);
     const url = `/${fileName}`;
 
     return fetch(url, {
@@ -600,8 +599,9 @@ function changeToV1() {
 	sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
 	sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
 	// store current data in the session storage to fill the next page with the current values set
-	sendGetRequest('home-V1.html').then(() => {
+	sendGetRequest('home-V1.html').then(data() => {
 	// Request the home page
+	document.getElementById('phone-screen').innerHTML = data;
 	document.getElementById('nb_photos').value = sessionStorage.getItem("nb_photos_page_change");
 	document.getElementById('tmp_pose').value = sessionStorage.getItem("tmp_pose_page_change");
 	document.getElementById('enregistrement').value = sessionStorage.getItem("enregistrement_page_change");
@@ -650,7 +650,9 @@ function update_time() {
     const secondsHeader = now.getSeconds().toString().padStart(2, '0');
     const currentTimeHeader = `${hoursHeader}:${minutesHeader}`;
     const timerHeader = document.getElementById('timer-header');
-    timerHeader.textContent = currentTimeHeader;
+	if (phone == true){
+		timerHeader.textContent = currentTimeHeader;
+	}
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
