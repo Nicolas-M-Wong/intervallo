@@ -599,7 +599,7 @@ function changeToV1() {
 	sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
 	sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
 	// store current data in the session storage to fill the next page with the current values set
-	sendGetRequest('home-V1.html').then(data() => {
+	sendGetRequest('home-V1.html').then(data => {
 	// Request the home page
 	document.getElementById('phone-screen').innerHTML = data;
 	document.getElementById('nb_photos').value = sessionStorage.getItem("nb_photos_page_change");
