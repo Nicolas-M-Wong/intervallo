@@ -602,13 +602,13 @@ function changeToV1() {
 	sendGetRequest('home-V1.html').then(data => {
 	// Request the home page
 	document.getElementById('phone-screen').innerHTML = data;
-	document.getElementById('nb_photos').value = sessionStorage.getItem("nb_photos_page_change");
-	document.getElementById('tmp_pose').value = sessionStorage.getItem("tmp_pose_page_change");
-	document.getElementById('enregistrement').value = sessionStorage.getItem("enregistrement_page_change");
 	// set the values accordingly in the new home page displayed
 		}).catch(error => {
 		console.error('Error loading content:', error);
 	});
+	document.getElementById('nb_photos').value = sessionStorage.getItem("nb_photos_page_change");
+	document.getElementById('tmp_pose').value = sessionStorage.getItem("tmp_pose_page_change");
+	document.getElementById('enregistrement').value = sessionStorage.getItem("enregistrement_page_change");
 	sendPostRequest("battery");
 	// Update the battery level
 	sessionStorage.nb_photos_page_change = 0;
@@ -626,7 +626,6 @@ function changeToV2() {
 	// store current data in the session storage to fill the next page with the current values set
 	sendGetRequest('home.html')
 	// Request the home page
-	
 	
 	var locPhotos = sessionStorage.getItem("nbPhotosNotif");
 	
@@ -650,9 +649,8 @@ function update_time() {
     const secondsHeader = now.getSeconds().toString().padStart(2, '0');
     const currentTimeHeader = `${hoursHeader}:${minutesHeader}`;
     const timerHeader = document.getElementById('timer-header');
-	if (phone == true){
-		timerHeader.textContent = currentTimeHeader;
-	}
+	timerHeader.textContent = currentTimeHeader;
+
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
