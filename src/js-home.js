@@ -595,35 +595,50 @@ function serverEnd(status_var) {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function changeToV1() {
-	sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
-	sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
-	sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
-	// store current data in the session storage to fill the next page with the current values set
-	sendGetRequest('home-V1.html').then(data => {
-	// Request the home page
-	document.getElementById('phone-screen').innerHTML = data;
-	// set the values accordingly in the new home page displayed
-		}).catch(error => {
-		console.error('Error loading content:', error);
-	});
-	
+    // Store current data in the session storage to fill the next page with the current values set
+    sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
+    sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
+    sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
+    
+    // Request the home page
+    sendGetRequest('home-V1.html').then(data => {
+        document.getElementById('phone-screen').innerHTML = data;
+
+        // After the new content is loaded, update the values
+        updating_values();
+        
+        // Optionally, if the battery level update depends on the new content being loaded
+        sendPostRequest("battery");
+    }).catch(error => {
+        console.error('Error loading content:', error);
+    });
 	document.addEventListener("DOMContentLoaded", function() {
 		console.log(document.getElementById('nb_photos').value);
 		sendPostRequest("battery");
 		console.log('after');
 		updating_values();
 		});
-	// Update the battery level
-	// Delete the value stored
-}
+	}
 
 function updating_values() {
-	
-	document.getElementById('nb_photos').value = parseInt(sessionStorage.getItem("nb_photos_page_change"), 10);
-	console.log(document.getElementById('nb_photos').value);
-	document.getElementById('tmp_pose').value = parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10);
-	document.getElementById('enregistrement').value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10);
+    const nbPhotosElement = document.getElementById('nb_photos');
+    const tmpPoseElement = document.getElementById('tmp_pose');
+    const enregistrementElement = document.getElementById('enregistrement');
+
+    if (nbPhotosElement) {
+        nbPhotosElement.value = parseInt(sessionStorage.getItem("nb_photos_page_change"), 10) || 0;
+        console.log(nbPhotosElement.value);
+    }
+    
+    if (tmpPoseElement) {
+        tmpPoseElement.value = parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10) || 0;
+    }
+    
+    if (enregistrementElement) {
+        enregistrementElement.value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10) || 0;
+    }
 }
+
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
