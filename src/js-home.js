@@ -610,7 +610,7 @@ function changeToV1() {
 	document.addEventListener("DOMContentLoaded", function() {
 		sendPostRequest("battery");
 		updating_values();
-		}
+		});
 	// Update the battery level
 	// Delete the value stored
 }
