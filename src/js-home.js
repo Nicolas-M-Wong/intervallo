@@ -619,6 +619,9 @@ function changePage(pageName,current_page) {
         console.error('Error loading content:', error);
     });
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function updating_values() {
     const nbPhotosElement = document.getElementById('nb_photos');
     const tmpPoseElement = document.getElementById('tmp_pose');
@@ -636,21 +639,6 @@ function updating_values() {
     if (enregistrementElement) {
         enregistrementElement.value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10) || 0;
     }
-}
-
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function changeToV2() {
-	sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
-	sessionStorage.tmp_pose_page_change = document.getElementById('tmp_pose').value;
-	sessionStorage.enregistrement_page_change = document.getElementById('enregistrement').value;
-	// store current data in the session storage to fill the next page with the current values set
-	sendGetRequest('home.html')
-	// Request the home page
-	
-	var locPhotos = sessionStorage.getItem("nbPhotosNotif");
-	
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
