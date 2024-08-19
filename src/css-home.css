@@ -550,6 +550,7 @@ border-color: red;
 	border-radius: 8px;
 	scrollbar-width: none;  /* For Firefox */
 	margin-bottom: 15px;
+	background-color: var(--bg-color-dark);
 }
 
 .number-wheel::before {
