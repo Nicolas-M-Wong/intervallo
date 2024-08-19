@@ -652,6 +652,13 @@ function updating_values(pageName,currentPage) {
 		}
 	}
 	if (currentPage === 'home-V1'){
+		createWheel('nb_photos', step_photo);
+		createWheel('tmp_pose', step_pose);
+		createWheel('enregistrement', step_enregistrement);
+
+		attachWheelEvents('nb_photos');
+		attachWheelEvents('tmp_pose');
+		attachWheelEvents('enregistrement');
 		if (nbPhotosElement) {
 			
 			updateWheel("nb_photos", parseInt(sessionStorage.getItem("nb_photos_page_change"), 10), step_photo)
