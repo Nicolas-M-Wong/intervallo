@@ -612,14 +612,7 @@ function changeToV1() {
     }).catch(error => {
         console.error('Error loading content:', error);
     });
-	document.addEventListener("DOMContentLoaded", function() {
-		console.log(document.getElementById('nb_photos').value);
-		sendPostRequest("battery");
-		console.log('after');
-		updating_values();
-		});
-	}
-
+}
 function updating_values() {
     const nbPhotosElement = document.getElementById('nb_photos');
     const tmpPoseElement = document.getElementById('tmp_pose');
