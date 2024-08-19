@@ -594,14 +594,20 @@ function serverEnd(status_var) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function changeToV1() {
+function changePage(pageName,current_page) {
     // Store current data in the session storage to fill the next page with the current values set
-    sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
-    sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
-    sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
-    
+	if (current_page === 'home'){
+		sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
+		sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
+		sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
+	}
+	else{
+		sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
+		sessionStorage.tmp_pose_page_change = document.getElementById('tmp_pose').value;
+		sessionStorage.enregistrement_page_change = document.getElementById('enregistrement').value;
+	}
     // Request the home page
-    sendGetRequest('home-V1.html').then(data => {
+    sendGetRequest(pageName).then(data => {
         document.getElementById('phone-screen').innerHTML = data;
 
         // After the new content is loaded, update the values
@@ -636,9 +642,9 @@ function updating_values() {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function changeToV2() {
-	sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
-	sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
-	sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
+	sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
+	sessionStorage.tmp_pose_page_change = document.getElementById('tmp_pose').value;
+	sessionStorage.enregistrement_page_change = document.getElementById('enregistrement').value;
 	// store current data in the session storage to fill the next page with the current values set
 	sendGetRequest('home.html')
 	// Request the home page
