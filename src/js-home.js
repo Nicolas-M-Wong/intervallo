@@ -634,10 +634,12 @@ function updating_values(pageName,currentPage) {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
 	
-    const nbPhotosElement = document.getElementById('nb_photos');
-    const tmpPoseElement = document.getElementById('tmp_pose');
-    const enregistrementElement = document.getElementById('enregistrement');
 	if (currentPage === 'home'){
+		
+		const nbPhotosElement = document.getElementById('nb_photos');
+		const tmpPoseElement = document.getElementById('tmp_pose');
+		const enregistrementElement = document.getElementById('enregistrement');
+		
 		if (nbPhotosElement) {
 			nbPhotosElement.value = parseInt(sessionStorage.getItem("nb_photos_page_change"), 10) || 0;
 			console.log(nbPhotosElement.value);
@@ -652,6 +654,7 @@ function updating_values(pageName,currentPage) {
 		}
 	}
 	if (currentPage === 'home-V1'){
+		console.log('success 1');
 		createWheel('nb_photos', step_photo);
 		createWheel('tmp_pose', step_pose);
 		createWheel('enregistrement', step_enregistrement);
@@ -659,8 +662,13 @@ function updating_values(pageName,currentPage) {
 		attachWheelEvents('nb_photos');
 		attachWheelEvents('tmp_pose');
 		attachWheelEvents('enregistrement');
+		
+		const nbPhotosElement = document.getElementById('nb_photos');
+		const tmpPoseElement = document.getElementById('tmp_pose');
+		const enregistrementElement = document.getElementById('enregistrement');
+		
 		if (nbPhotosElement) {
-			
+			console.log('success 2');
 			updateWheel("nb_photos", parseInt(sessionStorage.getItem("nb_photos_page_change"), 10), step_photo);
 		}
 	}
