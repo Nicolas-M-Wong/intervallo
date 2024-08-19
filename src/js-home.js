@@ -486,6 +486,8 @@ function getCurrentValue(wheel, step_array) {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function adjustScroll(wheel,wheelId) {
+	// Wheel = document.getElementById
+	// WheelId = Id of the element
 	const numbers = wheel.querySelectorAll('.number');
 	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
 	const targetScrollTop = middleIndex * 50 - wheel.clientHeight/3 + 50;
@@ -497,6 +499,8 @@ function adjustScroll(wheel,wheelId) {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function attachWheelEvents(wheelId) {
+	// Wheel = document.getElementById
+	// WheelId = Id of the element
 	const wheel = document.getElementById(wheelId);
 	let scrollTimeout;
 	wheel.addEventListener('scroll', () => {
@@ -510,6 +514,8 @@ function attachWheelEvents(wheelId) {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function updateSelectedNumber(wheel,wheelId) {
+	// Wheel = document.getElementById
+	// WheelId = Id of the element
 	const numbers = wheel.querySelectorAll('.number');
 	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/12 - 25)/50);
 	numbers.forEach(num => {
@@ -594,9 +600,11 @@ function serverEnd(status_var) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function changePage(pageName,current_page) {
+function changePage(pageName,currentPage) {
+	//pageName = requested page
+	//currentPage = the page currently displayed to the client
     // Store current data in the session storage to fill the next page with the current values set
-	if (current_page === 'home'){
+	if (currentPage === 'home'){
 		sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
 		sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
 		sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
@@ -611,7 +619,7 @@ function changePage(pageName,current_page) {
         document.getElementById('phone-screen').innerHTML = data;
 
         // After the new content is loaded, update the values
-        updating_values();
+        updating_values(pageName,currentPage);
         
         // Optionally, if the battery level update depends on the new content being loaded
         sendPostRequest("battery");
@@ -622,24 +630,79 @@ function changePage(pageName,current_page) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function updating_values() {
+function updating_values(pageName,currentPage) {
+	//pageName = requested page
+	//currentPage = the page currently displayed to the client
+	
     const nbPhotosElement = document.getElementById('nb_photos');
     const tmpPoseElement = document.getElementById('tmp_pose');
     const enregistrementElement = document.getElementById('enregistrement');
-
-    if (nbPhotosElement) {
-        nbPhotosElement.value = parseInt(sessionStorage.getItem("nb_photos_page_change"), 10) || 0;
-        console.log(nbPhotosElement.value);
-    }
-    
-    if (tmpPoseElement) {
-        tmpPoseElement.value = parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10) || 0;
-    }
-    
-    if (enregistrementElement) {
-        enregistrementElement.value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10) || 0;
-    }
+	if (currentPage === 'home'){
+		if (nbPhotosElement) {
+			nbPhotosElement.value = parseInt(sessionStorage.getItem("nb_photos_page_change"), 10) || 0;
+			console.log(nbPhotosElement.value);
+		}
+		
+		if (tmpPoseElement) {
+			tmpPoseElement.value = parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10) || 0;
+		}
+		
+		if (enregistrementElement) {
+			enregistrementElement.value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10) || 0;
+		}
+	}
+	if (currentPage === 'home-V1'{
+		if (nbPhotosElement) {
+			
+			updateWheel("nb_photos", parseInt(sessionStorage.getItem("nb_photos_page_change"), 10) || 0;, step_photo)
+		}
+	}
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+function updateWheel(wheelId, startValue, steps) {
+    const wheel = document.getElementById(wheelId);
+
+    // Ensure the element with the provided id exists
+    if (!wheel) {
+        console.error(`Element with id "${wheelId}" not found.`);
+        return;
+    }
+
+    // Ensure the steps array is not empty
+    if (!Array.isArray(steps) || steps.length === 0) {
+        console.error('Steps array is either not an array or is empty.');
+        return;
+    }
+
+    // Find the closest value in the steps array to the startValue
+    let closestValue = steps[0];
+    let smallestDifference = Math.abs(startValue - closestValue);
+
+    for (let i = 1; i < steps.length; i++) {
+        const currentDifference = Math.abs(startValue - steps[i]);
+        if (currentDifference < smallestDifference) {
+            closestValue = steps[i];
+            smallestDifference = currentDifference;
+        }
+    }
+
+    // Find the index of the closest value
+    const startIndex = steps.indexOf(closestValue);
+    if (startIndex === -1) {
+        console.error(`Closest value "${closestValue}" not found in steps array.`);
+        return;
+    }
+
+    // Calculate the initial scroll position based on the index of the closest value
+    const initialScrollPosition = startIndex * 50; // Assuming each step occupies 50px height
+    wheel.scrollTo({ top: initialScrollPosition, behavior: 'smooth' });
+
+    // Update the selected number
+    updateSelectedNumber(wheel, wheelId);
+}
+
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
