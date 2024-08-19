@@ -689,34 +689,51 @@ function updateWheel(wheelId, startValue, steps) {
         return;
     }
 
-    // Find the closest value in the steps array to the startValue
-    let closestValue = steps[0];
+    // Flatten the step ranges into a single array of possible values
+    let possibleValues = [];
+    for (let i = 0; i < steps.length; i++) {
+        let step = steps[i];
+        if (step.fixed) {
+            if (step.start === step.end) {
+                possibleValues.push(step.start);
+            } else {
+                for (let j = step.start; j <= step.end; j += step.step) {
+                    possibleValues.push(j);
+                }
+            }
+        } else {
+            for (let j = step.start; j <= step.end; j += step.step) {
+                possibleValues.push(j);
+            }
+        }
+    }
+
+    // Find the closest value in the possibleValues array to the startValue
+    let closestValue = possibleValues[0];
     let smallestDifference = Math.abs(startValue - closestValue);
 
-    for (let i = 1; i < steps.length; i++) {
-        const currentDifference = Math.abs(startValue - steps[i]);
+    for (let i = 1; i < possibleValues.length; i++) {
+        const currentDifference = Math.abs(startValue - possibleValues[i]);
         if (currentDifference < smallestDifference) {
-            closestValue = steps[i];
+            closestValue = possibleValues[i];
             smallestDifference = currentDifference;
         }
     }
 
     // Find the index of the closest value
-    const startIndex = steps.indexOf(closestValue);
+    const startIndex = possibleValues.indexOf(closestValue);
     if (startIndex === -1) {
-        console.error(`Closest value "${closestValue}" not found in steps array.`);
+        console.error(`Closest value "${closestValue}" not found in possible values.`);
         return;
     }
 
     // Calculate the initial scroll position based on the index of the closest value
     const initialScrollPosition = startIndex * 50; // Assuming each step occupies 50px height
     wheel.scrollTo({ top: initialScrollPosition, behavior: 'smooth' });
-	console.log(initialScrollPosition);
-	console.log(startValue);
+
     // Update the selected number
     updateSelectedNumber(wheel, wheelId);
 }
-
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
