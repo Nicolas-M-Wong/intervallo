@@ -603,8 +603,8 @@ function changePage(pageName,current_page) {
 	}
 	else{
 		sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
-		sessionStorage.tmp_pose_page_change = document.getElementById('tmp_pose').value;
-		sessionStorage.enregistrement_page_change = document.getElementById('enregistrement').value;
+		sessionStorage.tmp_pose_page_change = parseFloat(document.getElementById('tmp_pose').value).toFixed(1);
+		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
 	}
     // Request the home page
     sendGetRequest(pageName).then(data => {
