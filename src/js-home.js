@@ -654,7 +654,7 @@ function updating_values(pageName,currentPage) {
 	if (currentPage === 'home-V1'){
 		if (nbPhotosElement) {
 			
-			updateWheel("nb_photos", parseInt(sessionStorage.getItem("nb_photos_page_change"), 10);, step_photo)
+			updateWheel("nb_photos", parseInt(sessionStorage.getItem("nb_photos_page_change"), 10), step_photo)
 		}
 	}
 }
