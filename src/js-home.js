@@ -712,6 +712,7 @@ function updateWheel(wheelId, startValue, steps) {
     const initialScrollPosition = startIndex * 50; // Assuming each step occupies 50px height
     wheel.scrollTo({ top: initialScrollPosition, behavior: 'smooth' });
 	console.log(initialScrollPosition);
+	console.log(startValue);
     // Update the selected number
     updateSelectedNumber(wheel, wheelId);
 }
