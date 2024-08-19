@@ -608,7 +608,9 @@ function changeToV1() {
 	});
 	
 	document.addEventListener("DOMContentLoaded", function() {
+		console.log(document.getElementById('nb_photos').value);
 		sendPostRequest("battery");
+		console.log('after');
 		updating_values();
 		});
 	// Update the battery level
@@ -618,6 +620,7 @@ function changeToV1() {
 function updating_values() {
 	
 	document.getElementById('nb_photos').value = parseInt(sessionStorage.getItem("nb_photos_page_change"), 10);
+	console.log(document.getElementById('nb_photos').value);
 	document.getElementById('tmp_pose').value = parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10);
 	document.getElementById('enregistrement').value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10);
 }
