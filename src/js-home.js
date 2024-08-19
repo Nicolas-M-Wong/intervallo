@@ -671,8 +671,8 @@ function updating_values(pageName,currentPage) {
 			document.getElementById('nb_photos').offsetHeight;
 			updateWheel("tmp_pose", parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10), step_pose);
 			document.getElementById('tmp_pose').offsetHeight;
-			updateWheel("tmp_enregistrement", parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10), step_enregistrement);
-			document.getElementById('tmp_enregistrement').offsetHeight;
+			updateWheel("enregistrement", parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10), step_enregistrement);
+			document.getElementById('enregistrement').offsetHeight;
 		}
 	}
 }
