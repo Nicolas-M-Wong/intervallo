@@ -59,52 +59,12 @@ setInterval(function(){
     console.log(`Last screen type: ${last_screen_type}, Last orientation: ${last_orientation}`);
 
     if (last_orientation === 'h' && current_orientation === 'v') {
-        sendGetRequest('home.html');
-		
-		createWheel('nb_photos', step_photo);
-		createWheel('tmp_pose', step_pose);
-		createWheel('enregistrement', step_enregistrement);
-		attachWheelEvents('nb_photos');
-		attachWheelEvents('tmp_pose');
-		attachWheelEvents('enregistrement');
-		if (sessionStorage.nb_photos_page_change){
-			updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change,10),step_photo);
-		}
-
-		if (sessionStorage.tmp_pose_page_change){
-			updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change,10).toFixed(1),step_pose);
-		}
-
-		if (sessionStorage.enregistrement_page_change){
-			updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change,10).toFixed(1),step_enregistrement);
-		}		
-		sendPostRequest("battery");
+		location.reload();
     }
     if (last_screen_type === 'ordi' && current_screen_type === 'tel') {
-        sendGetRequest('home.html');
-		
-		createWheel('nb_photos', step_photo);
-		createWheel('tmp_pose', step_pose);
-		createWheel('enregistrement', step_enregistrement);
-		attachWheelEvents('nb_photos');
-		attachWheelEvents('tmp_pose');
-		attachWheelEvents('enregistrement');
-		if (sessionStorage.nb_photos_page_change){
-			updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change,10),step_photo);
-		}
-
-		if (sessionStorage.tmp_pose_page_change){
-			updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change,10).toFixed(1),step_pose);
-		}
-
-		if (sessionStorage.enregistrement_page_change){
-			updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change,10).toFixed(1),step_enregistrement);
-		}
-
-		sendPostRequest("battery");
+		location.reload();
     }
     if (current_orientation === 'v' && current_screen_type === 'tel') {
-        update_time();
     }
     last_screen_type = current_screen_type;
     last_orientation = current_orientation;
