@@ -256,7 +256,7 @@ function detectDevice() {
     // Check for touch capabilities to infer mobile devices
     let isMobile = window.matchMedia("(pointer: coarse)").matches;
     
-    if (isMobile) {
+    if (isMobile === false) {
         document.getElementById('phone-screen').style.display = "none";
         sendGetRequest('home-big-screen.html');
         return true;
