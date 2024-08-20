@@ -826,8 +826,4 @@ function startUp() {
  
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-startUp();
-setInterval(function(){update_time();}, 1000)
-setInterval(function(){
-    sendPostRequest("battery");},300000)
 
