@@ -219,6 +219,10 @@ function sendGetRequest(fileName) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+		else {
+			window.location.href = `/${fileName}`;
+		}
+			
         return response.text(); // Change this to response.json() if the response is JSON
     })
     .catch(error => {
