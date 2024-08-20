@@ -60,9 +60,27 @@ setInterval(function(){
 
     if (last_orientation === 'h' && current_orientation === 'v') {
         sendGetRequest('home.html');
+		
+		createWheel('nb_photos', step_photo);
+		createWheel('tmp_pose', step_pose);
+		createWheel('enregistrement', step_enregistrement);
+		attachWheelEvents('nb_photos');
+		attachWheelEvents('tmp_pose');
+		attachWheelEvents('enregistrement');
+		
+		sendPostRequest("battery");
     }
     if (last_screen_type === 'ordi' && current_screen_type === 'tel') {
         sendGetRequest('home.html');
+		
+		createWheel('nb_photos', step_photo);
+		createWheel('tmp_pose', step_pose);
+		createWheel('enregistrement', step_enregistrement);
+		attachWheelEvents('nb_photos');
+		attachWheelEvents('tmp_pose');
+		attachWheelEvents('enregistrement');
+		
+		sendPostRequest("battery");
     }
     if (current_orientation === 'v' && current_screen_type === 'tel') {
         setTimeout(function() {update_time();},100);
