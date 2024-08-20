@@ -227,7 +227,7 @@ function sendGetRequest(fileName) {
         const doc = parser.parseFromString(html, 'text/html');
        
 	   // Replace the contents of <head>
-        document.head.innerHTML = doc.head.innerHTML;
+       // document.head.innerHTML = doc.head.innerHTML;
 		
         // Replace the contents of <body>
         document.body.innerHTML = doc.body.innerHTML;
