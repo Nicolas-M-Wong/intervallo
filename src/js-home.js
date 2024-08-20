@@ -52,6 +52,7 @@ if (sessionStorage.enregistrement_page_change){
 	updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change,10).toFixed(1),step_enregistrement);
 }
 
+
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
@@ -315,59 +316,79 @@ function handleButtonClickBack(event) {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize theme
     const toggleBtn = document.getElementById('toggle-mode');
-    const body = document.body;
-    const elementsToToggle = [body, document.getElementById('dialogBox'),
-	document.getElementById('main'),document.getElementById('navbar-id'),
-	document.getElementById('nb_photos'),document.getElementById('tmp_pose'),
-	document.getElementById('enregistrement'),document.getElementById('shutdown'),
-	document.getElementById('big-screen'),document.getElementById('landscape-screen'),
-	document.getElementById('shutdown-wrapper'),document.getElementById('half-circle')];
+    const notificationElement = document.getElementById('notification');
+    const closeBtn = document.getElementById('toggle-notif');
 
+    // Ensure elements exist
+    const elementsToToggle = [
+        document.body, 
+        document.getElementById('dialogBox'),
+        document.getElementById('main'),
+        document.getElementById('navbar-id'),
+        document.getElementById('nb_photos'),
+        document.getElementById('tmp_pose'),
+        document.getElementById('enregistrement'),
+        document.getElementById('shutdown'),
+        document.getElementById('big-screen'),
+        document.getElementById('landscape-screen'),
+        document.getElementById('shutdown-wrapper'),
+        document.getElementById('half-circle')
+    ].filter(Boolean); // Remove null or undefined elements
+
+    // Initialize theme
     const currentTheme = sessionStorage.getItem('theme') || 'dark';
     elementsToToggle.forEach(element => {
         element.dataset.mode = currentTheme;
     });
 
-    toggleBtn.addEventListener('click', () => {
-        const newMode = body.dataset.mode === 'dark' ? 'light' : 'dark';
-        elementsToToggle.forEach(element => {
-            element.dataset.mode = newMode;
-        });
-        sessionStorage.setItem('theme', newMode);
+    // Toggle mode handler
+    document.body.addEventListener('click', function(event) {
+        if (event.target === toggleBtn) {
+            const newMode = document.body.dataset.mode === 'dark' ? 'light' : 'dark';
+            elementsToToggle.forEach(element => {
+                element.dataset.mode = newMode;
+            });
+            sessionStorage.setItem('theme', newMode);
+        }
+    });
+
+    // Initialize notification
+    const notifState = sessionStorage.getItem('notifState') || 'hide';
+
+    // Ensure notification elements exist
+    const notificationMessage = document.getElementById('notificationMessage');
+    const notificationTitle = document.getElementById('notificationTitle');
+
+    if (notifState === 'show') {
+        const locPhotos = sessionStorage.getItem("nbPhotosNotif");
+        const locExpo = sessionStorage.getItem("exposureTimeNotif");
+        const locTime = sessionStorage.getItem("currentTimeNotif");
+
+        if (notificationMessage) {
+            notificationMessage.textContent = `${locPhotos} photos, exposition ${locExpo} sec.`;
+        }
+        if (notificationTitle) {
+            notificationTitle.textContent = `La série se termine à ${locTime}`;
+        }
+    }
+
+    if (notificationElement) {
+        notificationElement.dataset.mode = notifState;
+    }
+
+    // Notification close handler
+    document.body.addEventListener('click', function(event) {
+        if (event.target === closeBtn) {
+            const newMode = notificationElement.dataset.mode === 'show' ? 'hide' : 'show';
+            notificationElement.dataset.mode = newMode;
+            console.log(newMode);
+            sessionStorage.setItem('notifState', newMode);
+        }
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const closeBtn = document.getElementById('toggle-notif');
-	const body = document.getElementById('notification');
-	const elementsToToggle = [document.getElementById('notification')];
-	
-	const notifState = sessionStorage.getItem('notifState') || 'hide';
-
-	if (notifState === 'show'){
-		var locPhotos = sessionStorage.getItem("nbPhotosNotif");
-		var locExpo = sessionStorage.getItem("exposureTimeNotif");
-		var locTime = sessionStorage.getItem("currentTimeNotif");
-
-		notificationMessage.textContent = `${locPhotos} photos, exposition ${locExpo} sec.`;
-		notificationTitle.textContent = `La série se termine à ${locTime}`;
-	}
-
-
-	elementsToToggle.forEach(element => {
-		element.dataset.mode = notifState;
-	});
-	
-    closeBtn.addEventListener('click', () => {
-        const newMode = body.dataset.mode === 'show' ? 'hide' : 'show';
-        elementsToToggle.forEach(element => {
-            element.dataset.mode = newMode;
-        });
-        console.log(newMode);
-		sessionStorage.setItem('notifState', newMode);
-    });
-});
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
