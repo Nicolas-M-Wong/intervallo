@@ -63,7 +63,7 @@ setInterval(function(){
         sendGetRequest('home.html');
     }
     if (current_orientation === 'v' && current_screen_type === 'tel') {
-        update_time();
+        setTimeout(function() {update_time();},100);
     }
     last_screen_type = current_screen_type;
     last_orientation = current_orientation;
