@@ -41,28 +41,31 @@ var last_screen_type = 'tel';
 var current_orientation = 'v';
 var current_screen_type = 'tel';
 setInterval(function(){
-	update_time();
-	if (detectDevice()){
-		current_screen_type = 'ordi';
-	}
-	else {
-		current_screen_type = 'tel';
-		if (detectLandscapeOrientation()){
-			current_orientation = 'h';
-		}
-		else{
-			current_orientation = 'v';
-		}
-		}
-		
-	if (last_orientation==='h' && current_orientation==='v'){
-		sendGetRequest('home.html');
-	}
-	if (last_screen_type==='ordi' && current_screen_type==='tel'){
-		sendGetRequest('home.html');
-	}
-	last_screen_type = current_screen_type;
-	last_orientation = current_orientation;
+    update_time();
+
+    if (detectDevice()) {
+        current_screen_type = 'ordi';
+    } else {
+        current_screen_type = 'tel';
+        if (detectLandscapeOrientation()) {
+            current_orientation = 'h';
+        } else {
+            current_orientation = 'v';
+        }
+    }
+
+    console.log(`Current screen type: ${current_screen_type}, Current orientation: ${current_orientation}`);
+    console.log(`Last screen type: ${last_screen_type}, Last orientation: ${last_orientation}`);
+
+    if (last_orientation === 'h' && current_orientation === 'v') {
+        sendGetRequest('home.html');
+    }
+    if (last_screen_type === 'ordi' && current_screen_type === 'tel') {
+        sendGetRequest('home.html');
+    }
+
+    last_screen_type = current_screen_type;
+    last_orientation = current_orientation;
 	}, 1000)
 	
 setInterval(function(){
