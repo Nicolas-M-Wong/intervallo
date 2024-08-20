@@ -50,7 +50,6 @@ setInterval(function(){
             current_orientation = 'h';
         } else {
             current_orientation = 'v';
-			update_time();
         }
     }
 
@@ -63,7 +62,9 @@ setInterval(function(){
     if (last_screen_type === 'ordi' && current_screen_type === 'tel') {
         sendGetRequest('home.html');
     }
-
+    if (current_orientation === 'v' && current_screen_type === 'tel') {
+        update_time();
+    }
     last_screen_type = current_screen_type;
     last_orientation = current_orientation;
 	}, 1000)
