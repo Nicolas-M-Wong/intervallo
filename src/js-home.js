@@ -825,4 +825,13 @@ function startUp() {
  
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
+function reloadJS() {
+    const scripts = document.querySelectorAll('script[src]');
+    scripts.forEach(script => {
+        const src = script.getAttribute('src').split('?')[0];
+        const newScript = document.createElement('script');
+        newScript.src = `${src}?v=${new Date().getTime()}`;
+        script.parentNode.replaceChild(newScript, script);
+    });
+}
 
