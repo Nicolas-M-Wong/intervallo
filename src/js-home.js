@@ -212,7 +212,7 @@ function sendGetRequest(fileName) {
     return fetch(url, {
         method: 'GET',
         headers: {
-            'Content-Type': 'text/plain', // Adjust the content type if necessary
+            'Content-Type': 'text/html', // Adjust the content type if necessary
         }
     })
     .then(response => {
