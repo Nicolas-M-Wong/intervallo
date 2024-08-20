@@ -39,7 +39,8 @@ startUp();
 
 setInterval(function(){
 	update_time();
-	DetectDevice();
+	detectDevice();
+	detectLandscapeOrientation();
 	}, 1000)
 	
 setInterval(function(){
@@ -252,7 +253,7 @@ document.getElementById("confirmation").addEventListener("click", function(event
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function DetectDevice() {
+function detectDevice() {
 	let isMobile = window.matchMedia || window.msMatchMedia;
 	let phone;
 
