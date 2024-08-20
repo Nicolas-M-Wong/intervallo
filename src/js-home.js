@@ -36,7 +36,11 @@ attachWheelEvents('tmp_pose');
 attachWheelEvents('enregistrement');
  
 startUp();
-setInterval(function(){update_time();}, 1000)
+setInterval(function(){
+	update_time();
+	DetectDevice();
+	}, 1000)
+	
 setInterval(function(){
     sendPostRequest("battery");},300000)
 
@@ -261,7 +265,26 @@ function DetectDevice() {
 function detectLandscapeOrientation() {
     const orientation = window.matchMedia("(orientation: landscape)").matches;
     const wideScreen= window.innerWidth > 800;
-    return orientation||wideScreen;
+    var phone = orientation||wideScreen;
+	if (phone == false) {
+		document.getElementById('phone-screen').style.display = "none";
+		const href = document.getElementById('big-screen').getAttribute('href');
+		console.log(`Fetching data from ${href}`);
+		
+		sendGetRequest(href).then(data => {
+			console.log(`Data received: ${data}`);
+			document.getElementById('screen-container').innerHTML = data;
+		}).catch(error => {
+			console.error('Fetch error:', error);
+		});
+	}
+
+	else if (detectLandscapeOrientation()) {
+		document.getElementById('phone-screen').style.display = "none";
+		sendGetRequest(document.getElementById('landscape-screen').getAttribute('href')).then(data => {
+		document.getElementById('screen-container').innerHTML = data;
+		});
+	}
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -280,30 +303,6 @@ function toggleNotif(){
 		sessionStorage.setItem('notifState', 'show');
 		element.dataset.mode = 'show';
 	});
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-const phone = DetectDevice()
-
-if (phone == false) {
-    document.getElementById('phone-screen').style.display = "none";
-    const href = document.getElementById('big-screen').getAttribute('href');
-    console.log(`Fetching data from ${href}`);
-    
-    sendGetRequest(href).then(data => {
-        console.log(`Data received: ${data}`);
-        document.getElementById('screen-container').innerHTML = data;
-    }).catch(error => {
-        console.error('Fetch error:', error);
-    });
-}
-
-else if (detectLandscapeOrientation()) {
-	document.getElementById('phone-screen').style.display = "none";
-	sendGetRequest(document.getElementById('landscape-screen').getAttribute('href')).then(data => {
-	document.getElementById('screen-container').innerHTML = data;
-    });
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
