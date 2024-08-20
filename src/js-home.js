@@ -40,6 +40,18 @@ setInterval(function(){update_time();}, 1000)
 setInterval(function(){
     sendPostRequest("battery");},300000)
 
+if (sessionStorage.nb_photos_page_change){
+	updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change,10),step_photo);
+}
+
+if (sessionStorage.tmp_pose_page_change){
+	updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change,10).toFixed(1),step_pose);
+}
+
+if (sessionStorage.enregistrement_page_change){
+	updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change,10).toFixed(1),step_enregistrement);
+}
+
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
@@ -538,6 +550,69 @@ function updateSelectedNumber(wheel,wheelId) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
+function updateWheel(wheelId, startValue, steps) {
+    const wheel = document.getElementById(wheelId);
+
+    // Ensure the element with the provided id exists
+    if (!wheel) {
+        console.error(`Element with id "${wheelId}" not found.`);
+        return;
+    }
+
+    // Ensure the steps array is not empty
+    if (!Array.isArray(steps) || steps.length === 0) {
+        console.error('Steps array is either not an array or is empty.');
+        return;
+    }
+
+    // Flatten the step ranges into a single array of possible values
+    let possibleValues = [];
+    for (let i = 0; i < steps.length; i++) {
+        let step = steps[i];
+        if (step.fixed) {
+            if (step.start === step.end) {
+                possibleValues.push(step.start);
+            } else {
+                for (let j = step.start; j <= step.end; j += step.step) {
+                    possibleValues.push(j);
+                }
+            }
+        } else {
+            for (let j = step.start; j <= step.end; j += step.step) {
+                possibleValues.push(j);
+            }
+        }
+    }
+
+    // Find the closest value in the possibleValues array to the startValue
+    let closestValue = possibleValues[0];
+    let smallestDifference = Math.abs(startValue - closestValue);
+
+    for (let i = 1; i < possibleValues.length; i++) {
+        const currentDifference = Math.abs(startValue - possibleValues[i]);
+        if (currentDifference < smallestDifference) {
+            closestValue = possibleValues[i];
+            smallestDifference = currentDifference;
+        }
+    }
+
+    // Find the index of the closest value
+    const startIndex = possibleValues.indexOf(closestValue);
+    if (startIndex === -1) {
+        console.error(`Closest value "${closestValue}" not found in possible values.`);
+        return;
+    }
+
+    // Calculate the initial scroll position based on the index of the closest value
+    const initialScrollPosition = startIndex * 50; // Assuming each step occupies 50px height
+    wheel.scrollTo({ top: initialScrollPosition, behavior: 'smooth' });
+
+    // Update the selected number
+    updateSelectedNumber(wheel, wheelId);
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function countDecimalPlaces(num) {
 	let numStr = num.toString();
 	let decimalIndex = numStr.indexOf('.');
@@ -615,7 +690,7 @@ function changePage(pageName,currentPage) {
 		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
 	}
     // Request the home page
-    sendGetRequest(pageName).then(data => {
+    /* sendGetRequest(pageName).then(data => {
         document.getElementById('phone-screen').innerHTML = data;
 
         // After the new content is loaded, update the values
@@ -625,7 +700,7 @@ function changePage(pageName,currentPage) {
         sendPostRequest("battery");
     }).catch(error => {
         console.error('Error loading content:', error);
-    });
+    }); */
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -679,66 +754,7 @@ function updating_values(pageName,currentPage) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function updateWheel(wheelId, startValue, steps) {
-    const wheel = document.getElementById(wheelId);
 
-    // Ensure the element with the provided id exists
-    if (!wheel) {
-        console.error(`Element with id "${wheelId}" not found.`);
-        return;
-    }
-
-    // Ensure the steps array is not empty
-    if (!Array.isArray(steps) || steps.length === 0) {
-        console.error('Steps array is either not an array or is empty.');
-        return;
-    }
-
-    // Flatten the step ranges into a single array of possible values
-    let possibleValues = [];
-    for (let i = 0; i < steps.length; i++) {
-        let step = steps[i];
-        if (step.fixed) {
-            if (step.start === step.end) {
-                possibleValues.push(step.start);
-            } else {
-                for (let j = step.start; j <= step.end; j += step.step) {
-                    possibleValues.push(j);
-                }
-            }
-        } else {
-            for (let j = step.start; j <= step.end; j += step.step) {
-                possibleValues.push(j);
-            }
-        }
-    }
-
-    // Find the closest value in the possibleValues array to the startValue
-    let closestValue = possibleValues[0];
-    let smallestDifference = Math.abs(startValue - closestValue);
-
-    for (let i = 1; i < possibleValues.length; i++) {
-        const currentDifference = Math.abs(startValue - possibleValues[i]);
-        if (currentDifference < smallestDifference) {
-            closestValue = possibleValues[i];
-            smallestDifference = currentDifference;
-        }
-    }
-
-    // Find the index of the closest value
-    const startIndex = possibleValues.indexOf(closestValue);
-    if (startIndex === -1) {
-        console.error(`Closest value "${closestValue}" not found in possible values.`);
-        return;
-    }
-
-    // Calculate the initial scroll position based on the index of the closest value
-    const initialScrollPosition = startIndex * 50; // Assuming each step occupies 50px height
-    wheel.scrollTo({ top: initialScrollPosition, behavior: 'smooth' });
-
-    // Update the selected number
-    updateSelectedNumber(wheel, wheelId);
-}
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
