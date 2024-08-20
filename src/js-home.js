@@ -255,18 +255,15 @@ document.getElementById("confirmation").addEventListener("click", function(event
 
 function detectDevice() {
 	let isMobile = window.matchMedia || window.msMatchMedia;
-	var phone = false;
 
 	if (isMobile) {
 		let matchMobile = isMobile("(pointer:coarse)");
-		phone = matchMobile.matches;
-	}
-
-	if (phone) {
-		document.getElementById('phone-screen').style.display = "none";
-		sendGetRequest('home-big-screen.html')
-		return true;
+		if (matchMobile.matches;) {
+			document.getElementById('phone-screen').style.display = "none";
+			sendGetRequest('home-big-screen.html')
+			return true;
 		}
+	}
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
