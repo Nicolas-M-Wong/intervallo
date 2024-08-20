@@ -36,6 +36,7 @@ attachWheelEvents('tmp_pose');
 attachWheelEvents('enregistrement');
  
 startUp();
+
 setInterval(function(){
 	update_time();
 	DetectDevice();
@@ -252,12 +253,21 @@ document.getElementById("confirmation").addEventListener("click", function(event
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function DetectDevice() {
-    let isMobile = window.matchMedia || window.msMatchMedia;
-    if(isMobile) {
-        let match_mobile = isMobile("(pointer:coarse)");
-        return match_mobile.matches;
-    }
-    return false;
+	let isMobile = window.matchMedia || window.msMatchMedia;
+	let phone;
+
+	if (isMobile) {
+		let matchMobile = isMobile("(pointer:coarse)");
+		phone = matchMobile.matches;
+	}
+	else {
+		phone = false;
+	}
+
+	if (phone) {
+		document.getElementById('phone-screen').style.display = "none";
+		sendGetRequest('home-big-screen.html')
+		}
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -266,25 +276,19 @@ function detectLandscapeOrientation() {
     const orientation = window.matchMedia("(orientation: landscape)").matches;
     const wideScreen= window.innerWidth > 800;
     var phone = orientation||wideScreen;
-	if (phone == false) {
-		document.getElementById('phone-screen').style.display = "none";
-		const href = document.getElementById('big-screen').getAttribute('href');
-		console.log(`Fetching data from ${href}`);
-		
-		sendGetRequest(href).then(data => {
-			console.log(`Data received: ${data}`);
-			document.getElementById('screen-container').innerHTML = data;
-		}).catch(error => {
-			console.error('Fetch error:', error);
-		});
-	}
+}
 
-	else if (detectLandscapeOrientation()) {
-		document.getElementById('phone-screen').style.display = "none";
-		sendGetRequest(document.getElementById('landscape-screen').getAttribute('href')).then(data => {
-		document.getElementById('screen-container').innerHTML = data;
-		});
-	}
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+const phone = DetectDevice()
+
+
+
+else if (detectLandscapeOrientation()) {
+	document.getElementById('phone-screen').style.display = "none";
+	sendGetRequest(document.getElementById('landscape-screen').getAttribute('href')).then(data => {
+	document.getElementById('screen-container').innerHTML = data;
+    });
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
