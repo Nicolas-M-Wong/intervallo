@@ -54,10 +54,7 @@ setInterval(function(){
             current_orientation = 'v';
         }
     }
-
-    console.log(`Current screen type: ${current_screen_type}, Current orientation: ${current_orientation}`);
-    console.log(`Last screen type: ${last_screen_type}, Last orientation: ${last_orientation}`);
-
+	
     if (last_orientation === 'h' && current_orientation === 'v') {
 		location.reload();
     }
