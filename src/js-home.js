@@ -275,18 +275,11 @@ function DetectDevice() {
 function detectLandscapeOrientation() {
     const orientation = window.matchMedia("(orientation: landscape)").matches;
     const wideScreen= window.innerWidth > 800;
-    var phone = orientation||wideScreen;
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-const phone = DetectDevice()
-
-else if (detectLandscapeOrientation()) {
-	document.getElementById('phone-screen').style.display = "none";
-	sendGetRequest(document.getElementById('landscape-screen').getAttribute('href')).then(data => {
-	document.getElementById('screen-container').innerHTML = data;
-    });
+    let phone = orientation||wideScreen;
+	if (phone) {
+		document.getElementById('phone-screen').style.display = "none";
+		sendGetRequest('home-landscape-screen.html');
+	}
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
