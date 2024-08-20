@@ -212,22 +212,24 @@ function sendGetRequest(fileName) {
     return fetch(url, {
         method: 'GET',
         headers: {
-            'Content-Type': 'text/html', // Adjust the content type if necessary
+            'Content-Type': 'text/html',
         }
     })
     .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-		else {
-			window.location.href = `/${fileName}`;
-		}
-			
-        return response.text(); // Change this to response.json() if the response is JSON
+        return response.text();
+    })
+    .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Replace the contents of <body>
+        document.body.innerHTML = doc.body.innerHTML;
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
-        return Promise.reject(error);
     });
 }
 
