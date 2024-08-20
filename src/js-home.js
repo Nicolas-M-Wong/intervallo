@@ -267,7 +267,6 @@ function detectDevice() {
 		sendGetRequest('home-big-screen.html')
 		return true;
 		}
-	
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -275,8 +274,7 @@ function detectDevice() {
 function detectLandscapeOrientation() {
     const orientation = window.matchMedia("(orientation: landscape)").matches;
     const wideScreen= window.innerWidth > 800;
-    let landscape-portait = orientation||wideScreen;
-	if (landscape-portait) {
+	if (orientation||wideScreen) {
 		document.getElementById('phone-screen').style.display = "none";
 		sendGetRequest('home-landscape-screen.html');
 		return true;
