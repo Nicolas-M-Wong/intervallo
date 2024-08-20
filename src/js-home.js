@@ -690,8 +690,7 @@ function changePage(pageName,currentPage) {
 		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
 	}
     // Request the home page
-    /* sendGetRequest(pageName).then(data => {
-        document.getElementById('phone-screen').innerHTML = data;
+    sendGetRequest(pageName).then(data => {
 
         // After the new content is loaded, update the values
         updating_values(pageName,currentPage);
@@ -700,7 +699,7 @@ function changePage(pageName,currentPage) {
         sendPostRequest("battery");
     }).catch(error => {
         console.error('Error loading content:', error);
-    }); */
+    });
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
