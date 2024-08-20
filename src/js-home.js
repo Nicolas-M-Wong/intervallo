@@ -255,14 +255,11 @@ document.getElementById("confirmation").addEventListener("click", function(event
 
 function detectDevice() {
 	let isMobile = window.matchMedia || window.msMatchMedia;
-	const phone;
+	var phone = false;
 
 	if (isMobile) {
 		let matchMobile = isMobile("(pointer:coarse)");
 		phone = matchMobile.matches;
-	}
-	else {
-		phone = false;
 	}
 
 	if (phone) {
