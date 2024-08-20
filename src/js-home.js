@@ -351,8 +351,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		var locExpo = sessionStorage.getItem("exposureTimeNotif");
 		var locTime = sessionStorage.getItem("currentTimeNotif");
 
-		notificationMessage.textContent = ${locPhotos} photos, exposition ${locExpo} sec.;
-		notificationTitle.textContent = La série se termine à ${locTime};
+		notificationMessage.textContent = `${locPhotos} photos, exposition ${locExpo} sec.`;
+		notificationTitle.textContent = `La série se termine à ${locTime}`;
 	}
 
 
