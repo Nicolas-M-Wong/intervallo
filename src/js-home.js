@@ -258,7 +258,7 @@ function detectDevice() {
 
 	if (isMobile) {
 		let matchMobile = isMobile("(pointer:coarse)");
-		if (matchMobile.matches;) {
+		if (matchMobile.matches) {
 			document.getElementById('phone-screen').style.display = "none";
 			sendGetRequest('home-big-screen.html')
 			return true;
