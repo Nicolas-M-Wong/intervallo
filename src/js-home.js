@@ -43,10 +43,12 @@ var current_screen_type = 'tel';
 setInterval(function(){
 
     if (detectDevice()) {
+		detectDevice();
         current_screen_type = 'ordi';
     } else {
         current_screen_type = 'tel';
         if (detectLandscapeOrientation()) {
+			detectLandscapeOrientation();
             current_orientation = 'h';
         } else {
             current_orientation = 'v';
