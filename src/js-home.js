@@ -40,7 +40,7 @@ startUp();
 setInterval(function(){
 	update_time();
 	detectDevice();
-	if (detectDevice() ==== false){detectLandscapeOrientation();}
+	if (detectDevice() === false){detectLandscapeOrientation();}
 	}, 1000)
 	
 setInterval(function(){
