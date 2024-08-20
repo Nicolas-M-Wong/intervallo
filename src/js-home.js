@@ -40,7 +40,7 @@ startUp();
 setInterval(function(){
 	update_time();
 	detectDevice();
-	detectLandscapeOrientation();
+	if (detectDevice() ==== false){detectLandscapeOrientation();}
 	}, 1000)
 	
 setInterval(function(){
@@ -255,7 +255,7 @@ document.getElementById("confirmation").addEventListener("click", function(event
 
 function detectDevice() {
 	let isMobile = window.matchMedia || window.msMatchMedia;
-	let phone;
+	const phone;
 
 	if (isMobile) {
 		let matchMobile = isMobile("(pointer:coarse)");
@@ -268,7 +268,9 @@ function detectDevice() {
 	if (phone) {
 		document.getElementById('phone-screen').style.display = "none";
 		sendGetRequest('home-big-screen.html')
+		return true;
 		}
+	
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -276,10 +278,11 @@ function detectDevice() {
 function detectLandscapeOrientation() {
     const orientation = window.matchMedia("(orientation: landscape)").matches;
     const wideScreen= window.innerWidth > 800;
-    let phone = orientation||wideScreen;
-	if (phone) {
+    let landscape-portait = orientation||wideScreen;
+	if (landscape-portait) {
 		document.getElementById('phone-screen').style.display = "none";
 		sendGetRequest('home-landscape-screen.html');
+		return true;
 	}
 }
 
