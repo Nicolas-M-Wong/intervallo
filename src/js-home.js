@@ -282,7 +282,7 @@ function detectDevice() {
     let isMobile = window.matchMedia("(pointer: coarse)").matches;
     
     if (isMobile === false) {
-        document.getElementById('phone-screen').style.display = "none";
+        //document.getElementById('phone-screen').style.display = "none";
         sendGetRequest('home-big-screen.html');
         return true;
     }
@@ -300,7 +300,7 @@ function detectLandscapeOrientation() {
     const isWideScreen = window.innerWidth > 800;
     // If either condition is true
     if (isLandscape || isWideScreen) {
-        document.getElementById('phone-screen').style.display = "none";
+        //document.getElementById('phone-screen').style.display = "none";
         sendGetRequest('home-landscape-screen.html');
         return true;
     }
