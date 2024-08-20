@@ -41,7 +41,6 @@ var last_screen_type = 'tel';
 var current_orientation = 'v';
 var current_screen_type = 'tel';
 setInterval(function(){
-    update_time();
 
     if (detectDevice()) {
         current_screen_type = 'ordi';
@@ -51,6 +50,7 @@ setInterval(function(){
             current_orientation = 'h';
         } else {
             current_orientation = 'v';
+			update_time();
         }
     }
 
