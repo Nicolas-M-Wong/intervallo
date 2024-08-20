@@ -46,10 +46,15 @@ setInterval(function(){
 		current_screen_type = 'ordi';
 	}
 	else {
+		current_screen_type = 'tel';
 		if (detectLandscapeOrientation()){
-			current_orientation ='h';
+			current_orientation = 'h';
+		}
+		else{
+			current_orientation = 'v';
 		}
 		}
+		
 	if (last_orientation==='h' && current_orientation==='v'){
 		sendGetRequest('home.html');
 	}
