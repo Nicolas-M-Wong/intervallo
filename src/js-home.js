@@ -252,30 +252,35 @@ document.getElementById("confirmation").addEventListener("click", function(event
 });
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
-
 function detectDevice() {
-	let isMobile = window.matchMedia || window.msMatchMedia;
-
-	if (isMobile) {
-		let matchMobile = isMobile("(pointer:coarse)");
-		if (matchMobile.matches) {
-			document.getElementById('phone-screen').style.display = "none";
-			sendGetRequest('home-big-screen.html')
-			return true;
-		}
-	}
+    // Check for touch capabilities to infer mobile devices
+    let isMobile = window.matchMedia("(pointer: coarse)").matches;
+    
+    if (isMobile) {
+        document.getElementById('phone-screen').style.display = "none";
+        sendGetRequest('home-big-screen.html');
+        return true;
+    }
+    
+    return false; // Return false if not mobile
 }
+
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function detectLandscapeOrientation() {
-    const orientation = window.matchMedia("(orientation: landscape)").matches;
-    const wideScreen= window.innerWidth > 800;
-	if (orientation||wideScreen) {
-		document.getElementById('phone-screen').style.display = "none";
-		sendGetRequest('home-landscape-screen.html');
-		return true;
-	}
+    // Check if the device is in landscape orientation
+    const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+    // Check if the screen width is greater than 800 pixels
+    const isWideScreen = window.innerWidth > 800;
+    // If either condition is true
+    if (isLandscape || isWideScreen) {
+        document.getElementById('phone-screen').style.display = "none";
+        sendGetRequest('home-landscape-screen.html');
+        return true;
+    }
+    // Return false if none of the conditions are met
+    return false;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
