@@ -2,7 +2,9 @@ import socket
 import time
 import io
 import os
+import MAX17043
 
+battery = MAX17043.max17043()
 
 directory = os.path.dirname(os.path.abspath(__file__)) #absolute path to file
 
@@ -208,7 +210,7 @@ if TCP_IP != "127.0.0.1":
                     pass
             else:
             # Serve the HTML file
-                home = io.open(directory+"/src/index.html", mode='r',encoding=('utf-8')).read()
+                home = io.open(directory+"/src/home.html", mode='r',encoding=('utf-8')).read()
                 response = 'HTTP/1.1 200 OK\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'+home
                 client_socket.send(response.encode('utf-8'))
         
