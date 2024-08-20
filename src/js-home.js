@@ -67,7 +67,17 @@ setInterval(function(){
 		attachWheelEvents('nb_photos');
 		attachWheelEvents('tmp_pose');
 		attachWheelEvents('enregistrement');
-		
+		if (sessionStorage.nb_photos_page_change){
+			updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change,10),step_photo);
+		}
+
+		if (sessionStorage.tmp_pose_page_change){
+			updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change,10).toFixed(1),step_pose);
+		}
+
+		if (sessionStorage.enregistrement_page_change){
+			updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change,10).toFixed(1),step_enregistrement);
+		}		
 		sendPostRequest("battery");
     }
     if (last_screen_type === 'ordi' && current_screen_type === 'tel') {
@@ -79,7 +89,18 @@ setInterval(function(){
 		attachWheelEvents('nb_photos');
 		attachWheelEvents('tmp_pose');
 		attachWheelEvents('enregistrement');
-		
+		if (sessionStorage.nb_photos_page_change){
+			updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change,10),step_photo);
+		}
+
+		if (sessionStorage.tmp_pose_page_change){
+			updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change,10).toFixed(1),step_pose);
+		}
+
+		if (sessionStorage.enregistrement_page_change){
+			updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change,10).toFixed(1),step_enregistrement);
+		}
+
 		sendPostRequest("battery");
     }
     if (current_orientation === 'v' && current_screen_type === 'tel') {
