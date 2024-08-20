@@ -282,8 +282,6 @@ function detectLandscapeOrientation() {
 
 const phone = DetectDevice()
 
-
-
 else if (detectLandscapeOrientation()) {
 	document.getElementById('phone-screen').style.display = "none";
 	sendGetRequest(document.getElementById('landscape-screen').getAttribute('href')).then(data => {
