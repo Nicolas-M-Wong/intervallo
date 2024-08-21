@@ -42,7 +42,7 @@ setInterval(function(){
     sendPostRequest("battery");},300000)
 
 setInterval(function(){
-    update_timer;},1000)
+    update_time;},1000)
 
 function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
 	const notificationMessage = document.getElementById("notificationMessage");
