@@ -3,6 +3,47 @@ let dialogBoxId = document.getElementById("dialogBox");
 let countdownInterval;
 let countDownDate;
 
+startUp();
+
+// Initial screen type and orientation detection
+let current_screen_type = detectDevice() ? 'ordi' : 'tel';
+let current_orientation = detectLandscapeOrientation() ? 'h' : 'v';
+let last_screen_type = current_screen_type;
+let last_orientation = current_orientation;
+
+// Function to handle screen and orientation changes
+function handleScreenChange() {
+    const new_screen_type = detectDevice() ? 'ordi' : 'tel';
+    const new_orientation = detectLandscapeOrientation() ? 'h' : 'v';
+
+    console.log(`Screen type: ${last_screen_type} -> ${new_screen_type}`);
+	console.log(`Orientation: ${last_orientation} -> ${new_orientation}`);
+
+    // Reload if orientation changes from horizontal to vertical
+    if (last_orientation === 'h' && new_orientation === 'v') {
+        location.reload();
+    }
+    
+    // Reload if screen type changes from 'ordi' to 'tel'
+    if (last_screen_type === 'ordi' && new_screen_type === 'tel') {
+        location.reload();
+    }
+
+    // Update the last known screen type and orientation
+    last_screen_type = new_screen_type;
+    last_orientation = new_orientation;
+}
+
+// Add event listeners for resize and orientationchange
+window.addEventListener('resize', handleScreenChange);
+window.addEventListener('orientationchange', handleScreenChange);
+	
+setInterval(function(){
+    sendPostRequest("battery");},300000)
+
+setInterval(function(){
+    update_timer;},1000)
+
 function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
 	const notificationMessage = document.getElementById("notificationMessage");
 	const notificationTitle = document.getElementById("notificationTitle");
@@ -169,42 +210,65 @@ document.getElementById("confirmation").addEventListener("click", function(event
 
 });
 
-function DetectDevice() {
-    let isMobile = window.matchMedia || window.msMatchMedia;
-    if(isMobile) {
-        let match_mobile = isMobile("(pointer:coarse)");
-        return match_mobile.matches;
-    }
-    return false;
-}
-
 function sendGetRequest(fileName) {
     const url = `/${fileName}`;
 
-    fetch(url, {
+    return fetch(url, {
         method: 'GET',
         headers: {
-            'Content-Type': 'text/plain', // Adjust the content type if necessary
+            'Content-Type': 'text/html',
         }
     })
     .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.text(); // You can change this to response.json() if the response is JSON
+        return response.text();
     })
-    .then(data => {
-	document.getElementById('screen-container').innerHTML = data;
+    .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+       
+	   // Replace the contents of <head>
+       // document.head.innerHTML = doc.head.innerHTML;
+		
+        // Replace the contents of <body>
+        document.body.innerHTML = doc.body.innerHTML;
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
     });
 }
 
+function detectDevice() {
+    // Check for touch capabilities to infer mobile devices
+    let isMobile = window.matchMedia("(pointer: coarse)").matches;
+    
+    if (isMobile === false) {
+        //document.getElementById('phone-screen').style.display = "none";
+        sendGetRequest('home-big-screen.html');
+        return true;
+    }
+    
+    return false; // Return false if not mobile
+}
+
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function detectLandscapeOrientation() {
-    const orientation = window.matchMedia("(orientation: landscape)").matches;
-    const wideScreen= window.innerWidth > 800;
-    return orientation||wideScreen;
+    // Check if the device is in landscape orientation
+    const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+    // Check if the screen width is greater than 800 pixels
+    const isWideScreen = window.innerWidth > 800;
+    // If either condition is true
+    if (isLandscape || isWideScreen) {
+        //document.getElementById('phone-screen').style.display = "none";
+        sendGetRequest('home-landscape-screen.html');
+        return true;
+    }
+    // Return false if none of the conditions are met
+    return false;
 }
 
 function toggleNotif(){
@@ -221,18 +285,6 @@ function toggleNotif(){
 		sessionStorage.setItem('notifState', 'show');
 		element.dataset.mode = 'show';
 	});
-}
-
-const phone = DetectDevice()
-
-if (phone == false) {
-	document.getElementById('phone-screen').style.display = "none";
-	sendGetRequest(document.getElementById('big-screen').getAttribute('href'));
-}
-
-else if (detectLandscapeOrientation()) {
-	document.getElementById('phone-screen').style.display = "none";
-	sendGetRequest(document.getElementById('landscape-screen').getAttribute('href'));
 }
 
 function handleButtonClickBack(event) {
@@ -376,11 +428,6 @@ function startUp() {
    sendPostRequest("battery");
  }
  
-startUp();
-setInterval(function(){update_time();}, 1000)
-setInterval(function(){
-    sendPostRequest("battery");},300000)
-
 
 function changePage(pageName,currentPage) {
 	//pageName = requested page
