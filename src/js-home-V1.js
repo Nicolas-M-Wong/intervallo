@@ -380,3 +380,20 @@ startUp();
 setInterval(function(){update_time();}, 1000)
 setInterval(function(){
     sendPostRequest("battery");},300000)
+
+
+function changePage(pageName,currentPage) {
+	//pageName = requested page
+	//currentPage = the page currently displayed to the client
+    // Store current data in the session storage to fill the next page with the current values set
+
+	sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
+	sessionStorage.tmp_pose_page_change = parseFloat(document.getElementById('tmp_pose').value).toFixed(1);
+	sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
+
+	sendPostRequest(pageName);
+	setTimeout(() => {
+    location.reload();
+	}, 250);
+
+}
