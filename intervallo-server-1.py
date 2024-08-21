@@ -199,7 +199,7 @@ if TCP_IP != "127.0.0.1":
         print(f'Received request: {first_line}')
         
         if method == 'GET':
-            print(f'\n')
+            print(f'home: {file}\n')
             if str(first_line[1]).strip('/') != '':
                 try:
                     response = parsing_get_msg(first_line,directory)
