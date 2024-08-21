@@ -36,10 +36,6 @@ attachWheelEvents('tmp_pose');
 attachWheelEvents('enregistrement');
  
 startUp();
-var last_orientation = 'v';
-var last_screen_type = 'tel';
-var current_orientation = 'v';
-var current_screen_type = 'tel';
 
 // Initial screen type and orientation detection
 let current_screen_type = detectDevice() ? 'ordi' : 'tel';
@@ -72,6 +68,11 @@ window.addEventListener('resize', handleScreenChange);
 window.addEventListener('orientationchange', handleScreenChange);
 
 /*	
+
+var last_orientation = 'v';
+var last_screen_type = 'tel';
+var current_orientation = 'v';
+var current_screen_type = 'tel';
 setInterval(function(){
 
     if (detectDevice()) {
