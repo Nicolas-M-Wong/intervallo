@@ -722,7 +722,7 @@ function changePage(pageName,currentPage) {
 	sendPostRequest(pageName);
 	setTimeout(() => {
     location.reload();
-	}, 50);
+	}, 250);
 
 	
 }
