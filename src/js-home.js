@@ -48,6 +48,9 @@ function handleScreenChange() {
     const new_screen_type = detectDevice() ? 'ordi' : 'tel';
     const new_orientation = detectLandscapeOrientation() ? 'h' : 'v';
 
+    console.log(`Screen type: ${last_screen_type} -> ${new_screen_type}`);
+	console.log(`Orientation: ${last_orientation} -> ${new_orientation}`);
+
     // Reload if orientation changes from horizontal to vertical
     if (last_orientation === 'h' && new_orientation === 'v') {
         location.reload();
