@@ -69,42 +69,12 @@ function handleScreenChange() {
 // Add event listeners for resize and orientationchange
 window.addEventListener('resize', handleScreenChange);
 window.addEventListener('orientationchange', handleScreenChange);
-
-/*	
-
-var last_orientation = 'v';
-var last_screen_type = 'tel';
-var current_orientation = 'v';
-var current_screen_type = 'tel';
-setInterval(function(){
-
-    if (detectDevice()) {
-		detectDevice();
-        current_screen_type = 'ordi';
-    } else {
-        current_screen_type = 'tel';
-        if (detectLandscapeOrientation()) {
-			detectLandscapeOrientation();
-            current_orientation = 'h';
-        } else {
-            current_orientation = 'v';
-        }
-    }
-	
-    if (last_orientation === 'h' && current_orientation === 'v') {
-		location.reload();
-    }
-    if (last_screen_type === 'ordi' && current_screen_type === 'tel') {
-		location.reload();
-    }
-    if (current_orientation === 'v' && current_screen_type === 'tel') {
-    }
-    last_screen_type = current_screen_type;
-    last_orientation = current_orientation;
-	}, 1000) */
 	
 setInterval(function(){
     sendPostRequest("battery");},300000)
+
+setInterval(function(){
+    update_timer;},1000)
 
 if (sessionStorage.nb_photos_page_change){
 	updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change,10),step_photo);
@@ -849,9 +819,4 @@ function update_battery(batteryLevel) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function startUp() {
-   update_time();
-   sendPostRequest("battery");
- }
- 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
