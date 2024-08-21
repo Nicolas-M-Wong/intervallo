@@ -75,7 +75,7 @@ function handleSubmit(event) {
 	event.preventDefault();
 
 	// Get the values of the form fields
-	const nbPhotos = parseInt(document.getElementById("nb_photo").value);
+	const nbPhotos = parseInt(document.getElementById("nb_photos").value);
 	const exposureTime = parseFloat(document.getElementById("tmp_pose").value);
 	const timeBetweenPhotos = parseFloat(document.getElementById("enregistrement").value);
 
@@ -99,7 +99,7 @@ function handleButtonClick() {
 		data["date"] = now;
         sendPostRequest(data);
 		
-		const nbPhotos_button = parseInt(document.getElementById("nb_photo").value);
+		const nbPhotos_button = parseInt(document.getElementById("nb_photos").value);
 		const exposureTime_button = parseFloat(document.getElementById("tmp_pose").value);
 		const timeBetweenPhotos_button = parseFloat(document.getElementById("enregistrement").value);
 		
@@ -113,7 +113,7 @@ function handleButtonClickTest() {
     if (formData) {
         const data = {};
         formData.forEach((value, key) => (data[key] = value));
-		data['nb_photo']=1;
+		data['nb_photos']=1;
 		var now = new Date().getTime();
 		data["date"] = now;
         sendPostRequest(data);
@@ -129,7 +129,7 @@ function handleButtonClickTest() {
 }
 
 function remoteTrigger(){
-const triggerMessage = {"nb_photo":"1", "tmp_pose":"0.1", "tmp_enregistrement":"0"};
+const triggerMessage = {"nb_photos":"1", "tmp_pose":"0.1", "tmp_enregistrement":"0"};
 var now = new Date().getTime();
 triggerMessage["date"] = now;
 console.log(triggerMessage);
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
     const elementsToToggle = [body, document.getElementById('dialogBox'),
 	document.getElementById('main'),document.getElementById('navbar-id'),
-	document.getElementById('nb_photo'),document.getElementById('tmp_pose'),
+	document.getElementById('nb_photos'),document.getElementById('tmp_pose'),
 	document.getElementById('enregistrement'),document.getElementById('shutdown'),
 	document.getElementById('big-screen'),document.getElementById('landscape-screen'),
 	document.getElementById('shutdown-wrapper'),document.getElementById('half-circle')];
