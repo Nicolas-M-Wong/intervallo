@@ -164,6 +164,7 @@ while get_ip()=="127.0.0.1":
         #If the raspi is waiting for more than 5 minutes end the loop
     
 TCP_IP = get_ip()      # Local host
+file = "/src/home.html"
 if TCP_IP != "127.0.0.1":
     #only start the server if the IP of the server is not itself
     BUFFER_SIZE = 1024
@@ -210,7 +211,7 @@ if TCP_IP != "127.0.0.1":
                     pass
             else:
             # Serve the HTML file
-                home = io.open(directory+"/src/home.html", mode='r',encoding=('utf-8')).read()
+                home = io.open(directory+file, mode='r',encoding=('utf-8')).read()
                 response = 'HTTP/1.1 200 OK\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'+home
                 client_socket.send(response.encode('utf-8'))
         
@@ -256,6 +257,14 @@ if TCP_IP != "127.0.0.1":
                 soc=battery.getSoc()
                 response_body=f"{round(soc)}"
             
+            elif body == '"home.html"':
+                file = "/src/home.html"
+                #Switching home page
+                
+            elif body == '"home-V1.html"':
+                file = "/src/home-V1.html"
+                #Switching home page
+                
             response = (
                     "HTTP/1.1 200 OK\r\n"
                     f"Content-Length: {len(response_body)}\r\n"
