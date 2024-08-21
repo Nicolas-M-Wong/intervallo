@@ -364,11 +364,11 @@ function serverEnd(status_var) {
 	
 	if (theme === 'dark'){
 			// Update title
-            titleElement.textContent = "Hop au dodo";}
+            titleElement.textContent = "Bonne nuit";}
 
     if (theme === 'light'){
             // Update title
-            titleElement.textContent = "Hop ça dégage";}
+            titleElement.textContent = "Bonne journée";}
 
     document.getElementById('main').style.display = "none";
     document.getElementById('shutdown').style.display = "flex";
@@ -376,14 +376,6 @@ function serverEnd(status_var) {
 
     setTimeout(() => {
         rotatingObject.style.animation = 'none';
-        if (theme === 'dark'){
-                // Update title
-                titleElement.textContent = "Bonne nuit";}
-                //messageElement.textContent = "L'intervallomètre est éteint";}
-        if (theme === 'light'){
-            // Update title
-        titleElement.textContent = "Bonne journée";}
-        //messageElement.textContent = "L'intervallomètre est éteint";}
         messageElement.textContent = "L'intervallomètre est éteint";
             rotatingObject.style.animation = 'none';
 
