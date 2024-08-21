@@ -74,7 +74,7 @@ setInterval(function(){
     sendPostRequest("battery");},300000)
 
 setInterval(function(){
-    update_timer;},1000)
+    update_time;},1000)
 
 if (sessionStorage.nb_photos_page_change){
 	updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change,10),step_photo);
@@ -289,6 +289,17 @@ function detectDevice() {
     if (isMobile === false) {
         //document.getElementById('phone-screen').style.display = "none";
         sendGetRequest('home-big-screen.html');
+		document.addEventListener('DOMContentLoaded', () => {
+		
+		const body = document.body;
+		const elementsToToggle = [body, document.getElementById('big-screen')];
+
+		const currentTheme = sessionStorage.getItem('theme') || 'dark';
+		elementsToToggle.forEach(element => {
+			element.dataset.mode = currentTheme;
+			});
+		});
+		
         return true;
     }
     
@@ -307,6 +318,16 @@ function detectLandscapeOrientation() {
     if (isLandscape || isWideScreen) {
         //document.getElementById('phone-screen').style.display = "none";
         sendGetRequest('home-landscape-screen.html');
+		document.addEventListener('DOMContentLoaded', () => {
+		
+		const body = document.body;
+		const elementsToToggle = [body, document.getElementById('landscape-screen')];
+
+		const currentTheme = sessionStorage.getItem('theme') || 'dark';
+		elementsToToggle.forEach(element => {
+			element.dataset.mode = currentTheme;
+			});
+		});
         return true;
     }
     // Return false if none of the conditions are met
