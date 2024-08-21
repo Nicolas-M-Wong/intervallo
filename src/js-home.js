@@ -826,12 +826,19 @@ function startUp() {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function reloadJS() {
+    // Select all script tags with a src attribute
     const scripts = document.querySelectorAll('script[src]');
+    
+    // Loop through each script tag
     scripts.forEach(script => {
-        const src = script.getAttribute('src').split('?')[0];
+        // Get the src of the current script tag
+        const src = script.getAttribute('src');
+        
+        // Create a new script tag
         const newScript = document.createElement('script');
-        newScript.src = `${src}?v=${new Date().getTime()}`;
+        newScript.src = `${src}?v=${new Date().getTime()}`; // Add a cache-busting query parameter
+        
+        // Replace the old script tag with the new one
         script.parentNode.replaceChild(newScript, script);
     });
 }
-
