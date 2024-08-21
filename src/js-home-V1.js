@@ -397,3 +397,20 @@ function changePage(pageName,currentPage) {
 	}, 250);
 
 }
+
+const nbPhotosElement = document.getElementById('nb_photos');
+const tmpPoseElement = document.getElementById('tmp_pose');
+const enregistrementElement = document.getElementById('enregistrement');
+
+if (nbPhotosElement) {
+	nbPhotosElement.value = parseInt(sessionStorage.getItem("nb_photos_page_change"), 10) || 0;
+	console.log(nbPhotosElement.value);
+}
+
+if (tmpPoseElement) {
+	tmpPoseElement.value = parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10) || 0;
+}
+
+if (enregistrementElement) {
+	enregistrementElement.value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10) || 0;
+}
