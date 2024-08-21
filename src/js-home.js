@@ -720,7 +720,11 @@ function changePage(pageName,currentPage) {
 	}
 	
 	sendPostRequest(pageName);
-	location.reload();
+	setTimeout(() => {
+    location.reload();
+	}, 50);
+
+	
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
