@@ -40,6 +40,38 @@ var last_orientation = 'v';
 var last_screen_type = 'tel';
 var current_orientation = 'v';
 var current_screen_type = 'tel';
+
+// Initial screen type and orientation detection
+let current_screen_type = detectDevice() ? 'ordi' : 'tel';
+let current_orientation = detectLandscapeOrientation() ? 'h' : 'v';
+let last_screen_type = current_screen_type;
+let last_orientation = current_orientation;
+
+// Function to handle screen and orientation changes
+function handleScreenChange() {
+    const new_screen_type = detectDevice() ? 'ordi' : 'tel';
+    const new_orientation = detectLandscapeOrientation() ? 'h' : 'v';
+
+    // Reload if orientation changes from horizontal to vertical
+    if (last_orientation === 'h' && new_orientation === 'v') {
+        location.reload();
+    }
+    
+    // Reload if screen type changes from 'ordi' to 'tel'
+    if (last_screen_type === 'ordi' && new_screen_type === 'tel') {
+        location.reload();
+    }
+
+    // Update the last known screen type and orientation
+    last_screen_type = new_screen_type;
+    last_orientation = new_orientation;
+}
+
+// Add event listeners for resize and orientationchange
+window.addEventListener('resize', handleScreenChange);
+window.addEventListener('orientationchange', handleScreenChange);
+
+/*	
 setInterval(function(){
 
     if (detectDevice()) {
@@ -65,7 +97,7 @@ setInterval(function(){
     }
     last_screen_type = current_screen_type;
     last_orientation = current_orientation;
-	}, 1000)
+	}, 1000) */
 	
 setInterval(function(){
     sendPostRequest("battery");},300000)
