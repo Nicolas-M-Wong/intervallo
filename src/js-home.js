@@ -718,17 +718,9 @@ function changePage(pageName,currentPage) {
 		sessionStorage.tmp_pose_page_change = parseFloat(document.getElementById('tmp_pose').value).toFixed(1);
 		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
 	}
-    // Request the home page
-    sendGetRequest(pageName).then(data => {
-
-        // After the new content is loaded, update the values
-        updating_values(pageName,currentPage);
-        
-        // Optionally, if the battery level update depends on the new content being loaded
-        sendPostRequest("battery");
-    }).catch(error => {
-        console.error('Error loading content:', error);
-    });
+	
+	sendPostRequest(pageName);
+	location.reload();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
