@@ -282,6 +282,7 @@ document.getElementById("confirmation").addEventListener("click", function(event
 });
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function detectDevice() {
     // Check for touch capabilities to infer mobile devices
     let isMobile = window.matchMedia("(pointer: coarse)").matches;
@@ -305,7 +306,6 @@ function detectDevice() {
     
     return false; // Return false if not mobile
 }
-
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -418,8 +418,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
 function changeColor(side) {
     document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
     setTimeout(() => {
@@ -456,47 +454,6 @@ function startUp() {
    sendPostRequest("battery");
  }
  
- // ---------------------------------------------------------------------------------------------------------------------------------------------
- 
-function createWheel_sec(elementId, step, length) {
-    const wheel = document.getElementById(elementId);
-
-    // Ensure the element with the provided id exists
-    if (!wheel) {
-        console.error(`Element with id "${elementId}" not found.`);
-        return;
-    }
-
-    // Create and append the starting padding div
-    const paddingDiv = document.createElement('div');
-    paddingDiv.style.height = '50px';
-    wheel.appendChild(paddingDiv);
-
-    let isFirst = true; // Flag to identify the first number div
-
-    // Create number divs with specified steps
-    for (let i = 0; i <= length; i += step) {
-        const numberDiv = document.createElement('div');
-        numberDiv.className = 'number';
-        numberDiv.innerText = i;
-
-        // Apply attributes to the first numberDiv in this loop
-        if (isFirst) {
-            numberDiv.id = 'number_selected_' + elementId;
-            numberDiv.classList.add('selected');
-            isFirst = false; // Reset the flag after the first div
-        }
-
-        // Append the numberDiv to the wheel
-        wheel.appendChild(numberDiv);
-    }
-
-    // Create and append the ending padding div
-    const paddingDivEnd = document.createElement('div');
-    paddingDivEnd.style.height = '50px';
-    wheel.appendChild(paddingDivEnd);
-}
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 		
 function createWheel(elementId, step) {
@@ -682,15 +639,6 @@ function countDecimalPlaces(num) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function shutDown() { 
-    document.getElementById('main').style.display = "none";
-    document.getElementById('shutdown').style.display = "flex";
-	document.getElementById('shutdown').style.justifyContent = 'center';
-    sendPostRequest("shutdown");
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
 function serverEnd(status_var) { 
 
 	const theme = sessionStorage.getItem('theme');
@@ -727,30 +675,6 @@ function serverEnd(status_var) {
         rotatingObject.style.opacity = '0';
     }, 15000); // 15 seconds (15000 milliseconds)
     sendPostRequest(status_var);
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function changePage(pageName,currentPage) {
-	//pageName = requested page
-	//currentPage = the page currently displayed to the client
-    // Store current data in the session storage to fill the next page with the current values set
-	if (currentPage === 'home'){
-		sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
-		sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
-		sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
-	}
-	else{
-		sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
-		sessionStorage.tmp_pose_page_change = parseFloat(document.getElementById('tmp_pose').value).toFixed(1);
-		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
-	}
-	
-	sendPostRequest(pageName);
-	setTimeout(() => {
-    location.reload();
-	}, 250);
-
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -804,40 +728,24 @@ function updating_values(pageName,currentPage) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function changeColor(side) {
-    document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
-    setTimeout(() => {
-    document.getElementById(`photo-distance-${side}`).style.backgroundColor = "transparent";
-    }, 350); // Temps en millisecondes
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function update_time() {
-    const now = new Date();
-    const hoursHeader = now.getHours().toString().padStart(2, '0');
-    const minutesHeader = now.getMinutes().toString().padStart(2, '0');
-    const secondsHeader = now.getSeconds().toString().padStart(2, '0');
-    const currentTimeHeader = `${hoursHeader}:${minutesHeader}`;
-    const timerHeader = document.getElementById('timer-header');
-	timerHeader.textContent = currentTimeHeader;
+function changePage(pageName,currentPage) {
+	//pageName = requested page
+	//currentPage = the page currently displayed to the client
+    // Store current data in the session storage to fill the next page with the current values set
+	if (currentPage === 'home'){
+		sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
+		sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
+		sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
+	}
+	else{
+		sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
+		sessionStorage.tmp_pose_page_change = parseFloat(document.getElementById('tmp_pose').value).toFixed(1);
+		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
+	}
+	
+	sendPostRequest(pageName);
+	setTimeout(() => {
+    location.reload();
+	}, 250);
 
 }
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function update_battery(batteryLevel) {
-    const batteryHeader = document.getElementById('battery-header');
-    batteryHeader.textContent = `${batteryLevel}%`;
-    if (batteryLevel === ""){
-        sendPostRequest("battery");
-    }
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
