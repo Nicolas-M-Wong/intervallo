@@ -5,7 +5,26 @@ let countDownDate;
 
 startUp();
 
-// Initial screen type and orientation detection
+
+const nbPhotosElement = document.getElementById('nb_photos');
+const tmpPoseElement = document.getElementById('tmp_pose');
+const enregistrementElement = document.getElementById('enregistrement');
+
+if (nbPhotosElement) {
+	nbPhotosElement.value = parseInt(sessionStorage.getItem("nb_photos_page_change"), 10) || 0;
+	console.log(nbPhotosElement.value);
+}
+
+if (tmpPoseElement) {
+	tmpPoseElement.value = parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10) || 0;
+}
+
+if (enregistrementElement) {
+	enregistrementElement.value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10) || 0;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 let current_screen_type = detectDevice() ? 'ordi' : 'tel';
 let current_orientation = detectLandscapeOrientation() ? 'h' : 'v';
 let last_screen_type = current_screen_type;
@@ -270,6 +289,8 @@ function detectLandscapeOrientation() {
     return false;
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function toggleNotif(){
 	// Update notification message and title
 	var locPhotos = sessionStorage.getItem("nbPhotosNotif");
@@ -286,10 +307,14 @@ function toggleNotif(){
 	});
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function handleButtonClickBack(event) {
 	event.preventDefault();
 	closeDialog();
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('toggle-mode');
@@ -315,6 +340,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.getElementById('toggle-notif');
 	const body = document.getElementById('notification');
@@ -331,6 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		notificationTitle.textContent = `La série se termine à ${locTime}`;
 	}
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 	elementsToToggle.forEach(element => {
 		element.dataset.mode = notifState;
@@ -346,12 +374,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function shutDown() { 
     document.getElementById('main').style.display = "none";
     document.getElementById('shutdown').style.display = "flex";
 	document.getElementById('shutdown').style.justifyContent = 'center';
     sendPostRequest("shutdown");
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function serverEnd(status_var) { 
 
@@ -391,12 +423,17 @@ function serverEnd(status_var) {
     sendPostRequest(status_var);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function changeColor(side) {
     document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
     setTimeout(() => {
     document.getElementById(`photo-distance-${side}`).style.backgroundColor = "transparent";
     }, 350); // Temps en millisecondes
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function update_time() {
     const now = new Date();
     const hoursHeader = now.getHours().toString().padStart(2, '0');
@@ -407,6 +444,8 @@ function update_time() {
     timerHeader.textContent = currentTimeHeader;
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function update_battery(batteryLevel) {
     const batteryHeader = document.getElementById('battery-header');
     batteryHeader.textContent = `${batteryLevel}%`;
@@ -414,11 +453,15 @@ function update_battery(batteryLevel) {
         sendPostRequest("battery");
     }
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function startUp() {
    update_time();
    sendPostRequest("battery");
- }
- 
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function changePage(pageName,currentPage) {
 	//pageName = requested page
@@ -434,21 +477,4 @@ function changePage(pageName,currentPage) {
     location.reload();
 	}, 250);
 
-}
-
-const nbPhotosElement = document.getElementById('nb_photos');
-const tmpPoseElement = document.getElementById('tmp_pose');
-const enregistrementElement = document.getElementById('enregistrement');
-
-if (nbPhotosElement) {
-	nbPhotosElement.value = parseInt(sessionStorage.getItem("nb_photos_page_change"), 10) || 0;
-	console.log(nbPhotosElement.value);
-}
-
-if (tmpPoseElement) {
-	tmpPoseElement.value = parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10) || 0;
-}
-
-if (enregistrementElement) {
-	enregistrementElement.value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10) || 0;
 }
