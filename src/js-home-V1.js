@@ -253,7 +253,6 @@ function detectDevice() {
     return false; // Return false if not mobile
 }
 
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function detectLandscapeOrientation() {
