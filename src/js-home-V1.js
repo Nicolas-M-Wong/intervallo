@@ -62,6 +62,8 @@ setInterval(function(){
 
 setInterval(function(){
     update_time;},1000)
+	
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
 	const notificationMessage = document.getElementById("notificationMessage");
@@ -107,11 +109,15 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
     }, 1000);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function closeDialog() {
     dialogBoxId.close(); 
     // Clear the countdown interval when the dialog box is closed
     clearInterval(countdownInterval);
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 // Function to format time in hh:mm:ss
 function formatTime(totalSeconds) {
@@ -151,6 +157,8 @@ function handleSubmit(event) {
 	formData = new FormData(event.target);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function handleButtonClick() {
     if (formData) {
         const data = {};
@@ -168,6 +176,8 @@ function handleButtonClick() {
         console.error('Form data is not available. Please submit the form first.');
     }
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function handleButtonClickTest() {
     if (formData) {
@@ -188,13 +198,17 @@ function handleButtonClickTest() {
     }
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function remoteTrigger(){
-const triggerMessage = {"nb_photos":"1", "tmp_pose":"0.1", "tmp_enregistrement":"0"};
-var now = new Date().getTime();
-triggerMessage["date"] = now;
-console.log(triggerMessage);
-sendPostRequest(triggerMessage)
+	const triggerMessage = {"nb_photos":"1", "tmp_pose":"0.1", "tmp_enregistrement":"0"};
+	var now = new Date().getTime();
+	triggerMessage["date"] = now;
+	console.log(triggerMessage);
+	sendPostRequest(triggerMessage)
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function sendPostRequest(data) {
     const xhr = new XMLHttpRequest();
@@ -223,11 +237,15 @@ function sendPostRequest(data) {
     xhr.send(JSON.stringify(data));
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 // Prevent the dialog box from closing when the confirm button is clicked
 document.getElementById("confirmation").addEventListener("click", function(event) {
     event.preventDefault();
 
 });
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function sendGetRequest(fileName) {
     const url = `/${fileName}`;
@@ -258,6 +276,8 @@ function sendGetRequest(fileName) {
         console.error('There was a problem with the fetch operation:', error);
     });
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function detectDevice() {
     // Check for touch capabilities to infer mobile devices
