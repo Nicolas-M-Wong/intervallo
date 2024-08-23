@@ -1,6 +1,6 @@
 var WheelConstruct = WheelConstructor || {};
  
-function WheelConstruct.createWheel(elementId, step) {
+WheelConstruct.createWheel = function(elementId, step) {
     const wheel = document.getElementById(elementId);
     const paddingDiv = document.createElement('div');
     paddingDiv.style.height = '50px';
@@ -33,7 +33,7 @@ function WheelConstruct.createWheel(elementId, step) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 		
-function WheelConstruct.getCurrentValue(wheel, step_array) {
+WheelConstruct.getCurrentValue = function (wheel, step_array) {
 	const numbers = wheel.querySelectorAll('.number');
 	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
 	const currentValue = parseFloat(numbers[middleIndex].innerText, 10);
@@ -54,7 +54,7 @@ function WheelConstruct.getCurrentValue(wheel, step_array) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function WheelConstruct.adjustScroll(wheel,wheelId) {
+WheelConstruct.adjustScroll = function(wheel,wheelId) {
 	// Wheel = document.getElementById
 	// WheelId = Id of the element
 	const numbers = wheel.querySelectorAll('.number');
@@ -67,7 +67,7 @@ function WheelConstruct.adjustScroll(wheel,wheelId) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function WheelConstruct.attachWheelEvents(wheelId) {
+WheelConstruct.attachWheelEvents = function(wheelId){
 	// Wheel = document.getElementById
 	// WheelId = Id of the element
 	const wheel = document.getElementById(wheelId);
@@ -82,7 +82,7 @@ function WheelConstruct.attachWheelEvents(wheelId) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function WheelConstruct.updateSelectedNumber(wheel,wheelId) {
+WheelConstruct.updateSelectedNumber = function(wheel,wheelId) {
 	// Wheel = document.getElementById
 	// WheelId = Id of the element
 	const numbers = wheel.querySelectorAll('.number');
@@ -107,7 +107,7 @@ function WheelConstruct.updateSelectedNumber(wheel,wheelId) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function WheelConstruct.updateWheel(wheelId, startValue, steps) {
+WheelConstruct.updateWheel = function(wheelId, startValue, steps) {
     const wheel = document.getElementById(wheelId);
 
     // Ensure the element with the provided id exists
@@ -170,7 +170,7 @@ function WheelConstruct.updateWheel(wheelId, startValue, steps) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function WheelConstruct.countDecimalPlaces(num) {
+WheelConstruct.countDecimalPlaces = function(num) {
 	let numStr = num.toString();
 	let decimalIndex = numStr.indexOf('.');
 	if (decimalIndex === -1) {
@@ -184,7 +184,7 @@ function WheelConstruct.countDecimalPlaces(num) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function WheelConstruct.updating_values(pageName,currentPage) {
+WheelConstruct.updating_values = function(pageName,currentPage) {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
 	
