@@ -754,5 +754,5 @@ function saveFormData(currentPage){
 	}
 
 window.addEventListener('beforeunload', function(event) {
-            saveFormData();
+            saveFormData('home');
         });
