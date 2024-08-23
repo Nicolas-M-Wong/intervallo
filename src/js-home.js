@@ -158,10 +158,17 @@ function submitForm(event){
 	const doc_pose = document.getElementById('tmp_pose');
 	const doc_save = document.getElementById('enregistrement');
 	
-	const nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo) || parseInt(doc_photos.value);
-	const tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose) || parseFloat(doc_pose.value);
-	const tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement) || parseFloat(doc_save.value);
-
+	if (currentFileName === 'home'){
+		const nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo) || parseInt(doc_photos.value);
+		const tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose) || parseFloat(doc_pose.value);
+		const tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement) || parseFloat(doc_save.value);
+	}
+	
+	else if (currentFileName === 'home-V1'){
+		const nb_photos = parseInt(doc_photos.value);
+		const tmp_pose = parseFloat(doc_pose.value);
+		const tmp_enregistrement = parseFloat(doc_save.value);
+	}
 	
 	const totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
 	console.log("Total time for the interval:", totalTime, "seconds");
