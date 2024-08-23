@@ -173,7 +173,7 @@ function submitForm(event){
 	document.getElementById("confirmation").style.display = "block";
 
 	// Prepare form data for the POST request
-	formData = new FormData(document.getElementById('wheelForm'));
+	formData = new FormData(document.getElementById('interval-Form'));
 	}
 	
 /* document.getElementById('wheelForm').addEventListener('submit', function(event) {
