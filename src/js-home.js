@@ -153,25 +153,27 @@ let formData; // Define formData in the global scope
 function submitForm(event){
 	event.preventDefault();
 	let currentFileName = document.body.getAttribute('data-page');
-	console.log(currentFileName);
+	
+	let nb_photos = 0;
+	let tmp_pose = 0;
+	let tmp_enregistrement = 0;
+	
 	const doc_photos = document.getElementById('nb_photos');
 	const doc_pose = document.getElementById('tmp_pose');
 	const doc_save = document.getElementById('enregistrement');
 	
 	if (currentFileName === "home"){
 		console.log("success home");
-		const nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo);
-		const tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose);
-		const tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
-		console.log(nb_photos,tmp_pose,tmp_enregistrement);
+		nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo);
+		tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose);
+		tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
 	}
 	
 	if (currentFileName === "home-V1"){
 		console.log("success home-V1");
-		const nb_photos = parseInt(doc_photos.value);
-		const tmp_pose = parseFloat(doc_pose.value);
-		const tmp_enregistrement = parseFloat(doc_save.value);
-		console.log(nb_photos,tmp_pose,tmp_enregistrement);
+		nb_photos = parseInt(doc_photos.value);
+		tmp_pose = parseFloat(doc_pose.value);
+		tmp_enregistrement = parseFloat(doc_save.value);
 	}
 	
 	const totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
