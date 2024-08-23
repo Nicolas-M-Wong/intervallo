@@ -180,5 +180,3 @@ WheelConstruct.countDecimalPlaces = function(num) {
 	//Compte les chiffres après la virgule du pas décimal
 	//Compte les caractères pour éviter une boucle while
 }
-
-
