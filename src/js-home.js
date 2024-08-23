@@ -83,11 +83,8 @@ WheelConstruct.updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_ch
 
 WheelConstruct.updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change || 0,10).toFixed(1),step_enregistrement);
 
-
-var currentUrl = window.location.href;
-
 // Extract the file name from the URL
-var currentFileName = currentUrl.substring(currentUrl.lastIndexOf('/') + 1);
+var currentFileName = document.body.getAttribute('data-page');
 
 // You can now use this file name in your script
 console.log("Current HTML file is: " + currentFileName);
