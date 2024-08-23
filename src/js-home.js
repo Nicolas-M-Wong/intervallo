@@ -159,7 +159,7 @@ function submitForm(event){
 	const doc_photos = document.getElementById('nb_photos');
 	const doc_pose = document.getElementById('tmp_pose');
 	const doc_save = document.getElementById('enregistrement');
-
+	console.log(WheelConstruct.getCurrentValue(doc_photos,step_photo))
 	const nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo) || parseInt(doc_photos.value);
 	const tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose) || parseFloat(doc_pose.value);
 	const tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement) || parseFloat(doc_save.value);
