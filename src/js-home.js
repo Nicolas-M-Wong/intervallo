@@ -27,7 +27,7 @@ const step_enregistrement = [
 	{ start: 60, end: length_enregistrement, step: 10*step_s, fixed: false } //Between 60 to the end, 10s step
 ];
 
-createWheel('nb_photos', step_photo);
+WheelConstruct.createWheel('nb_photos', step_photo);
 createWheel('tmp_pose', step_pose);
 createWheel('enregistrement', step_enregistrement);
 
