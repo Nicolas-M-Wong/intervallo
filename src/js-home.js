@@ -83,12 +83,6 @@ WheelConstruct.updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_ch
 
 WheelConstruct.updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change || 0,10).toFixed(1),step_enregistrement);
 
-// Extract the file name from the URL
-var currentFileName = document.body.getAttribute('data-page');
-
-// You can now use this file name in your script
-console.log("Current HTML file is: " + currentFileName);
-
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -158,10 +152,28 @@ function formatTime(totalSeconds) {
 
 let formData; // Define formData in the global scope
 
-function submitForm (currentPage){
+function submitForm (){
+	event.preventDefault();
+	let currentFileName = document.body.getAttribute('data-page');
 	
-	if (currentPage === 'home'){
-		
+	const doc_photos = document.getElementById('nb_photos');
+	const doc_pose = document.getElementById('tmp_pose');
+	const doc_save = document.getElementById('enregistrement');
+
+	const nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo) || parseInt(doc_photos.value);
+	const tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose) || parseFloat(doc_pose.value);
+	const tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement) || parseFloat(doc_save.value);
+
+	
+	const totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
+	console.log("Total time for the interval:", totalTime, "seconds");
+
+	// Display formatted time in confirmation
+	document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
+	document.getElementById("confirmation").style.display = "block";
+
+	// Prepare form data for the POST request
+	formData = new FormData(event.target);
 	}
 	
 }
