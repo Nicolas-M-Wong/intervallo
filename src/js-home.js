@@ -732,20 +732,27 @@ function changePage(pageName,currentPage) {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
     // Store current data in the session storage to fill the next page with the current values set
-	if (currentPage === 'home'){
-		sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
-		sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
-		sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
-	}
-	else{
-		sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
-		sessionStorage.tmp_pose_page_change = parseFloat(document.getElementById('tmp_pose').value).toFixed(1);
-		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
-	}
-	
+	saveFormData(currentPage);
 	sendPostRequest(pageName);
 	setTimeout(() => {
     location.reload();
 	}, 250);
 
 }
+
+function saveFormData(currentPage){
+	if (currentPage === 'home'){
+		sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
+		sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
+		sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
+	}
+	else if (currentPage === 'home-V1'){
+		sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
+		sessionStorage.tmp_pose_page_change = parseFloat(document.getElementById('tmp_pose').value).toFixed(1);
+		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
+	}
+	}
+
+window.addEventListener('beforeunload', function(event) {
+            saveFormData();
+        });
