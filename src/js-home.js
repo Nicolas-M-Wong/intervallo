@@ -163,6 +163,7 @@ function submitForm(event){
 		const nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo);
 		const tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose);
 		const tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
+		console.log(nb_photos,tmp_pose,tmp_enregistrement);
 	}
 	
 	if (currentFileName === "home-V1"){
@@ -170,6 +171,7 @@ function submitForm(event){
 		const nb_photos = parseInt(doc_photos.value);
 		const tmp_pose = parseFloat(doc_pose.value);
 		const tmp_enregistrement = parseFloat(doc_save.value);
+		console.log(nb_photos,tmp_pose,tmp_enregistrement);
 	}
 	
 	const totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
