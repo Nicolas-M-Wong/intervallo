@@ -176,7 +176,6 @@ function submitForm (){
 	formData = new FormData(event.target);
 	}
 	
-}
 document.getElementById('wheelForm').addEventListener('submit', function(event) {
 	event.preventDefault();
 
