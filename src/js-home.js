@@ -164,7 +164,7 @@ function submitForm(event){
 		const tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement) || parseFloat(doc_save.value);
 	}
 	
-	else if (currentFileName === 'home-V1'){
+	if (currentFileName === 'home-V1'){
 		const nb_photos = parseInt(doc_photos.value);
 		const tmp_pose = parseFloat(doc_pose.value);
 		const tmp_enregistrement = parseFloat(doc_save.value);
