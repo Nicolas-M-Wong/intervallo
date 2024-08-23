@@ -82,8 +82,6 @@ setInterval(function(){
 setInterval(function(){
     update_time;},1000)
 
-
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
