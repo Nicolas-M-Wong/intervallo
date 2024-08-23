@@ -1,4 +1,4 @@
-var WheelConstruct = WheelConstructor || {};
+var WheelConstruct = WheelConstruct || {};
  
 WheelConstruct.createWheel = function(elementId, step) {
     const wheel = document.getElementById(elementId);
