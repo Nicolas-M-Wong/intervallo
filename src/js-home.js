@@ -740,6 +740,8 @@ function changePage(pageName,currentPage) {
 
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function saveFormData(currentPage){
 	if (currentPage === 'home'){
 		sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
