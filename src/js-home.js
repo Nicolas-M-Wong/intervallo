@@ -176,38 +176,20 @@ function submitForm(event){
 	formData = new FormData(document.getElementById('interval-Form'));
 	}
 	
-/* document.getElementById('wheelForm').addEventListener('submit', function(event) {
-	event.preventDefault();
-
-	const nb_photos = WheelConstruct.getCurrentValue(document.getElementById('nb_photos'),step_photo);
-	const tmp_pose = WheelConstruct.getCurrentValue(document.getElementById('tmp_pose'),step_pose);
-	const tmp_enregistrement = WheelConstruct.getCurrentValue(document.getElementById('enregistrement'),step_enregistrement);
-	
-	// Get the values of the form fields
-	// Calculate the total time
-	const totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
-	console.log("Total time for the interval:", totalTime, "seconds");
-
-	// Display formatted time in confirmation
-	document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
-	document.getElementById("confirmation").style.display = "block";
-
-	// Prepare form data for the POST request
-	formData = new FormData(event.target);
-}); */
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function handleButtonClick(test_status) {
     if (formData) {
+		console.log(formData);
         const data = {};
-        const nb_photos = WheelConstruct.getCurrentValue(document.getElementById('nb_photos'),step_photo);
+		const doc_photos = document.getElementById('nb_photos');
+        const nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo)|| parseInt(doc_photos.value);
 		data["nb_photos"] = nb_photos;
 		if (test_status === "Yes"){
             data["nb_photos"] = 1;
             }
-		let tmp_pose = WheelConstruct.getCurrentValue(document.getElementById('tmp_pose'),step_pose);
-		let tmp_enregistrement = WheelConstruct.getCurrentValue(document.getElementById('enregistrement'),step_enregistrement);
+		const tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose) || parseFloat(doc_pose.value);
+		const tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement) || parseFloat(doc_save.value);
 
 		var now = new Date().getTime();
 		
