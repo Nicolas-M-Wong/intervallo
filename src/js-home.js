@@ -76,16 +76,15 @@ setInterval(function(){
 setInterval(function(){
     update_time;},1000)
 
-if (sessionStorage.nb_photos_page_change){
-	updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change,10),step_photo);
-}
+
+WheelConstruct.updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change || 0,10),step_photo);
 
 if (sessionStorage.tmp_pose_page_change){
-	updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change,10).toFixed(1),step_pose);
+	WheelConstruct.updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change,10).toFixed(1),step_pose);
 }
 
 if (sessionStorage.enregistrement_page_change){
-	updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change,10).toFixed(1),step_enregistrement);
+	WheelConstruct.updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change,10).toFixed(1),step_enregistrement);
 }
 
 
