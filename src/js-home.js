@@ -173,10 +173,10 @@ function submitForm(event){
 	document.getElementById("confirmation").style.display = "block";
 
 	// Prepare form data for the POST request
-	formData = new FormData(event.target);
+	formData = new FormData(document.getElementById('wheelForm'));
 	}
 	
-document.getElementById('wheelForm').addEventListener('submit', function(event) {
+/* document.getElementById('wheelForm').addEventListener('submit', function(event) {
 	event.preventDefault();
 
 	const nb_photos = WheelConstruct.getCurrentValue(document.getElementById('nb_photos'),step_photo);
@@ -194,7 +194,7 @@ document.getElementById('wheelForm').addEventListener('submit', function(event) 
 
 	// Prepare form data for the POST request
 	formData = new FormData(event.target);
-});
+}); */
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
