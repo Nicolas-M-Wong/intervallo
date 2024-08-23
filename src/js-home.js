@@ -152,34 +152,53 @@ function formatTime(totalSeconds) {
 
 let formData; // Define formData in the global scope
 
-function submitForm(event){
-	event.preventDefault();
-	let currentFileName = document.body.getAttribute('data-page');
-	
-	const doc_photos = document.getElementById('nb_photos');
-	const doc_pose = document.getElementById('tmp_pose');
-	const doc_save = document.getElementById('enregistrement');
-	
-	console.log(WheelConstruct.getCurrentValue(doc_photos,step_photo));
-	console.log(WheelConstruct.getCurrentValue(doc_pose,step_pose));
-	console.log(WheelConstruct.getCurrentValue(doc_save,step_enregistrement));
-	
-	const nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo) || parseInt(doc_photos.value);
-	const tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose) || parseFloat(doc_pose.value);
-	const tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement) || parseFloat(doc_save.value);
+function submitForm(event) {
+    event.preventDefault();
 
-	
-	const totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
-	console.log("Total time for the interval:", totalTime, "seconds");
+    let currentFileName = document.body.getAttribute('data-page');
+    
+    // Get form element
+    const formElement = document.getElementById('interval-Form');
+    
+    // Check if the formElement is actually an HTMLFormElement
+    if (!(formElement instanceof HTMLFormElement)) {
+        console.error('The element with ID "interval-Form" is not a form.');
+        return;
+    }
 
-	// Display formatted time in confirmation
-	document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
-	document.getElementById("confirmation").style.display = "block";
+    // Retrieve input elements
+    const doc_photos = document.getElementById('nb_photos');
+    const doc_pose = document.getElementById('tmp_pose');
+    const doc_save = document.getElementById('enregistrement');
+    
+    // Get values from WheelConstruct
+    console.log(WheelConstruct.getCurrentValue(doc_photos, step_photo));
+    console.log(WheelConstruct.getCurrentValue(doc_pose, step_pose));
+    console.log(WheelConstruct.getCurrentValue(doc_save, step_enregistrement));
+    
+    // Calculate values
+    const nb_photos = WheelConstruct.getCurrentValue(doc_photos, step_photo) || parseInt(doc_photos.value);
+    const tmp_pose = WheelConstruct.getCurrentValue(doc_pose, step_pose) || parseFloat(doc_pose.value);
+    const tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save, step_enregistrement) || parseFloat(doc_save.value);
 
-	// Prepare form data for the POST request
-	formData = new FormData(document.getElementById('interval-Form'));
-	}
-	
+    // Compute total time
+    const totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
+    console.log("Total time for the interval:", totalTime, "seconds");
+
+    // Display formatted time in confirmation
+    document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
+    document.getElementById("confirmation").style.display = "block";
+
+    // Prepare form data for the POST request
+    try {
+        const formData = new FormData(formElement);
+        // You can now use formData for further processing
+        console.log("Form data prepared successfully.");
+    } catch (error) {
+        console.error("Failed to prepare FormData:", error);
+    }
+}
+
 /* document.getElementById('wheelForm').addEventListener('submit', function(event) {
 	event.preventDefault();
 
