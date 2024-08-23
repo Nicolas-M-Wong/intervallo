@@ -79,13 +79,18 @@ setInterval(function(){
 
 WheelConstruct.updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change || 0,10),step_photo);
 
-if (sessionStorage.tmp_pose_page_change){
-	WheelConstruct.updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change,10).toFixed(1),step_pose);
-}
+WheelConstruct.updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change || 0,10).toFixed(1),step_pose);
 
-if (sessionStorage.enregistrement_page_change){
-	WheelConstruct.updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change,10).toFixed(1),step_enregistrement);
-}
+WheelConstruct.updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change || 0,10).toFixed(1),step_enregistrement);
+
+
+var currentUrl = window.location.href;
+
+// Extract the file name from the URL
+var currentFileName = currentUrl.substring(currentUrl.lastIndexOf('/') + 1);
+
+// You can now use this file name in your script
+console.log("Current HTML file is: " + currentFileName);
 
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -156,6 +161,13 @@ function formatTime(totalSeconds) {
 
 let formData; // Define formData in the global scope
 
+function submitForm (currentPage){
+	
+	if (currentPage === 'home'){
+		
+	}
+	
+}
 document.getElementById('wheelForm').addEventListener('submit', function(event) {
 	event.preventDefault();
 
