@@ -152,7 +152,7 @@ function formatTime(totalSeconds) {
 
 let formData; // Define formData in the global scope
 
-function submitForm (){
+function submitForm(event){
 	event.preventDefault();
 	let currentFileName = document.body.getAttribute('data-page');
 	
