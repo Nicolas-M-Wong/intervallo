@@ -198,7 +198,8 @@ function handleButtonClick(test_status) {
             }
 			
         sendPostRequest(data);
-        showDialog(data["nb_photos"], tmp_pose, tmp_enregistrement); // Show the dialog box with the countdown
+        showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"]); // Show the dialog box with the countdown
+		
     } else {
         console.error('Form data is not available. Please submit the form first.');
     }
