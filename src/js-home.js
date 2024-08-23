@@ -28,12 +28,12 @@ const step_enregistrement = [
 ];
 
 WheelConstruct.createWheel('nb_photos', step_photo);
-createWheel('tmp_pose', step_pose);
-createWheel('enregistrement', step_enregistrement);
+WheelConstruct.createWheel('tmp_pose', step_pose);
+WheelConstruct.createWheel('enregistrement', step_enregistrement);
 
-attachWheelEvents('nb_photos');
-attachWheelEvents('tmp_pose');
-attachWheelEvents('enregistrement');
+WheelConstruct.attachWheelEvents('nb_photos');
+WheelConstruct.attachWheelEvents('tmp_pose');
+WheelConstruct.attachWheelEvents('enregistrement');
  
 startUp();
 
@@ -160,9 +160,9 @@ let formData; // Define formData in the global scope
 document.getElementById('wheelForm').addEventListener('submit', function(event) {
 	event.preventDefault();
 
-	const nb_photos = getCurrentValue(document.getElementById('nb_photos'),step_photo);
-	const tmp_pose = getCurrentValue(document.getElementById('tmp_pose'),step_pose);
-	const tmp_enregistrement = getCurrentValue(document.getElementById('enregistrement'),step_enregistrement);
+	const nb_photos = WheelConstruct.getCurrentValue(document.getElementById('nb_photos'),step_photo);
+	const tmp_pose = WheelConstruct.getCurrentValue(document.getElementById('tmp_pose'),step_pose);
+	const tmp_enregistrement = WheelConstruct.getCurrentValue(document.getElementById('enregistrement'),step_enregistrement);
 	
 	// Get the values of the form fields
 	// Calculate the total time
@@ -182,13 +182,13 @@ document.getElementById('wheelForm').addEventListener('submit', function(event) 
 function handleButtonClick(test_status) {
     if (formData) {
         const data = {};
-        const nb_photos = getCurrentValue(document.getElementById('nb_photos'),step_photo);
+        const nb_photos = WheelConstruct.getCurrentValue(document.getElementById('nb_photos'),step_photo);
 		data["nb_photos"] = nb_photos;
 		if (test_status === "Yes"){
             data["nb_photos"] = 1;
             }
-		let tmp_pose = getCurrentValue(document.getElementById('tmp_pose'),step_pose);
-		let tmp_enregistrement = getCurrentValue(document.getElementById('enregistrement'),step_enregistrement);
+		let tmp_pose = WheelConstruct.getCurrentValue(document.getElementById('tmp_pose'),step_pose);
+		let tmp_enregistrement = WheelConstruct.getCurrentValue(document.getElementById('enregistrement'),step_enregistrement);
 
 		var now = new Date().getTime();
 		
@@ -455,88 +455,6 @@ function startUp() {
  }
  
 // ---------------------------------------------------------------------------------------------------------------------------------------------
-		
-function createWheel(elementId, step) {
-    const wheel = document.getElementById(elementId);
-    const paddingDiv = document.createElement('div');
-    paddingDiv.style.height = '50px';
-    wheel.appendChild(paddingDiv);
-
-    // Flag to determine if this is the first element
-    let isFirst = true;
-
-    step.forEach(({ start, end, step, fixed }) => {
-        for (let i = start; i <= end; i += step) {
-            const numberDiv = document.createElement('div');
-            numberDiv.className = 'number';
-            numberDiv.innerText = fixed ? i.toFixed(countDecimalPlaces(step)) : i;
-
-            // Apply attributes to the first numberDiv
-            if (isFirst) {
-                numberDiv.id = 'number_selected_' + elementId;
-                numberDiv.classList.add('selected');
-                isFirst = false;
-            }
-
-            wheel.appendChild(numberDiv);
-        }
-    });
-
-    const paddingDivEnd = document.createElement('div');
-    paddingDivEnd.style.height = '50px';
-    wheel.appendChild(paddingDivEnd);
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-		
-function getCurrentValue(wheel, step_array) {
-	const numbers = wheel.querySelectorAll('.number');
-	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
-	const currentValue = parseFloat(numbers[middleIndex].innerText, 10);
-
-	// Function to get the current step based on value and step_pose
-	function getStep(value, step_array) {
-		for (let i = 0; i < step_array.length; i++) {
-			if (value >= step_array[i].start && value < step_array[i].end) {
-				return step_array[i].step;
-			}
-		}
-		return step_array[step_array.length - 1].step; // Default to the last step if not found
-	}
-
-	const step = getStep(currentValue, step_array);
-	return currentValue.toFixed(countDecimalPlaces(step));
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function adjustScroll(wheel,wheelId) {
-	// Wheel = document.getElementById
-	// WheelId = Id of the element
-	const numbers = wheel.querySelectorAll('.number');
-	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
-	const targetScrollTop = middleIndex * 50 - wheel.clientHeight/3 + 50;
-
-	wheel.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
-	updateSelectedNumber(wheel,wheelId);
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function attachWheelEvents(wheelId) {
-	// Wheel = document.getElementById
-	// WheelId = Id of the element
-	const wheel = document.getElementById(wheelId);
-	let scrollTimeout;
-	wheel.addEventListener('scroll', () => {
-		clearTimeout(scrollTimeout);
-		scrollTimeout = setTimeout(() => {
-			adjustScroll(wheel,wheelId);
-		}, 100);
-	});
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function updateSelectedNumber(wheel,wheelId) {
 	// Wheel = document.getElementById
@@ -703,13 +621,13 @@ function updating_values(pageName,currentPage) {
 		}
 	}
 	if (currentPage === 'home-V1'){
-		createWheel('nb_photos', step_photo);
-		createWheel('tmp_pose', step_pose);
-		createWheel('enregistrement', step_enregistrement);
+		WheelConstruct.createWheel('nb_photos', step_photo);
+		WheelConstruct.createWheel('tmp_pose', step_pose);
+		WheelConstruct.createWheel('enregistrement', step_enregistrement);
 
-		attachWheelEvents('nb_photos');
-		attachWheelEvents('tmp_pose');
-		attachWheelEvents('enregistrement');
+		WheelConstruct.attachWheelEvents('nb_photos');
+		WheelConstruct.attachWheelEvents('tmp_pose');
+		WheelConstruct.attachWheelEvents('enregistrement');
 		
 		const nbPhotosElement = document.getElementById('nb_photos');
 		const tmpPoseElement = document.getElementById('tmp_pose');
@@ -744,9 +662,9 @@ function changePage(pageName,currentPage) {
 
 function saveFormData(currentPage){
 	if (currentPage === 'home'){
-		sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
-		sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
-		sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
+		sessionStorage.nb_photos_page_change = WheelConstruct.getCurrentValue(nb_photos, step_photo);
+		sessionStorage.tmp_pose_page_change = WheelConstruct.getCurrentValue(tmp_pose, step_pose);
+		sessionStorage.enregistrement_page_change = WheelConstruct.getCurrentValue(enregistrement, step_enregistrement);
 	}
 	else if (currentPage === 'home-V1'){
 		sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
