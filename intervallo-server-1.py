@@ -267,7 +267,7 @@ if TCP_IP != "127.0.0.1":
                 file = "/src/home-V1.html"
                 #Switching home page
             
-            elif body ='""':
+            elif body == '""':
                 print("empty post request")
                 http_header = "HTTP/1.1 400 Bad Request\r\n"
                 response_body = "Empty request"  
