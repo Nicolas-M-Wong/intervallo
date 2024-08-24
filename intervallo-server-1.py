@@ -221,6 +221,7 @@ if TCP_IP != "127.0.0.1":
             print(f"POST = {body}\n")
             response_body = "Data received"
             parameters = {}
+            http_header = "HTTP/1.1 200 OK\r\n"
             try:
                 parameters = JSON_data(body)
             except:
@@ -240,8 +241,9 @@ if TCP_IP != "127.0.0.1":
                 
                 else:
                     print("shot command during an existing shoot")
-
-                
+                    http_header = "HTTP/1.1 400 Bad Request\r\n"
+                    response_body = "Unavailable"
+                    
             elif body == '"shutdown"':
                 client_socket.close()
                 s.close()
@@ -266,7 +268,7 @@ if TCP_IP != "127.0.0.1":
                 #Switching home page
                 
             response = (
-                    "HTTP/1.1 200 OK\r\n"
+                    f"{http_header}"
                     f"Content-Length: {len(response_body)}\r\n"
                     "Cache-Control: private, no-store, no-cache\r\n"
                     "Content-Type: text/plain\r\n"
