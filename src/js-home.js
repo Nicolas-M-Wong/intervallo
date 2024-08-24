@@ -27,20 +27,6 @@ const step_enregistrement = [
 	{ start: 60, end: length_enregistrement, step: 10*step_s, fixed: false } //Between 60 to the end, 10s step
 ];
 
-if (document.body.getAttribute('data-page') === 'home'){
-	WheelConstruct.createWheel('nb_photos', step_photo);
-	WheelConstruct.createWheel('tmp_pose', step_pose);
-	WheelConstruct.createWheel('enregistrement', step_enregistrement);
-
-	WheelConstruct.attachWheelEvents('nb_photos');
-	WheelConstruct.attachWheelEvents('tmp_pose');
-	WheelConstruct.attachWheelEvents('enregistrement');
-	
-	WheelConstruct.updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change || 0,10),step_photo);
-	WheelConstruct.updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change || 0,10).toFixed(1),step_pose);
-	WheelConstruct.updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change || 0,10).toFixed(1),step_enregistrement);
-}
-
 startUp();
 
 // Initial screen type and orientation detection
@@ -475,8 +461,9 @@ function update_battery(batteryLevel) {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function startUp() {
-   update_time();
-   sendPostRequest("battery");
+	update_time();
+	sendPostRequest("battery");
+	updating_values();
  }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -538,7 +525,7 @@ function updating_values() {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
 	let currentFileName = document.body.getAttribute('data-page');
-	console.log(currentFileName);
+	
 	if (currentFileName === 'home'){
 		
 		const nbPhotosElement = document.getElementById('nb_photos');
