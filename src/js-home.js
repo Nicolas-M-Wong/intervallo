@@ -204,8 +204,7 @@ function handleButtonClick(test_status) {
 			data["tmp_enregistrement"] = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
 			data["date"] = now;
 			if (test_status === "No"){
-				data["nb_photos"] = WheelConstruct.getCurrentValue(doc_photos,step_photo);
-				console.log("nb_photos (home):", data["nb_photos"]);
+				nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo);
             }
 		}
 		
@@ -214,8 +213,7 @@ function handleButtonClick(test_status) {
 			data["tmp_enregistrement"] = parseFloat(doc_save.value);
 			data["date"] = now;
 			if (test_status === "No"){
-				data["nb_photos"] = parseInt(doc_photos.value);
-				console.log("nb_photos (home-V1):", data["nb_photos"]);
+				nb_photos = parseInt(doc_photos.value);
             }
 		}
         
