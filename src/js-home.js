@@ -216,11 +216,11 @@ function sendPostRequest(data) {
     var http_head = 'http://'
     xhr.open('POST', http_head.concat(ip), true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-	var return_data;
+	var return_data = 0;
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-				return_data = xhr.status;
+				return_data = 200;
                 console.log('Success:', xhr.responseText);
                 if (data === 'battery'){
                     if (isNaN(xhr.responseText) === false){
