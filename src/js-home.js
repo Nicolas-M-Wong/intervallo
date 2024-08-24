@@ -189,7 +189,8 @@ function handleButtonClick(test_status) {
 		data["nb_photos"] = nb_photos;
 			
         var http_code = sendPostRequest(data);
-		if (http_code === 200){
+		console.log(http_code);
+		if (http_code === 200) {
 			showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"]); // Show the dialog box with the countdown
 		}
     } else {
