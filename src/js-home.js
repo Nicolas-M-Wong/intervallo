@@ -534,7 +534,7 @@ function serverEnd(status_var) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function updating_values(pageName) {
+function updating_values() {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
 	let currentFileName = document.body.getAttribute('data-page');
@@ -593,7 +593,7 @@ function changePage(pageName) {
 	setTimeout(() => {
     location.reload();
 	}, 250);
-
+	updating_values()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
