@@ -56,7 +56,7 @@ window.addEventListener('beforeunload', function(event) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
+function showDialog(nbPhotos, exposureTime, timeBetweenPhotos, now) {
 	const notificationMessage = document.getElementById("notificationMessage");
 	const notificationTitle = document.getElementById("notificationTitle");
 	
@@ -74,7 +74,6 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
     
      // Set countdown date to current time plus total time
      
-    const now = new Date().getTime();
     const countDownDate = now + totalTime * 1000;
 
     // Convert countdown date to readable format
@@ -191,9 +190,11 @@ function handleButtonClick(test_status) {
 			
         sendPostRequest(data);
 		console.log(http_status_post);
+		const nowDate = new Date().getTime()
+		setTimeout(() => {
 		if (http_status_post === 200) {
-			showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"]); // Show the dialog box with the countdown
-		}
+			showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
+		}},150)
     } else {
         console.error('Form data is not available. Please submit the form first.');
     }
