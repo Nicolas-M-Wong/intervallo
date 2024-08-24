@@ -3,7 +3,7 @@ let dialogBoxId = document.getElementById("dialogBox");
 let countdownInterval;
 let countDownDate;
 let formData; // Define formData in the global scope
-var return_data = 0;
+var http_status_post = 0;
 
 const step_s = 1
 const step_ms = 0.1
@@ -189,9 +189,9 @@ function handleButtonClick(test_status) {
         
 		data["nb_photos"] = nb_photos;
 			
-        var http_code = sendPostRequest(data);
-		console.log(http_code);
-		if (http_code === 200) {
+        sendPostRequest(data);
+		console.log(http_status_post);
+		if (http_status_post === 200) {
 			showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"]); // Show the dialog box with the countdown
 		}
     } else {
@@ -220,7 +220,7 @@ function sendPostRequest(data) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-				return_data = 200;
+				http_status_post = 200;
                 console.log('Success:', xhr.responseText);
                 if (data === 'battery'){
                     if (isNaN(xhr.responseText) === false){
@@ -243,7 +243,7 @@ function sendPostRequest(data) {
 			
 		};
     xhr.send(JSON.stringify(data));
-	console.log("sendPostRequest: ",return_data);
+	console.log("sendPostRequest: ",http_status_post);
 	}
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
