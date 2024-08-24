@@ -281,6 +281,7 @@ if TCP_IP != "127.0.0.1":
                     "\r\n"
                     f"{response_body}"
                 )
+            print(http_header)
             client_socket.send(response.encode('utf-8'))
         # Close the client socket
         client_socket.close()
