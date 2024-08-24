@@ -241,6 +241,7 @@ function sendPostRequest(data) {
 			}
 		};
     xhr.send(JSON.stringify(data));
+	console.log("sendPostRequest: ",xhr.status);
 	return (xhr.status);
 	}
 	
