@@ -188,9 +188,10 @@ function handleButtonClick(test_status) {
         
 		data["nb_photos"] = nb_photos;
 			
-        sendPostRequest(data);
-        showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"]); // Show the dialog box with the countdown
-		
+        var http_code = sendPostRequest(data);
+		if (http_code === 200){
+			showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"]); // Show the dialog box with the countdown
+		}
     } else {
         console.error('Form data is not available. Please submit the form first.');
     }
@@ -239,6 +240,7 @@ function sendPostRequest(data) {
 			}
 		};
     xhr.send(JSON.stringify(data));
+	return (xhr.status);
 	}
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
