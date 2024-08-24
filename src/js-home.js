@@ -243,7 +243,6 @@ function sendPostRequest(data) {
 			
 		};
     xhr.send(JSON.stringify(data));
-	console.log("sendPostRequest: ",http_status_post);
 	}
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
