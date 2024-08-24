@@ -233,11 +233,9 @@ function sendPostRequest(data) {
 			}
 				
             else {
-                console.error('Error:', xhr.statusText);
-            }
+                console.error('Error:', xhr.statusText);}
 			}
-		}
-
+		};
     xhr.send(JSON.stringify(data));
 	}
 	
