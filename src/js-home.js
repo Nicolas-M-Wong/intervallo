@@ -577,12 +577,12 @@ function updating_values() {
 		const enregistrementElement = document.getElementById('enregistrement');
 		
 		if (nbPhotosElement) {
-			updateWheel("nb_photos", parseInt(sessionStorage.getItem("nb_photos_page_change"), 10), step_photo);
-			document.getElementById('nb_photos').offsetHeight;
-			updateWheel("tmp_pose", parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10), step_pose);
-			document.getElementById('tmp_pose').offsetHeight;
-			updateWheel("enregistrement", parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10), step_enregistrement);
-			document.getElementById('enregistrement').offsetHeight;
+			WheelConstruct.updateWheel("nb_photos", parseInt(sessionStorage.getItem("nb_photos_page_change"), 10), step_photo);
+			//document.getElementById('nb_photos').offsetHeight;
+			WheelConstruct.updateWheel("tmp_pose", parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10), step_pose);
+			//document.getElementById('tmp_pose').offsetHeight;
+			WheelConstruct.updateWheel("enregistrement", parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10), step_enregistrement);
+			//document.getElementById('enregistrement').offsetHeight;
 		}
 	}
 }
