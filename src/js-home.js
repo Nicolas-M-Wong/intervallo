@@ -538,6 +538,7 @@ function updating_values(pageName) {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
 	let currentFileName = document.body.getAttribute('data-page');
+	console.log(currentFileName);
 	if (currentFileName === 'home'){
 		
 		const nbPhotosElement = document.getElementById('nb_photos');
