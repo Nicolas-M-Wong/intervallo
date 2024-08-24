@@ -191,22 +191,33 @@ function submitForm(event){
 
 function handleButtonClick(test_status) {
     if (formData) {
-
+		let currentFileName = document.body.getAttribute('data-page');
         const data = {};
 		var now = new Date().getTime();
 		const doc_photos = document.getElementById('nb_photos');
 		const doc_pose = document.getElementById('tmp_pose');
 		const doc_save = document.getElementById('enregistrement');
+		let nb_photos = 1
 		
-		data["tmp_pose"] = WheelConstruct.getCurrentValue(doc_pose,step_pose) || parseFloat(doc_pose.value);
-		data["tmp_enregistrement"] = WheelConstruct.getCurrentValue(doc_save,step_enregistrement) || parseFloat(doc_save.value);
-		data["date"] = now;
-		
-        const nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo)|| parseInt(doc_photos.value);
-		data["nb_photos"] = nb_photos;
-		if (test_status === "Yes"){
-            data["nb_photos"] = 1;
+		if (currentFileName === "home"){
+			data["tmp_pose"] = WheelConstruct.getCurrentValue(doc_pose,step_pose);
+			data["tmp_enregistrement"] = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
+			data["date"] = now;
+			if (test_status === "No"){
+				data["nb_photos"] = WheelConstruct.getCurrentValue(doc_photos,step_photo);
             }
+		}
+		
+		if (currentFileName === "home-V1"){
+			data["tmp_pose"] = parseFloat(doc_pose.value);
+			data["tmp_enregistrement"] = parseFloat(doc_save.value);
+			data["date"] = now;
+			if (test_status === "No"){
+				data["nb_photos"] = parseInt(doc_photos.value);
+            }
+		}
+        
+		data["nb_photos"] = nb_photos;
 			
         sendPostRequest(data);
         showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"]); // Show the dialog box with the countdown
