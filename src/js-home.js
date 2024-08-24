@@ -197,7 +197,7 @@ function handleButtonClick(test_status) {
 		const doc_photos = document.getElementById('nb_photos');
 		const doc_pose = document.getElementById('tmp_pose');
 		const doc_save = document.getElementById('enregistrement');
-		let nb_photos = 1
+		var nb_photos = 1
 		
 		if (currentFileName === "home"){
 			data["tmp_pose"] = WheelConstruct.getCurrentValue(doc_pose,step_pose);
