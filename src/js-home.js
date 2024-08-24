@@ -231,6 +231,7 @@ function sendPostRequest(data) {
                 }
 			}
 			else if (xhr.status === 400) {
+				http_status_post = 400;
                 console.log('Fail:', xhr.responseText);
 				document.getElementById("dialogBoxTitle").innerHTML = " ";
 				document.getElementById("Compteur").innerHTML = "Indisponible";
@@ -238,6 +239,7 @@ function sendPostRequest(data) {
 			}
 				
             else {
+				http_status_post = 0;
                 console.error('Error:', xhr.statusText);}
 			}
 			
