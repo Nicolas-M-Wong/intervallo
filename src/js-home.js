@@ -583,11 +583,11 @@ function updating_values(pageName) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function changePage(pageName,currentPage) {
+function changePage(pageName) {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
     // Store current data in the session storage to fill the next page with the current values set
-	saveFormData(currentPage);
+	saveFormData();
 	sendPostRequest(pageName);
 	setTimeout(() => {
     location.reload();
@@ -597,13 +597,14 @@ function changePage(pageName,currentPage) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function saveFormData(currentPage){
-	if (currentPage === 'home'){
+function saveFormData(){
+	let currentFileName = document.body.getAttribute('data-page');
+	if (currentFileName === 'home'){
 		sessionStorage.nb_photos_page_change = WheelConstruct.getCurrentValue(nb_photos, step_photo);
 		sessionStorage.tmp_pose_page_change = WheelConstruct.getCurrentValue(tmp_pose, step_pose);
 		sessionStorage.enregistrement_page_change = WheelConstruct.getCurrentValue(enregistrement, step_enregistrement);
 	}
-	else if (currentPage === 'home-V1'){
+	else if (currentFileName === 'home-V1'){
 		sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
 		sessionStorage.tmp_pose_page_change = parseFloat(document.getElementById('tmp_pose').value).toFixed(1);
 		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
@@ -611,5 +612,5 @@ function saveFormData(currentPage){
 	}
 
 window.addEventListener('beforeunload', function(event) {
-            saveFormData('home');
+            saveFormData();
         });
