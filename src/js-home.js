@@ -537,8 +537,8 @@ function serverEnd(status_var) {
 function updating_values(pageName,currentPage) {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
-	
-	if (currentPage === 'home'){
+	let currentFileName = document.body.getAttribute('data-page');
+	if (currentFileName === 'home'){
 		
 		const nbPhotosElement = document.getElementById('nb_photos');
 		const tmpPoseElement = document.getElementById('tmp_pose');
