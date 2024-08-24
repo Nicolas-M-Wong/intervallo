@@ -2,6 +2,7 @@
 let dialogBoxId = document.getElementById("dialogBox");
 let countdownInterval;
 let countDownDate;
+let formData; // Define formData in the global scope
 
 const step_s = 1
 const step_ms = 0.1
@@ -33,35 +34,6 @@ let current_orientation = detectLandscapeOrientation() ? 'h' : 'v';
 let last_screen_type = current_screen_type;
 let last_orientation = current_orientation;
 
-window.addEventListener('load', function() {
-	updateTime();
-	sendPostRequest("battery");
-	updateValues();
-	});
-
-// Function to handle screen and orientation changes
-function handleScreenChange() {
-    const new_screen_type = detectDevice() ? 'ordi' : 'tel';
-    const new_orientation = detectLandscapeOrientation() ? 'h' : 'v';
-
-    console.log(`Screen type: ${last_screen_type} -> ${new_screen_type}`);
-	console.log(`Orientation: ${last_orientation} -> ${new_orientation}`);
-
-    // Reload if orientation changes from horizontal to vertical
-    if (last_orientation === 'h' && new_orientation === 'v') {
-        location.reload();
-    }
-    
-    // Reload if screen type changes from 'ordi' to 'tel'
-    if (last_screen_type === 'ordi' && new_screen_type === 'tel') {
-        location.reload();
-    }
-
-    // Update the last known screen type and orientation
-    last_screen_type = new_screen_type;
-    last_orientation = new_orientation;
-}
-
 // Add event listeners for resize and orientationchange
 window.addEventListener('resize', handleScreenChange);
 window.addEventListener('orientationchange', handleScreenChange);
@@ -69,8 +41,17 @@ window.addEventListener('orientationchange', handleScreenChange);
 setInterval(function(){
     sendPostRequest("battery");},300000)
 
-setInterval(function(){
-    updateTime;},1000)
+requestAnimationFrame(updateTime);
+
+window.addEventListener('load', function() {
+	updateTime();
+	sendPostRequest("battery");
+	updateValues();
+	});
+
+window.addEventListener('beforeunload', function(event) {
+            saveFormData();
+        });
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -137,8 +118,6 @@ function formatTime(totalSeconds) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
-
-let formData; // Define formData in the global scope
 
 function submitForm(event){
 	event.preventDefault();
@@ -247,15 +226,21 @@ function sendPostRequest(data) {
                         updateBattery("");
                         }
                 }
-            } else {
+			}
+			if (xhr.status === 400) {
+                console.log('Fail:', xhr.responseText);
+				dialogBoxId.showModal();
+			}
+				
+            else {
                 console.error('Error:', xhr.statusText);
             }
-        }
-    };
+			}
+		}
 
     xhr.send(JSON.stringify(data));
-}
-
+	}
+	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function sendGetRequest(fileName) {
@@ -351,6 +336,31 @@ function detectLandscapeOrientation() {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
+// Function to handle screen and orientation changes
+function handleScreenChange() {
+    const new_screen_type = detectDevice() ? 'ordi' : 'tel';
+    const new_orientation = detectLandscapeOrientation() ? 'h' : 'v';
+
+    console.log(`Screen type: ${last_screen_type} -> ${new_screen_type}`);
+	console.log(`Orientation: ${last_orientation} -> ${new_orientation}`);
+
+    // Reload if orientation changes from horizontal to vertical
+    if (last_orientation === 'h' && new_orientation === 'v') {
+        location.reload();
+    }
+    
+    // Reload if screen type changes from 'ordi' to 'tel'
+    if (last_screen_type === 'ordi' && new_screen_type === 'tel') {
+        location.reload();
+    }
+
+    // Update the last known screen type and orientation
+    last_screen_type = new_screen_type;
+    last_orientation = new_orientation;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function toggleNotif(){
 	// Update notification message and title
 	var locPhotos = sessionStorage.getItem("nbPhotosNotif");
@@ -416,7 +426,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		notificationTitle.textContent = `La série se termine à ${locTime}`;
 	}
 
-
 	elementsToToggle.forEach(element => {
 		element.dataset.mode = notifState;
 	});
@@ -437,7 +446,7 @@ function changeColor(side) {
     document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
     setTimeout(() => {
     document.getElementById(`photo-distance-${side}`).style.backgroundColor = "transparent";
-    }, 350); // Temps en millisecondes
+    }, 250); // Temps en millisecondes
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -446,7 +455,6 @@ function updateTime() {
     const now = new Date();
     const hoursHeader = now.getHours().toString().padStart(2, '0');
     const minutesHeader = now.getMinutes().toString().padStart(2, '0');
-    const secondsHeader = now.getSeconds().toString().padStart(2, '0');
     const currentTimeHeader = `${hoursHeader}:${minutesHeader}`;
     const timerHeader = document.getElementById('timer-header');
     timerHeader.textContent = currentTimeHeader;
@@ -593,8 +601,3 @@ function saveFormData(){
 		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
 	}
 	}
-
-window.addEventListener('beforeunload', function(event) {
-            saveFormData();
-        });
-		
