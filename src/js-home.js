@@ -3,6 +3,7 @@ let dialogBoxId = document.getElementById("dialogBox");
 let countdownInterval;
 let countDownDate;
 let formData; // Define formData in the global scope
+var return_data = 0;
 
 const step_s = 1
 const step_ms = 0.1
@@ -216,7 +217,6 @@ function sendPostRequest(data) {
     var http_head = 'http://'
     xhr.open('POST', http_head.concat(ip), true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-	var return_data = 0;
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
@@ -244,7 +244,6 @@ function sendPostRequest(data) {
 		};
     xhr.send(JSON.stringify(data));
 	console.log("sendPostRequest: ",return_data);
-	return (return_data);
 	}
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
