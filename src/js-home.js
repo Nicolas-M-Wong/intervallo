@@ -534,7 +534,7 @@ function serverEnd(status_var) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function updating_values(pageName,currentPage) {
+function updating_values(pageName) {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
 	let currentFileName = document.body.getAttribute('data-page');
@@ -557,7 +557,7 @@ function updating_values(pageName,currentPage) {
 			enregistrementElement.value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10) || 0;
 		}
 	}
-	if (currentPage === 'home-V1'){
+	if (currentFileName === 'home-V1'){
 		WheelConstruct.createWheel('nb_photos', step_photo);
 		WheelConstruct.createWheel('tmp_pose', step_pose);
 		WheelConstruct.createWheel('enregistrement', step_enregistrement);
@@ -594,56 +594,6 @@ function changePage(pageName,currentPage) {
 	}, 250);
 
 }
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-updating_values = function(pageName,currentPage) {
-	//pageName = requested page
-	//currentPage = the page currently displayed to the client
-	
-	if (currentPage === 'home'){
-		
-		const nbPhotosElement = document.getElementById('nb_photos');
-		const tmpPoseElement = document.getElementById('tmp_pose');
-		const enregistrementElement = document.getElementById('enregistrement');
-		
-		if (nbPhotosElement) {
-			nbPhotosElement.value = parseInt(sessionStorage.getItem("nb_photos_page_change"), 10) || 0;
-			console.log(nbPhotosElement.value);
-		}
-		
-		if (tmpPoseElement) {
-			tmpPoseElement.value = parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10) || 0;
-		}
-		
-		if (enregistrementElement) {
-			enregistrementElement.value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10) || 0;
-		}
-	}
-	if (currentPage === 'home-V1'){
-		createWheel('nb_photos', step_photo);
-		createWheel('tmp_pose', step_pose);
-		createWheel('enregistrement', step_enregistrement);
-
-		attachWheelEvents('nb_photos');
-		attachWheelEvents('tmp_pose');
-		attachWheelEvents('enregistrement');
-		
-		const nbPhotosElement = document.getElementById('nb_photos');
-		const tmpPoseElement = document.getElementById('tmp_pose');
-		const enregistrementElement = document.getElementById('enregistrement');
-		
-		if (nbPhotosElement) {
-			WheelConstruct.updateWheel("nb_photos", parseInt(sessionStorage.getItem("nb_photos_page_change"), 10), step_photo);
-			document.getElementById('nb_photos').offsetHeight;
-			WheelConstruct.updateWheel("tmp_pose", parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10), step_pose);
-			document.getElementById('tmp_pose').offsetHeight;
-			WheelConstruct.updateWheel("enregistrement", parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10), step_enregistrement);
-			document.getElementById('enregistrement').offsetHeight;
-		}
-	}
-}
-
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
