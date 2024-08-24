@@ -216,10 +216,11 @@ function sendPostRequest(data) {
     var http_head = 'http://'
     xhr.open('POST', http_head.concat(ip), true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-
+	var return_data;
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
+				return_data = xhr.status;
                 console.log('Success:', xhr.responseText);
                 if (data === 'battery'){
                     if (isNaN(xhr.responseText) === false){
@@ -239,10 +240,11 @@ function sendPostRequest(data) {
             else {
                 console.error('Error:', xhr.statusText);}
 			}
+			
 		};
     xhr.send(JSON.stringify(data));
-	console.log("sendPostRequest: ",xhr.status);
-	return (xhr.status);
+	console.log("sendPostRequest: ",return_data);
+	return (return_data);
 	}
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
