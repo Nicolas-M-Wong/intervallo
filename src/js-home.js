@@ -27,31 +27,17 @@ const step_enregistrement = [
 	{ start: 60, end: length_enregistrement, step: 10*step_s, fixed: false } //Between 60 to the end, 10s step
 ];
 
-/* if (document.body.getAttribute('data-page') === 'home'){
-	WheelConstruct.createWheel('nb_photos', step_photo);
-	WheelConstruct.createWheel('tmp_pose', step_pose);
-	WheelConstruct.createWheel('enregistrement', step_enregistrement);
-
-	WheelConstruct.attachWheelEvents('nb_photos');
-	WheelConstruct.attachWheelEvents('tmp_pose');
-	WheelConstruct.attachWheelEvents('enregistrement');
-	
-	WheelConstruct.updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change || 0,10),step_photo);
-	WheelConstruct.updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change || 0,10).toFixed(1),step_pose);
-	WheelConstruct.updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change || 0,10).toFixed(1),step_enregistrement);
-}
-
-if (document.body.getAttribute('data-page') === 'home'){
-	
-} */
-
-startUp();
-
 // Initial screen type and orientation detection
 let current_screen_type = detectDevice() ? 'ordi' : 'tel';
 let current_orientation = detectLandscapeOrientation() ? 'h' : 'v';
 let last_screen_type = current_screen_type;
 let last_orientation = current_orientation;
+
+window.addEventListener('load', function() {
+	updateTime();
+	sendPostRequest("battery");
+	updateValues();
+	});
 
 // Function to handle screen and orientation changes
 function handleScreenChange() {
@@ -84,7 +70,7 @@ setInterval(function(){
     sendPostRequest("battery");},300000)
 
 setInterval(function(){
-    update_time;},1000)
+    updateTime;},1000)
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -256,9 +242,9 @@ function sendPostRequest(data) {
                 console.log('Success:', xhr.responseText);
                 if (data === 'battery'){
                     if (isNaN(xhr.responseText) === false){
-                        update_battery(xhr.responseText);
+                        updateBattery(xhr.responseText);
                         } else {
-                        update_battery("");
+                        updateBattery("");
                         }
                 }
             } else {
@@ -456,7 +442,7 @@ function changeColor(side) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function update_time() {
+function updateTime() {
     const now = new Date();
     const hoursHeader = now.getHours().toString().padStart(2, '0');
     const minutesHeader = now.getMinutes().toString().padStart(2, '0');
@@ -468,21 +454,13 @@ function update_time() {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function update_battery(batteryLevel) {
+function updateBattery(batteryLevel) {
     const batteryHeader = document.getElementById('battery-header');
     batteryHeader.textContent = `${batteryLevel}%`;
     if (batteryLevel === ""){
         sendPostRequest("battery");
     }
 }
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function startUp() {
-   update_time();
-   sendPostRequest("battery");
-   updating_values();
- }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -539,7 +517,7 @@ function serverEnd(status_var) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function updating_values() {
+function updateValues() {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
 	let currentFileName = document.body.getAttribute('data-page');
@@ -620,3 +598,4 @@ function saveFormData(){
 window.addEventListener('beforeunload', function(event) {
             saveFormData();
         });
+		
