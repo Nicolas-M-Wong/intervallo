@@ -66,7 +66,7 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
     });
     document.getElementById("Compteur").innerHTML = "00:00:00"; // Initialize countdown display
     dialogBoxId.showModal();
-    
+    document.getElementById("DialogBoxTitle").innerHTML = "Temps restant :";
     // Calculate the total time
 
     const totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
@@ -230,6 +230,8 @@ function sendPostRequest(data) {
 			if (xhr.status === 400) {
                 console.log('Fail:', xhr.responseText);
 				dialogBoxId.showModal();
+				document.getElementById("DialogBoxTitle").innerHTML = "";
+				document.getElementById("Compteur").innerHTML = "Indisponible";
 			}
 				
             else {
