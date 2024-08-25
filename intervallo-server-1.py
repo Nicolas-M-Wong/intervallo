@@ -248,7 +248,8 @@ if TCP_IP != "127.0.0.1":
             except:
                 pass
                 http_header = "HTTP/1.1 400 Bad Request\r\n"
-            if parameters.get('"token"') == client_dict.get(client_address[0]):
+            print(parameters.get('token'),client_dict.get(client_address[0]))
+            if parameters.get('token') == client_dict.get(client_address[0]):
                 print("chat")
             if "nb_photos" in parameters.keys():
                 tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
@@ -278,7 +279,7 @@ if TCP_IP != "127.0.0.1":
                 s.close()
                 break
             
-            elif parameters.get('battery'):
+            elif parameters.get('"battery"'):
                 soc=battery.getSoc()
                 response_body=f"{round(soc)}"
             
