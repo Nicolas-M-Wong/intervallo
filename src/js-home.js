@@ -230,11 +230,8 @@ function sendPostRequest(data) {
             if (xhr.readyState === 4) { // Request is complete
                 if (xhr.status === 200) {
                     http_status_post = 200;
-                    console.log('Success:', xhr.responseText);
-					console.log({...ensureDict("battery"), ...{"token":sessionStorage.getItem("sessionToken")}},"  ",data);
-					console.log(data.battery);
-					console.log(data === {...ensureDict("battery"), ...{"token":sessionStorage.getItem("sessionToken")}});
-                    if (data === {...ensureDict("battery"), ...{"token":sessionStorage.getItem("sessionToken")}}) {
+                    console.log('Success:', xhr.responseText););
+                    if (data.battery) {
                         if (!isNaN(xhr.responseText)) {
                             updateBattery(xhr.responseText);
                         } else {
