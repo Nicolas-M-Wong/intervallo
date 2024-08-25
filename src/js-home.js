@@ -159,7 +159,24 @@ function submitForm(event){
 
 	// Prepare form data for the POST request
 	formData = new FormData(document.getElementById('interval-Form'));
+	const fields = ['nb_photos', 'tmp_pose', 'enregistrement'];
+	let allFilled = true;
+	
+	fields.forEach(function(fieldId) {
+		const field = document.getElementById(fieldId);
+		if (!field.value) {
+			allFilled = false;
+			field.setCustomValidity('This field is required.');
+		} else {
+			field.setCustomValidity('');
+		}
+	});
+
+	if (!allFilled) {
+		event.preventDefault(); // Prevent form submission if any field is empty
 	}
+	}
+	
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
