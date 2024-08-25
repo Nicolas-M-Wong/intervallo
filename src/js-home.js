@@ -158,7 +158,7 @@ function submitForm(event){
 	document.getElementById("confirmation").style.display = "block";
 
 	// Prepare form data for the POST request
-	formData = new FormData(document.getElementById('interval-Form'));
+	
 	const fields = ['nb_photos', 'tmp_pose', 'enregistrement'];
 	let allFilled = true;
 	
@@ -175,7 +175,10 @@ function submitForm(event){
 	if (!allFilled) {
 		event.preventDefault(); // Prevent form submission if any field is empty
 	}
+	else{
+		formData = new FormData(document.getElementById('interval-Form'));
 	}
+}
 	
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
