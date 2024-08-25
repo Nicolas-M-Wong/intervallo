@@ -248,21 +248,26 @@ if TCP_IP != "127.0.0.1":
             
             if parameters.get('token') == client_dict.get(client_address[0]):
                 if "nb_photos" in parameters.keys():
-                    tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
-                    print(tmp_prise)
-                    new_cmd_date = parameters.get('date',0)
+                    try:
+                        tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
+                        print(tmp_prise)
+                        new_cmd_date = parameters.get('date',0)
                     
-                    #Avoid capturing pictures for command sent during the shoot
-                    if new_cmd_date > expct_end_date:
-                        new_cmd_date +=1000*tmp_prise
-                        expct_end_date = new_cmd_date
-                        photo_capture(parameters.get('nb_photos',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
-                    
-                    else:
-                        print("shot command during an existing shoot")
-                        http_header = "HTTP/1.1 400 Bad Request\r\n"
-                        response_body = "Unavailable"
+                        #Avoid capturing pictures for command sent during the shoot
+                        if new_cmd_date > expct_end_date:
+                            new_cmd_date +=1000*tmp_prise
+                            expct_end_date = new_cmd_date
+                            photo_capture(parameters.get('nb_photos',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
                         
+                        else:
+                            print("shot command during an existing shoot")
+                            http_header = "HTTP/1.1 400 Bad Request\r\n"
+                            response_body = "Unavailable"
+                        
+                    except:
+                        print("Failed not a number")
+                        http_header = "HTTP/1.1 400 Bad Request\r\n"
+                        response_body = "Failed NaN"
                 elif 'shutdown' in parameters.keys():
                     client_socket.close()
                     s.close()
