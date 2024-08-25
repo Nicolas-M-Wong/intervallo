@@ -278,7 +278,7 @@ if TCP_IP != "127.0.0.1":
                 s.close()
                 break
             
-            elif parameters.get('"battery"'):
+            elif parameters.get('battery'):
                 soc=battery.getSoc()
                 response_body=f"{round(soc)}"
             
