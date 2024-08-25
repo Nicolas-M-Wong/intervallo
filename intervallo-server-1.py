@@ -157,7 +157,6 @@ def header ():
     script += "Content-Type: text/html;"
     script += "charset=UTF-8\r\n"
     script += "\r\n"
-    print(time.asctime(time.gmtime()))
     return script
 
 def generate_token():
@@ -218,7 +217,6 @@ if TCP_IP != "127.0.0.1":
                         client_dict.update({client_address[0]:user_token}) 
                         response = 'HTTP/1.1 200 OK\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/plain\r\ncharset=UTF-8\r\n\r\n'+'Token: '+user_token
                         client_socket.send(response.encode('utf-8'))
-                        print("token request")
                 else:
                     try:
                         response = parsing_get_msg(first_line,directory)
@@ -243,56 +241,57 @@ if TCP_IP != "127.0.0.1":
             http_header = "HTTP/1.1 200 OK\r\n"
             try:
                 parameters = JSON_data(body)
-                print("success", parameters.get('token') ,client_dict.get(client_address[0]))
                 
             except:
                 pass
                 http_header = "HTTP/1.1 400 Bad Request\r\n"
-                
-            if "nb_photos" in parameters.keys():
-                tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
-                print(tmp_prise)
-                new_cmd_date = parameters.get('date',0)
-                
-                #Avoid capturing pictures for command sent during the shoot
-                if new_cmd_date > expct_end_date:
-                    new_cmd_date +=1000*tmp_prise
-                    expct_end_date = new_cmd_date
-                    photo_capture(parameters.get('nb_photos',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
-                
-                else:
-                    print("shot command during an existing shoot")
-                    http_header = "HTTP/1.1 400 Bad Request\r\n"
-                    response_body = "Unavailable"
+            
+            if parameters.get('token') == client_dict(client_address[0]):
+                if "nb_photos" in parameters.keys():
+                    tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
+                    print(tmp_prise)
+                    new_cmd_date = parameters.get('date',0)
                     
-            elif 'shutdown' in parameters:
-                client_socket.close()
-                s.close()
-                shutdown_raspi ()
-                break
-            
-            elif 'sleep' in parameters:
-                client_socket.close()
-                s.close()
-                break
-            
-            elif 'battery' in parameters:
-                soc=battery.getSoc()
-                response_body=f"{round(soc)}"
-            
-            elif 'home.html' in parameters:
-                file = "/src/home.html"
-                #Switching home page
+                    #Avoid capturing pictures for command sent during the shoot
+                    if new_cmd_date > expct_end_date:
+                        new_cmd_date +=1000*tmp_prise
+                        expct_end_date = new_cmd_date
+                        photo_capture(parameters.get('nb_photos',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
+                    
+                    else:
+                        print("shot command during an existing shoot")
+                        http_header = "HTTP/1.1 400 Bad Request\r\n"
+                        response_body = "Unavailable"
+                        
+                elif 'shutdown' in parameters.keys():
+                    client_socket.close()
+                    s.close()
+                    shutdown_raspi ()
+                    break
                 
-            elif 'home-V1.html' in parameters:
-                file = "/src/home-V1.html"
-                #Switching home page
-            
-            elif not parameters:
-                print("empty post request")
+                elif 'sleep' in parameters.keys():
+                    client_socket.close()
+                    s.close()
+                    break
+                
+                elif 'battery' in parameters.keys():
+                    soc=battery.getSoc()
+                    response_body=f"{round(soc)}"
+                
+                elif 'home.html' in parameters.keys():
+                    file = "/src/home.html"
+                    #Switching home page
+                    
+                elif 'home-V1.html' in parameters.keys():
+                    file = "/src/home-V1.html"
+                    #Switching home page
+                
+                elif not parameters.keys():
+                    print("empty post request")
+                    http_header = "HTTP/1.1 400 Bad Request\r\n"
+                    response_body = "Empty request"  
+            else:
                 http_header = "HTTP/1.1 400 Bad Request\r\n"
-                response_body = "Empty request"  
-                
             response = (
                     f"{http_header}"
                     f"Content-Length: {len(response_body)}\r\n"
