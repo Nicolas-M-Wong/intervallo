@@ -230,7 +230,7 @@ function sendPostRequest(data) {
             if (xhr.readyState === 4) { // Request is complete
                 if (xhr.status === 200) {
                     http_status_post = 200;
-                    console.log('Success:', xhr.responseText););
+                    console.log('Success:', xhr.responseText);
                     if (data.battery) {
                         if (!isNaN(xhr.responseText)) {
                             updateBattery(xhr.responseText);
