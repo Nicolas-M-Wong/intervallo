@@ -128,9 +128,11 @@ def JSON_data (msg):
     
     for i in range(0,len(msg)):
         pairs_key_value = msg[i].split(':')
-        
-        dict_parameters [pairs_key_value[0].strip('"')] = float(pairs_key_value[1].strip('"'))
-
+        try:
+            dict_parameters [pairs_key_value[0].strip('"')] = float(pairs_key_value[1].strip('"'))
+        except:
+            dict_parameters [pairs_key_value[0].strip('"')] = pairs_key_value[1].strip('"')
+            #Data is NaN in this case
     return dict_parameters
 
 def get_ip():
@@ -158,7 +160,8 @@ def header ():
     return script
 
 def generate_token():
-    ''.join(random.SystemRandom().choice(string.ascii_uppercase +string.digits) for _ in range (N))
+    token_length = 5
+    return ''.join(random.SystemRandom().choice(string.ascii_uppercase +string.digits) for _ in range (token_length))
     
 time_delay = 0
 while get_ip()=="127.0.0.1":
@@ -208,21 +211,22 @@ if TCP_IP != "127.0.0.1":
         if method == 'GET':
             print(f'home: {file}\n')
             if str(first_line[1]).strip('/') != '':
-                try:
-                    response = parsing_get_msg(first_line,directory)
-                    client_socket.send(response)
-                except:
-                    print(str(first_line[1]).strip('/'))
-                    if str(first_line[1]).strip('/') != 'token':
+                
+                if str(first_line[1]).strip('/') == 'token':
                         user_token = generate_token()
-                        client_dict.update({client_address:user_token}) 
-                        response = 'HTTP/1.1 200 OK\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/plain\r\ncharset=UTF-8\r\n\r\n'+user_token
+                        client_dict.update({client_address[0]:user_token}) 
+                        response = 'HTTP/1.1 200 OK\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/plain\r\ncharset=UTF-8\r\n\r\n'+'Token: '+user_token
                         client_socket.send(response.encode('utf-8'))
                         print("token request")
-                    else:
+                else:
+                    try:
+                        response = parsing_get_msg(first_line,directory)
+                        client_socket.send(response)
+                    except:
+                        print(str(first_line[1]).strip('/'))
                         response = 'HTTP/1.1 400 Bad Request\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/plain\r\ncharset=UTF-8\r\n\r\n'+"failed bad request"
                         print("failed bad request")
-                    pass
+                        pass
             else:
             # Serve the HTML file
                 home = io.open(directory+file, mode='r',encoding=('utf-8')).read()
@@ -238,12 +242,12 @@ if TCP_IP != "127.0.0.1":
             http_header = "HTTP/1.1 200 OK\r\n"
             try:
                 parameters = JSON_data(body)
-                print("success", parameters.get('token') ,client_dict.get(client_address))
+                print("success", parameters.get('token') ,client_dict.get(client_address[0]))
                 
             except:
                 pass
                 http_header = "HTTP/1.1 400 Bad Request\r\n"
-            if parameters.get('token') == client_dict.get(client_address):
+            if parameters.get('"token"') == client_dict.get(client_address[0]):
                 print("chat")
             if "nb_photos" in parameters.keys():
                 tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
