@@ -610,10 +610,9 @@ function changePage(pageName) {
 	//currentPage = the page currently displayed to the client
     // Store current data in the session storage to fill the next page with the current values set
 	saveFormData();
-	sendPostRequest(pageName);
-	setTimeout(() => {
+	sendPostRequest(pageName).then(() => {
     location.reload();
-	}, 250);
+	});
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
