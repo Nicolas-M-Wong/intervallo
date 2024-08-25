@@ -162,8 +162,8 @@ function submitForm(event){
 	// Prepare form data for the POST request
 	formData = new FormData(document.getElementById('interval-Form'));
 	}
-	}
 }
+
 	
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
