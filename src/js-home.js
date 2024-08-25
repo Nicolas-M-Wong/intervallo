@@ -152,7 +152,7 @@ function submitForm(event){
 	
 	var totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
 	console.log("Total time for the interval:", totalTime, "seconds");
-	if (totalTime <= 0){
+	if (Number.isNaN(totalTime) || totalTime <= 0){
 		totalTime=0;
 		document.getElementById("confirmation").style.display = "none";
 	}
