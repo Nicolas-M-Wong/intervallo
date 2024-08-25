@@ -259,26 +259,26 @@ if TCP_IP != "127.0.0.1":
                     http_header = "HTTP/1.1 400 Bad Request\r\n"
                     response_body = "Unavailable"
                     
-            elif parameters.get("shutdown"):
+            elif parameters.get('"shutdown"'):
                 client_socket.close()
                 s.close()
                 shutdown_raspi ()
                 break
             
-            elif parameters.get("sleep"):
+            elif parameters.get('"sleep"'):
                 client_socket.close()
                 s.close()
                 break
             
-            elif parameters.get("battery"):
+            elif parameters.get('"battery"'):
                 soc=battery.getSoc()
                 response_body=f"{round(soc)}"
             
-            elif parameters.get("home.html"):
+            elif parameters.get('"home.html"'):
                 file = "/src/home.html"
                 #Switching home page
                 
-            elif parameters.get("home-V1.html"):
+            elif parameters.get('"home-V1.html"'):
                 file = "/src/home-V1.html"
                 #Switching home page
             
