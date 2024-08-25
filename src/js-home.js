@@ -217,42 +217,47 @@ function remoteTrigger(){
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function sendPostRequest(data) {
-	data = ensureDict(data);
-	data["token"]=sessionStorage.getItem("sessionToken");
-    const xhr = new XMLHttpRequest();
-    var ip = location.host;
-    var http_head = 'http://'
-    xhr.open('POST', http_head.concat(ip), true);
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-				http_status_post = 200;
-                console.log('Success:', xhr.responseText);
-                if (data === 'battery'){
-                    if (isNaN(xhr.responseText) === false){
-                        updateBattery(xhr.responseText);
+    return new Promise((resolve, reject) => {
+        data = ensureDict(data);
+        data["token"] = sessionStorage.getItem("sessionToken");
+        const xhr = new XMLHttpRequest();
+        const ip = location.host;
+        const http_head = 'http://';
+        xhr.open('POST', http_head.concat(ip), true);
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) { // Request is complete
+                if (xhr.status === 200) {
+                    http_status_post = 200;
+                    console.log('Success:', xhr.responseText);
+                    if (data === 'battery') {
+                        if (!isNaN(xhr.responseText)) {
+                            updateBattery(xhr.responseText);
                         } else {
-                        updateBattery("");
+                            updateBattery("");
                         }
+                    }
+                    resolve(xhr.responseText); // Resolve the promise with the response text
+                } else if (xhr.status === 400) {
+                    http_status_post = 400;
+                    console.log('Fail:', xhr.responseText);
+                    document.getElementById("dialogBoxTitle").innerHTML = " ";
+                    document.getElementById("Compteur").innerHTML = "Indisponible";
+                    dialogBoxId.showModal();
+                    reject(new Error('Bad Request')); // Reject the promise with an error
+                } else {
+                    http_status_post = 0;
+                    console.error('Error:', xhr.statusText);
+                    reject(new Error(xhr.statusText)); // Reject the promise with the error status text
                 }
-			}
-			else if (xhr.status === 400) {
-				http_status_post = 400;
-                console.log('Fail:', xhr.responseText);
-				document.getElementById("dialogBoxTitle").innerHTML = " ";
-				document.getElementById("Compteur").innerHTML = "Indisponible";
-				dialogBoxId.showModal();
-			}
-				
-            else {
-				http_status_post = 0;
-                console.error('Error:', xhr.statusText);}
-			}
-			
-		};
-    xhr.send(JSON.stringify(data));
-	}
+            }
+        };
+        
+        xhr.send(JSON.stringify(data));
+    });
+}
+
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
