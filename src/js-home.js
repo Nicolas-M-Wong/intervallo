@@ -46,11 +46,14 @@ setInterval(function(){
 requestAnimationFrame(updateTime);
 
 window.addEventListener('load', function() {
-	sendGetRequest("token");
-	updateTime();
-	updateValues();
-	sendPostRequest("battery");
-	});
+  sendGetRequest("token").then(() => {
+    updateTime();
+    updateValues();
+    sendPostRequest("battery");
+  }).catch(error => {
+    console.error('Error fetching token:', error);
+  });
+});
 
 window.addEventListener('beforeunload', function(event) {
             saveFormData();
@@ -190,13 +193,12 @@ function handleButtonClick(test_status) {
         
 		data["nb_photos"] = nb_photos;
 			
-        sendPostRequest(data);
-		console.log(http_status_post);
-		const nowDate = new Date().getTime()
-		setTimeout(() => {
-		if (http_status_post === 200) {
+        sendPostRequest(data).then(() => {
+		if (http_status_post === 200){
+			const nowDate = new Date().getTime()
 			showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
-		}},150)
+		}
+		});
     } else {
         console.error('Form data is not available. Please submit the form first.');
     }
@@ -223,7 +225,6 @@ function sendPostRequest(data) {
     xhr.open('POST', http_head.concat(ip), true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.onreadystatechange = function() {
-		sessionStorage.setItem('http_status',xhr.status);
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
 				http_status_post = 200;
@@ -272,7 +273,7 @@ function sendGetRequest(fileName) {
     })
     .then(html => {
 		
-		const tokenPattern = /token:\s*([^\s]+)/; // Regex to match "token: [unique_token]"
+		const tokenPattern = /Token:\s*([^\s]+)/; // Regex to match "token: [unique_token]"
         const match = html.match(tokenPattern);
 
         if (match && match[1]) {
