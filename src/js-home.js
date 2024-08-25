@@ -248,9 +248,11 @@ function sendPostRequest(data) {
                 } else if (xhr.status === 400) {
                     http_status_post = 400;
                     console.log('Fail:', xhr.responseText);
-                    document.getElementById("dialogBoxTitle").innerHTML = " ";
-                    document.getElementById("Compteur").innerHTML = "Indisponible";
-                    dialogBoxId.showModal();
+					if (xhr.responseText === "Unavailable"){
+						document.getElementById("dialogBoxTitle").innerHTML = " ";
+						document.getElementById("Compteur").innerHTML = "Indisponible";
+						dialogBoxId.showModal();
+					}
                     reject(new Error('Bad Request')); // Reject the promise with an error
                 } else {
                     http_status_post = 0;
