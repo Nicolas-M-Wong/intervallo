@@ -246,7 +246,7 @@ if TCP_IP != "127.0.0.1":
                 pass
                 http_header = "HTTP/1.1 400 Bad Request\r\n"
             
-            if parameters.get('token') == client_dict(client_address[0]):
+            if parameters.get('token') == client_dict.get(client_address[0]):
                 if "nb_photos" in parameters.keys():
                     tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
                     print(tmp_prise)
