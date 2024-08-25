@@ -487,8 +487,9 @@ function updateTime() {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function updateBattery(batteryLevel) {
+	console.log(batteryLevel);
     const batteryHeader = document.getElementById('battery-header');
-    batteryHeader.textContent = '${batteryLevel}%';
+    batteryHeader.textContent = `${batteryLevel}%`;
     if (batteryLevel === ""){
         sendPostRequest(battery);
     }
