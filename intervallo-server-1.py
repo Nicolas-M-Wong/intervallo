@@ -212,6 +212,7 @@ if TCP_IP != "127.0.0.1":
                     response = parsing_get_msg(first_line,directory)
                     client_socket.send(response)
                 except:
+                    print(str(first_line[1]).strip('/'))
                     if str(first_line[1]).strip('/') != 'token':
                         user_token = generate_token()
                         client_dict.update({client_address:user_token}) 
@@ -237,6 +238,8 @@ if TCP_IP != "127.0.0.1":
             http_header = "HTTP/1.1 200 OK\r\n"
             try:
                 parameters = JSON_data(body)
+                print("success", parameters.get('token') ,client_dict.get(client_address))
+                
             except:
                 pass
                 http_header = "HTTP/1.1 400 Bad Request\r\n"
