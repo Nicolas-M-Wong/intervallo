@@ -231,7 +231,7 @@ function sendPostRequest(data) {
                 if (xhr.status === 200) {
                     http_status_post = 200;
                     console.log('Success:', xhr.responseText);
-                    if (data === 'battery') {
+                    if (data === ensureDict('battery')) {
                         if (!isNaN(xhr.responseText)) {
                             updateBattery(xhr.responseText);
                         } else {
@@ -487,7 +487,6 @@ function updateTime() {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function updateBattery(batteryLevel) {
-	console.log('battery level: ',batteryLevel);
     const batteryHeader = document.getElementById('battery-header');
     batteryHeader.textContent = `${batteryLevel}%`;
     if (batteryLevel === ""){
