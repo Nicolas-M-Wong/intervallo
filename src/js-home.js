@@ -4,6 +4,7 @@ let countdownInterval;
 let countDownDate;
 let formData; // Define formData in the global scope
 var http_status_post = 0;
+var token = 0;
 
 const step_s = 1
 const step_ms = 0.1
@@ -45,9 +46,10 @@ setInterval(function(){
 requestAnimationFrame(updateTime);
 
 window.addEventListener('load', function() {
+	sendGetRequest("token");
 	updateTime();
-	sendPostRequest("battery");
 	updateValues();
+	sendPostRequest("battery");
 	});
 
 window.addEventListener('beforeunload', function(event) {
@@ -213,12 +215,15 @@ function remoteTrigger(){
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function sendPostRequest(data) {
+	data = ensureDict(data);
+	data["token"]=sessionStorage.getItem("sessionToken");
     const xhr = new XMLHttpRequest();
     var ip = location.host;
     var http_head = 'http://'
     xhr.open('POST', http_head.concat(ip), true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     xhr.onreadystatechange = function() {
+		sessionStorage.setItem('http_status',xhr.status);
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
 				http_status_post = 200;
@@ -266,12 +271,18 @@ function sendGetRequest(fileName) {
         return response.text();
     })
     .then(html => {
+		
+		const tokenPattern = /token:\s*([^\s]+)/; // Regex to match "token: [unique_token]"
+        const match = html.match(tokenPattern);
+
+        if (match && match[1]) {
+            // If token found, store it in sessionStorage and return early
+            sessionStorage.setItem('sessionToken', match[1]);
+            return; // Exit the function without updating the DOM
+        }
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
-       
-	   // Replace the contents of <head>
-       // document.head.innerHTML = doc.head.innerHTML;
-		
+
         // Replace the contents of <body>
         document.body.innerHTML = doc.body.innerHTML;
     })
@@ -473,7 +484,8 @@ function updateBattery(batteryLevel) {
     const batteryHeader = document.getElementById('battery-header');
     batteryHeader.textContent = `${batteryLevel}%`;
     if (batteryLevel === ""){
-        sendPostRequest("battery");
+		
+        sendPostRequest(battery);
     }
 }
 
@@ -608,3 +620,22 @@ function saveFormData(){
 		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
 	}
 	}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+function ensureDict(data) {
+    if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
+        // If data is already an object, return it as is
+        return data;
+    } else {
+        // If data is not an object, treat it as a string
+        const words = String(data).split(/\s+/); // Split data into words using whitespace
+        const dict = {};
+        
+        words.forEach(word => {
+            dict[word] = word; // Set each word as both key and value
+        });
+        
+        return dict;
+    }
+}
