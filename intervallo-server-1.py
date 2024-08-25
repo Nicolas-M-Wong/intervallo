@@ -3,10 +3,14 @@ import time
 import io
 import os
 import MAX17043
+import random
+import string
 
 battery = MAX17043.max17043()
 
 directory = os.path.dirname(os.path.abspath(__file__)) #absolute path to file
+
+client_dict = {}
 
 ############################### HTTP Header attribute dictionnary #############
 # Constructing dictionnary for most of the possible header sent by the serv to the client
@@ -100,7 +104,7 @@ def parsing_get_msg(data,active_dir):
             decrypted_data = ('HTTP/1.1 200 OK\r\nCache-Control: private, no-store, no-cache\r\nContent-Type:'+ type_header +'\r\ncharset=UTF-8\r\n\r\n').encode('utf-8')+image
             
     else:
-        response_body = "Data received"
+        response_body = "Failed 404"
         response = ("HTTP/1.1 404 Not Found\r\n"
                 f"Content-Length: {len(response_body)}\r\n"
                 "Cache-Control: private, no-store, no-cache\r\n"
@@ -153,6 +157,9 @@ def header ():
     print(time.asctime(time.gmtime()))
     return script
 
+def generate_token():
+    ''.join(random.SystemRandom().choice(string.ascii_uppercase +string.digits) for _ in range (N))
+    
 time_delay = 0
 while get_ip()=="127.0.0.1":
     print("waiting for a network connection")
@@ -205,9 +212,15 @@ if TCP_IP != "127.0.0.1":
                     response = parsing_get_msg(first_line,directory)
                     client_socket.send(response)
                 except:
-                    response = 'HTTP/1.1 200 OK\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'
-                    client_socket.send(response.encode('utf-8'))
-                    print("failed")
+                    if str(first_line[1]).strip('/') != 'token':
+                        user_token = generate_token()
+                        client_dict.update({client_address:user_token}) 
+                        response = 'HTTP/1.1 200 OK\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/plain\r\ncharset=UTF-8\r\n\r\n'+user_token
+                        client_socket.send(response.encode('utf-8'))
+                        print("token request")
+                    else:
+                        response = 'HTTP/1.1 400 Bad Request\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/plain\r\ncharset=UTF-8\r\n\r\n'+"failed bad request"
+                        print("failed bad request")
                     pass
             else:
             # Serve the HTML file
@@ -226,7 +239,9 @@ if TCP_IP != "127.0.0.1":
                 parameters = JSON_data(body)
             except:
                 pass
-            
+                http_header = "HTTP/1.1 400 Bad Request\r\n"
+            if parameters.get('token') == client_dict.get(client_address):
+                print("chat")
             if "nb_photos" in parameters.keys():
                 tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
                 print(tmp_prise)
@@ -244,30 +259,30 @@ if TCP_IP != "127.0.0.1":
                     http_header = "HTTP/1.1 400 Bad Request\r\n"
                     response_body = "Unavailable"
                     
-            elif body == '"shutdown"':
+            elif parameters.get("shutdown"):
                 client_socket.close()
                 s.close()
                 shutdown_raspi ()
                 break
             
-            elif body == '"sleep"':
+            elif parameters.get("sleep"):
                 client_socket.close()
                 s.close()
                 break
             
-            elif body == '"battery"':
+            elif parameters.get("battery"):
                 soc=battery.getSoc()
                 response_body=f"{round(soc)}"
             
-            elif body == '"home.html"':
+            elif parameters.get("home.html"):
                 file = "/src/home.html"
                 #Switching home page
                 
-            elif body == '"home-V1.html"':
+            elif parameters.get("home-V1.html"):
                 file = "/src/home-V1.html"
                 #Switching home page
             
-            elif body == '""':
+            elif parameters.get(""):
                 print("empty post request")
                 http_header = "HTTP/1.1 400 Bad Request\r\n"
                 response_body = "Empty request"  
