@@ -50,7 +50,8 @@ http_type_header_dict.update({"js":"text/javascript"}) #adding .js files
 #     "date": "date & time at which the request has been sent by the user",
 #     "sleep": "shutdown the server but keeps the raspi online, used for testing purposes",
 #     "shutdown": "shutdown the raspi and the server",
-#     "battery": "request periodically the battery level to display to the user"}
+#     "battery": "request periodically the battery level to display to the user"
+#     "token": "token used to ensure that post messages are not ghost messages, behaviour seen on safari"}
 
 
 ########################################## Capturing photo ####################
