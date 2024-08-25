@@ -150,33 +150,18 @@ function submitForm(event){
 		tmp_enregistrement = parseFloat(doc_save.value);
 	}
 	
-	const totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
+	var totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
 	console.log("Total time for the interval:", totalTime, "seconds");
-
+	if (totalTime < 0){
+		totalTime=0;
+	}
+	else{
 	// Display formatted time in confirmation
 	document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
 	document.getElementById("confirmation").style.display = "block";
-
 	// Prepare form data for the POST request
-	
-	const fields = ['nb_photos', 'tmp_pose', 'enregistrement'];
-	let allFilled = true;
-	
-	fields.forEach(function(fieldId) {
-		const field = document.getElementById(fieldId);
-		if (!field.value) {
-			allFilled = false;
-			field.setCustomValidity('This field is required.');
-		} else {
-			field.setCustomValidity('');
-		}
-	});
-
-	if (!allFilled) {
-		event.preventDefault(); // Prevent form submission if any field is empty
+	formData = new FormData(document.getElementById('interval-Form'));
 	}
-	else{
-		formData = new FormData(document.getElementById('interval-Form'));
 	}
 }
 	
