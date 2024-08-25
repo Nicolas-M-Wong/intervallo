@@ -232,6 +232,7 @@ function sendPostRequest(data) {
                     http_status_post = 200;
                     console.log('Success:', xhr.responseText);
 					console.log({...ensureDict("battery"), ...{"token":sessionStorage.getItem("sessionToken")}},"  ",data);
+					console.log(data.battery);
 					console.log(data === {...ensureDict("battery"), ...{"token":sessionStorage.getItem("sessionToken")}});
                     if (data === {...ensureDict("battery"), ...{"token":sessionStorage.getItem("sessionToken")}}) {
                         if (!isNaN(xhr.responseText)) {
