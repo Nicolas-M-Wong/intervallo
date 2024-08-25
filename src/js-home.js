@@ -487,7 +487,7 @@ function updateTime() {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function updateBattery(batteryLevel) {
-	console.log(batteryLevel);
+	console.log('battery level: ',batteryLevel);
     const batteryHeader = document.getElementById('battery-header');
     batteryHeader.textContent = `${batteryLevel}%`;
     if (batteryLevel === ""){
