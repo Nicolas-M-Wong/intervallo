@@ -198,19 +198,13 @@ function handleButtonClick(test_status) {
 		}
         
 		data["nb_photos"] = nb_photos;
-		var totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
-			console.log("Total time for the interval:", totalTime, "seconds");
-		if (Number.isNaN(totalTime) || totalTime <= 0){	
-			console.error('Form data is not available. Please submit the form first.');
+			
+        sendPostRequest(data).then(() => {
+		if (http_status_post === 200){
+			const nowDate = new Date().getTime()
+			showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
 		}
-		else{
-			sendPostRequest(data).then(() => {
-			if (http_status_post === 200){
-				const nowDate = new Date().getTime()
-				showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
-			}
-			});
-		}
+		});
     } else {
         console.error('Form data is not available. Please submit the form first.');
     }
