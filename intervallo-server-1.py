@@ -83,14 +83,15 @@ def execute_request(request, *args):
         return "Error: Request should be a non-empty dictionary"
     
     # Extract the first key-value pair from the dictionary
-    request, args = list(post_request_dict.items())[0]
+    else:
+        request, args = list(post_request_dict.items())[0]
     
     if request in post_request_dict:
-        func, arg_count = post_request_dict[request]
-        if isinstance(args, list) and len(args) == arg_count:
-            return func(*args)  # Call the function with the provided arguments
-        else:
-            return f"Error: {request} requires {arg_count} argument(s) and should be provided in a list"
+        try:
+            post_request_dict[request](*args)
+        except:
+            print("failed")
+            pass
     else:
         return "Unknown request"
     
