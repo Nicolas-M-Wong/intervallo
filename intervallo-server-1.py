@@ -54,8 +54,8 @@ def sleep(value):
     client_socket.send(header().encode('utf-8'))
     client_socket.close()
     s.close()
-    global server_status
-    server_status = False
+    return server_status
+    
 
 
 def shutdown(value):
@@ -84,7 +84,9 @@ def execute_request(request, *args):
     
     if request in post_request_dict:
         try:
-            post_request_dict[request](*args)
+            result = post_request_dict[request](*args)
+            if result is not None:
+                return result
         except:
             print("failed")
             pass
@@ -337,7 +339,11 @@ if TCP_IP != "127.0.0.1":
                         
                 else:
                     request, args = list(parameters.items())[0]
-                    execute_request(request,args)
+                    result = execute_request(request,args)
+                    if type(result) is str:
+                        response_body = result
+                    if type(result) is bool:
+                        server_status = result
                         
                 # elif 'shutdown' in parameters.keys():
                 #     client_socket.close()
