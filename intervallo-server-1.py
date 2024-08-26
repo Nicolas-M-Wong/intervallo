@@ -64,8 +64,8 @@ def shutdown(value):
     s.close()
     os.popen("sudo shutdown -h now")
 
-def file_request(dir_path_abs,file_name):
-    file_location = dir_path_abs+"/src/"+file_name+".html"
+def file_request(file_name):
+    file_location="/src/"+file_name+".html"
     if os.path.isfile(file_location):
         global file
         file=="/src/"+file_name+".html"
@@ -79,12 +79,8 @@ post_request_dict = {
 
 def execute_request(request, *args):
     #The key should match a key
-    if not isinstance(post_request_dict, dict) or len(post_request_dict) == 0:
-        return "Error: Request should be a non-empty dictionary"
     
     # Extract the first key-value pair from the dictionary
-    else:
-        request, args = list(post_request_dict.items())[0]
     
     if request in post_request_dict:
         try:
@@ -340,7 +336,8 @@ if TCP_IP != "127.0.0.1":
                         response_body = "Failed NaN"
                         
                 else:
-                    execute_request(parameters)
+                    request, args = list(parameters.items())[0]
+                    execute_request(request,args)
                         
                 # elif 'shutdown' in parameters.keys():
                 #     client_socket.close()
