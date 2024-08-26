@@ -338,7 +338,8 @@ if TCP_IP != "127.0.0.1":
                         http_header = "HTTP/1.1 400 Bad Request\r\n"
                         response_body = "Failed NaN"
                         
-                execute_request(request, *args)
+                else:
+                    execute_request(parameters)
                         
                 # elif 'shutdown' in parameters.keys():
                 #     client_socket.close()
@@ -363,7 +364,7 @@ if TCP_IP != "127.0.0.1":
                 #     file = "/src/home-V1.html"
                 #     #Switching home page
                 
-                elif not parameters.keys():
+                if not parameters.keys():
                     print("empty post request")
                     http_header = "HTTP/1.1 400 Bad Request\r\n"
                     response_body = "Empty request"  
