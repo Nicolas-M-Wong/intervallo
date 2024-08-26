@@ -42,8 +42,31 @@ http_type_header_dict.update({"js":"text/javascript"}) #adding .js files
 
 ################################# List of possible post request ###############
 
+def battery():
+    soc=battery.getSoc()
+    response_body=f"{round(soc)}"
+    return response_body
+    
+def sleep():
+    client_socket.send(header().encode('utf-8'))
+    client_socket.close()
+    s.close()
 
-# post_request={
+
+def shutdown():
+    client_socket.send(header().encode('utf-8'))
+    client_socket.close()
+    s.close()
+    os.popen("sudo shutdown -h now")
+
+def file_request(dir_path_abs,file_name):
+    file_location = dir_path_abs+"/src/"+file_name+".html"
+    if os.path.isfile(file_location):
+        global file
+        file=="/src/"+file_name+".html"
+        
+
+# post_request_dict={
 #     "nb_photo":"number of picture to take requested by the user",
 #     "tmp_pose": "exposure time for each picture",
 #     "tmp_enregistrement": "time interval between each frame",
@@ -159,6 +182,16 @@ def header ():
     script += "\r\n"
     return script
 
+def parse_header_item(header,item):
+    header_list = []
+    for i in header:
+        header_list.append(i.split(': '))
+    for i in range (0,len(header_list)):
+        if header_list[i][0] == item:
+            return header_list[i][1]
+    return
+    
+    
 def generate_token():
     token_length = 5
     return ''.join(random.SystemRandom().choice(string.ascii_uppercase +string.digits) for _ in range (token_length))
@@ -204,8 +237,14 @@ if TCP_IP != "127.0.0.1":
         request = client_socket.recv(1024).decode('utf-8')
         # Parse the request to determine the type of request (GET/POST)
         headers = request.split('\r\n')
+        
+        if parse_header_item(headers,'Content-Length') != len(headers[-1]):
+            print("Error: message received shorter than the HTTP request Content-Length")
+            #Identify why safari is behaving weirdly
+            
         first_line = headers[0].split(' ')
         method = first_line[0]
+        
         print(f'Received request: {first_line}')
         
         if method == 'GET':
@@ -268,6 +307,7 @@ if TCP_IP != "127.0.0.1":
                         print("Failed not a number")
                         http_header = "HTTP/1.1 400 Bad Request\r\n"
                         response_body = "Failed NaN"
+                        
                 elif 'shutdown' in parameters.keys():
                     client_socket.close()
                     s.close()
@@ -283,13 +323,13 @@ if TCP_IP != "127.0.0.1":
                     soc=battery.getSoc()
                     response_body=f"{round(soc)}"
                 
-                elif 'home.html' in parameters.keys():
-                    file = "/src/home.html"
+                elif 'file_request' in parameters.keys():
+                    file = "/src/"+parameters.get('file_request')+".html"
                     #Switching home page
                     
-                elif 'home-V1.html' in parameters.keys():
-                    file = "/src/home-V1.html"
-                    #Switching home page
+                # elif 'home-V1.html' in parameters.keys():
+                #     file = "/src/home-V1.html"
+                #     #Switching home page
                 
                 elif not parameters.keys():
                     print("empty post request")
