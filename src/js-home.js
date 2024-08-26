@@ -612,7 +612,7 @@ function changePage(pageName) {
 	//currentPage = the page currently displayed to the client
     // Store current data in the session storage to fill the next page with the current values set
 	saveFormData();
-	sendPostRequest(pageName).then(() => {
+	sendPostRequest({"file_request":pageName}).then(() => {
     location.reload();
 	});
 }
