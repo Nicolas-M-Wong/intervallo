@@ -79,11 +79,11 @@ post_request_dict = {
 
 def execute_request(request, *args):
     #The key should match a key
-    if not isinstance(request_dict, dict) or len(request_dict) == 0:
+    if not isinstance(post_request_dict, dict) or len(post_request_dict) == 0:
         return "Error: Request should be a non-empty dictionary"
     
     # Extract the first key-value pair from the dictionary
-    request, args = next(iter(request_dict.items()))
+    request, args = next(iter(post_request_dict.items()))
     
     if request in post_request_dict:
         func, arg_count = post_request_dict[request]
