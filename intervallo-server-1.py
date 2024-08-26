@@ -42,18 +42,23 @@ http_type_header_dict.update({"js":"text/javascript"}) #adding .js files
 
 ################################# List of possible post request ###############
 
-def battery():
+#value is set as variable for ease of use as it send always a dict with a pair
+# key/value by the JS
+
+def battery(value):
     soc=battery_getSoc.getSoc()
     response_body=f"{round(soc)}"
     return response_body
     
-def sleep():
+def sleep(value):
     client_socket.send(header().encode('utf-8'))
     client_socket.close()
     s.close()
+    global server_status
+    server_status = False
 
 
-def shutdown():
+def shutdown(value):
     client_socket.send(header().encode('utf-8'))
     client_socket.close()
     s.close()
@@ -65,7 +70,31 @@ def file_request(dir_path_abs,file_name):
         global file
         file=="/src/"+file_name+".html"
         
+post_request_dict = {
+    'battery' : battery,
+    'sleep' : sleep,
+    'shutdown': shutdown,
+    'file_request' : file_request
+    }
 
+def execute_request(request, *args):
+    #The key should match a key
+    if not isinstance(request_dict, dict) or len(request_dict) == 0:
+        return "Error: Request should be a non-empty dictionary"
+    
+    # Extract the first key-value pair from the dictionary
+    request, args = next(iter(request_dict.items()))
+    
+    if request in post_request_dict:
+        func, arg_count = post_request_dict[request]
+        if isinstance(args, list) and len(args) == arg_count:
+            return func(*args)  # Call the function with the provided arguments
+        else:
+            return f"Error: {request} requires {arg_count} argument(s) and should be provided in a list"
+    else:
+        return "Unknown request"
+    
+    
 # post_request_dict={
 #     "nb_photo":"number of picture to take requested by the user",
 #     "tmp_pose": "exposure time for each picture",
@@ -197,6 +226,7 @@ def generate_token():
     return ''.join(random.SystemRandom().choice(string.ascii_uppercase +string.digits) for _ in range (token_length))
     
 time_delay = 0
+server_status = True
 while get_ip()=="127.0.0.1":
     print("waiting for a network connection")
     time.sleep(1.5)
@@ -229,7 +259,7 @@ if TCP_IP != "127.0.0.1":
     server_socket = s
     print(f'Serving on port {TCP_PORT}...')
     # Accept and handle incoming connections one at a time
-    while True:
+    while server_status:
 
         client_socket, client_address = server_socket.accept()
         print(f'Accepted connection from {client_address}')
@@ -308,24 +338,26 @@ if TCP_IP != "127.0.0.1":
                         http_header = "HTTP/1.1 400 Bad Request\r\n"
                         response_body = "Failed NaN"
                         
-                elif 'shutdown' in parameters.keys():
-                    client_socket.close()
-                    s.close()
-                    shutdown_raspi ()
-                    break
+                execute_request(request, *args)
+                        
+                # elif 'shutdown' in parameters.keys():
+                #     client_socket.close()
+                #     s.close()
+                #     shutdown_raspi ()
+                #     break
                 
-                elif 'sleep' in parameters.keys():
-                    client_socket.close()
-                    s.close()
-                    break
+                # elif 'sleep' in parameters.keys():
+                #     client_socket.close()
+                #     s.close()
+                #     break
                 
-                elif 'battery' in parameters.keys():
-                    soc=battery_getSoc.getSoc()
-                    response_body=f"{round(soc)}"
+                # elif 'battery' in parameters.keys():
+                #     soc=battery_getSoc.getSoc()
+                #     response_body=f"{round(soc)}"
                 
-                elif 'file_request' in parameters.keys():
-                    file = "/src/"+parameters.get('file_request')+".html"
-                    #Switching home page
+                # elif 'file_request' in parameters.keys():
+                #     file = "/src/"+parameters.get('file_request')+".html"
+                #     #Switching home page
                     
                 # elif 'home-V1.html' in parameters.keys():
                 #     file = "/src/home-V1.html"
