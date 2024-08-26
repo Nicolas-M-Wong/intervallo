@@ -6,7 +6,7 @@ import MAX17043
 import random
 import string
 
-battery = MAX17043.max17043()
+battery_getSoc = MAX17043.max17043()
 
 directory = os.path.dirname(os.path.abspath(__file__)) #absolute path to file
 
@@ -43,7 +43,7 @@ http_type_header_dict.update({"js":"text/javascript"}) #adding .js files
 ################################# List of possible post request ###############
 
 def battery():
-    soc=battery.getSoc()
+    soc=battery_getSoc.getSoc()
     response_body=f"{round(soc)}"
     return response_body
     
@@ -320,7 +320,7 @@ if TCP_IP != "127.0.0.1":
                     break
                 
                 elif 'battery' in parameters.keys():
-                    soc=battery.getSoc()
+                    soc=battery_getSoc.getSoc()
                     response_body=f"{round(soc)}"
                 
                 elif 'file_request' in parameters.keys():
