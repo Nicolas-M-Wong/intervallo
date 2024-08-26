@@ -66,7 +66,9 @@ def shutdown(value):
 
 def file_request(file_name):
     file_location="/src/"+file_name+".html"
+    print('searching for :',file_location)
     if os.path.isfile(file_location):
+        print('success, new file name =',file_name)
         global file
         file="/src/"+file_name+".html"
         
