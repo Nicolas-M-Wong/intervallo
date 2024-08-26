@@ -68,7 +68,7 @@ def file_request(file_name):
     file_location="/src/"+file_name+".html"
     if os.path.isfile(file_location):
         global file
-        file=="/src/"+file_name+".html"
+        file="/src/"+file_name+".html"
         
 post_request_dict = {
     'battery' : battery,
@@ -90,7 +90,7 @@ def execute_request(request, *args):
             pass
     else:
         return "Unknown request"
-    
+
     
 # post_request_dict={
 #     "nb_photo":"number of picture to take requested by the user",
