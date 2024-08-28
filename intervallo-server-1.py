@@ -271,6 +271,7 @@ if TCP_IP != "127.0.0.1":
         
         if parse_header_item(headers,'Content-Length') != len(headers[-1]):
             print("Error: message received shorter than the HTTP request Content-Length")
+            print(parse_header_item(headers,'Content-Length'),len(headers[-1]))
             #Identify why safari is behaving weirdly
             
         first_line = headers[0].split(' ')
