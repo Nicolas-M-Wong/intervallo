@@ -271,7 +271,8 @@ if TCP_IP != "127.0.0.1":
         expect_content_len = parse_header_item(headers,'Content-Length')
         if expect_content_len != None:
             expect_content_len = int(expect_content_len)
-        
+        if expect_content_len == None:
+            expect_content_len = 0
         if expect_content_len != len(headers[-1]):
                 
             print("Error: message received shorter than the HTTP request Content-Length")
