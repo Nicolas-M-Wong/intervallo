@@ -250,7 +250,7 @@ function sendPostRequest(data) {
                     console.log('Fail:', xhr.responseText);
 					if (xhr.responseText === "Unavailable"){
 						document.getElementById("dialogBoxTitle").innerHTML = " ";
-						document.getElementById("Compteur").innerHTML = "Indisponible";
+						document.getElementById("Compteur").innerHTML = "Prise de vue en cours</br>APN Indisponible";
 						dialogBoxId.showModal();
 					}
                     reject(new Error('Bad Request')); // Reject the promise with an error
