@@ -265,13 +265,18 @@ if TCP_IP != "127.0.0.1":
         client_socket, client_address = server_socket.accept()
         print(f'Accepted connection from {client_address}')
             # Receive the request data
-        request = client_socket.recv(1024).decode('utf-8')
+        client_request = client_socket.recv(1024).decode('utf-8')
         # Parse the request to determine the type of request (GET/POST)
-        headers = request.split('\r\n')
+        headers = client_request.split('\r\n')
+        expect_content_len = parse_header_item(headers,'Content-Length')
+        if expect_content_len != None:
+            expect_content_len = int(expect_content_len)
         
-        if parse_header_item(headers,'Content-Length') != len(headers[-1]):
+        if expect_content_len != len(headers[-1]):
+                
             print("Error: message received shorter than the HTTP request Content-Length")
             print(parse_header_item(headers,'Content-Length'),len(headers[-1]))
+            client_request += client_socket.recv(1024).decode('utf-8')
             #Identify why safari is behaving weirdly
             
         first_line = headers[0].split(' ')
