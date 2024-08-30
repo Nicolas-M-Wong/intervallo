@@ -11,7 +11,7 @@
 
 </head>
 
-<body id="screen-container" data-mode="dark">
+<body id="screen-container" data-page="home" data-mode="dark">
 
 <div id="phone-screen" class="phone-screen-class">
 <div class="container" id="main" data-mode="dark">
@@ -45,7 +45,7 @@
 	</div>
 </div>
 
-	<div class="IntervalForm" id="interval-Form">
+	<div class="param-submit">
 	
         	<div class="flex-container-title">
             	<div class="flex-column-title">
@@ -70,11 +70,12 @@
 						
 					</div>
 				</div>
-				<form id="wheelForm">
+				
+				<form id="interval-Form">
 					<input type="hidden" id="value1" name="value1">
 					<input type="hidden" id="value2" name="value2">
 					<input type="hidden" id="value3" name="value3">
-					<button type="submit" id="form-submit" value="Ok">Ok</button>
+					<button type="submit" id="form-submit" value="Ok" onclick="submitForm(event);">Ok</button>
 				</form>
     	</div>
     
@@ -89,7 +90,7 @@
         </div>
     
         <dialog id="dialogBox" data-mode="dark">
-            <h3>Temps restant :‎</h3>
+            <h3 id="dialogBoxTitle"><h3>
             <h3 id="Compteur"></h3>
             <footer>
             <div class="back-button">
@@ -101,7 +102,7 @@
 		<div class="navbar-container">
 			<nav class="navbar" id="navbar-id" data-mode="dark">
 				<a name="photo-distance" id="photo-distance-L" onclick="remoteTrigger();changeColor('L');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
-				<a name="intervallo-home" id="intervallo-home" onclick="changePage('home-V1.html','home');"><img width="32" height="32" src="ico-intervallo.ico" ></a>
+				<a name="intervallo-home" id="intervallo-home" onclick="changePage('home-V1');"><img width="32" height="32" src="ico-intervallo.ico" ></a>
 				<a name="photo-distance" id="photo-distance-R" onclick="remoteTrigger();changeColor('R');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
 			</nav>
 		</div>
@@ -122,9 +123,9 @@
     </div>
 </div>
 
-
 <!-- ------------------------------------------------------------------------------- -->
 
+<script src="wheel-constructor.js"></script>
 <script src="js-home.js"></script>
 </body>
 </html>

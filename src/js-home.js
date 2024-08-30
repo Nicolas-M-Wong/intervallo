@@ -2,6 +2,9 @@
 let dialogBoxId = document.getElementById("dialogBox");
 let countdownInterval;
 let countDownDate;
+let formData; // Define formData in the global scope
+var http_status_post = 0;
+var token = 0;
 
 const step_s = 1
 const step_ms = 0.1
@@ -27,44 +30,11 @@ const step_enregistrement = [
 	{ start: 60, end: length_enregistrement, step: 10*step_s, fixed: false } //Between 60 to the end, 10s step
 ];
 
-createWheel('nb_photos', step_photo);
-createWheel('tmp_pose', step_pose);
-createWheel('enregistrement', step_enregistrement);
-
-attachWheelEvents('nb_photos');
-attachWheelEvents('tmp_pose');
-attachWheelEvents('enregistrement');
- 
-startUp();
-
 // Initial screen type and orientation detection
 let current_screen_type = detectDevice() ? 'ordi' : 'tel';
 let current_orientation = detectLandscapeOrientation() ? 'h' : 'v';
 let last_screen_type = current_screen_type;
 let last_orientation = current_orientation;
-
-// Function to handle screen and orientation changes
-function handleScreenChange() {
-    const new_screen_type = detectDevice() ? 'ordi' : 'tel';
-    const new_orientation = detectLandscapeOrientation() ? 'h' : 'v';
-
-    console.log(`Screen type: ${last_screen_type} -> ${new_screen_type}`);
-	console.log(`Orientation: ${last_orientation} -> ${new_orientation}`);
-
-    // Reload if orientation changes from horizontal to vertical
-    if (last_orientation === 'h' && new_orientation === 'v') {
-        location.reload();
-    }
-    
-    // Reload if screen type changes from 'ordi' to 'tel'
-    if (last_screen_type === 'ordi' && new_screen_type === 'tel') {
-        location.reload();
-    }
-
-    // Update the last known screen type and orientation
-    last_screen_type = new_screen_type;
-    last_orientation = new_orientation;
-}
 
 // Add event listeners for resize and orientationchange
 window.addEventListener('resize', handleScreenChange);
@@ -73,25 +43,25 @@ window.addEventListener('orientationchange', handleScreenChange);
 setInterval(function(){
     sendPostRequest("battery");},300000)
 
-setInterval(function(){
-    update_time;},1000)
+requestAnimationFrame(updateTime);
 
-if (sessionStorage.nb_photos_page_change){
-	updateWheel('nb_photos',parseInt(sessionStorage.nb_photos_page_change,10),step_photo);
-}
+window.addEventListener('load', function() {
+  sendGetRequest("token").then(() => {
+    updateTime();
+    updateValues();
+    sendPostRequest("battery");
+  }).catch(error => {
+    console.error('Error fetching token:', error);
+  });
+});
 
-if (sessionStorage.tmp_pose_page_change){
-	updateWheel('tmp_pose',parseFloat(sessionStorage.tmp_pose_page_change,10).toFixed(1),step_pose);
-}
-
-if (sessionStorage.enregistrement_page_change){
-	updateWheel('enregistrement',parseFloat(sessionStorage.enregistrement_page_change,10).toFixed(1),step_enregistrement);
-}
-
+window.addEventListener('beforeunload', function(event) {
+            saveFormData();
+        });
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
+function showDialog(nbPhotos, exposureTime, timeBetweenPhotos, now) {
 	const notificationMessage = document.getElementById("notificationMessage");
 	const notificationTitle = document.getElementById("notificationTitle");
 	
@@ -100,16 +70,15 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos) {
             e.preventDefault();
         }
     });
+	document.getElementById("dialogBoxTitle").innerHTML = "Temps restant :";
     document.getElementById("Compteur").innerHTML = "00:00:00"; // Initialize countdown display
     dialogBoxId.showModal();
-    
     // Calculate the total time
 
     const totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
     
      // Set countdown date to current time plus total time
      
-    const now = new Date().getTime();
     const countDownDate = now + totalTime * 1000;
 
     // Convert countdown date to readable format
@@ -155,48 +124,87 @@ function formatTime(totalSeconds) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-let formData; // Define formData in the global scope
-
-document.getElementById('wheelForm').addEventListener('submit', function(event) {
+function submitForm(event){
 	event.preventDefault();
-
-	const nb_photos = getCurrentValue(document.getElementById('nb_photos'),step_photo);
-	const tmp_pose = getCurrentValue(document.getElementById('tmp_pose'),step_pose);
-	const tmp_enregistrement = getCurrentValue(document.getElementById('enregistrement'),step_enregistrement);
+	let currentFileName = document.body.getAttribute('data-page');
 	
-	// Get the values of the form fields
-	// Calculate the total time
-	const totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
+	let nb_photos = 0;
+	let tmp_pose = 0;
+	let tmp_enregistrement = 0;
+	
+	const doc_photos = document.getElementById('nb_photos');
+	const doc_pose = document.getElementById('tmp_pose');
+	const doc_save = document.getElementById('enregistrement');
+	
+	if (currentFileName === "home"){
+		console.log("success home");
+		nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo);
+		tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose);
+		tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
+	}
+	
+	if (currentFileName === "home-V1"){
+		console.log("success home-V1");
+		nb_photos = parseInt(doc_photos.value);
+		tmp_pose = parseFloat(doc_pose.value);
+		tmp_enregistrement = parseFloat(doc_save.value);
+	}
+	
+	var totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
 	console.log("Total time for the interval:", totalTime, "seconds");
-
+	if (Number.isNaN(totalTime) || totalTime <= 0){
+		totalTime=0;
+		document.getElementById("confirmation").style.display = "none";
+	}
+	else{
 	// Display formatted time in confirmation
 	document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
 	document.getElementById("confirmation").style.display = "block";
-
 	// Prepare form data for the POST request
-	formData = new FormData(event.target);
-});
+	formData = new FormData(document.getElementById('interval-Form'));
+	}
+}
 
+	
+	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function handleButtonClick(test_status) {
     if (formData) {
+		let currentFileName = document.body.getAttribute('data-page');
         const data = {};
-        const nb_photos = getCurrentValue(document.getElementById('nb_photos'),step_photo);
-		data["nb_photos"] = nb_photos;
-		if (test_status === "Yes"){
-            data["nb_photos"] = 1;
-            }
-		let tmp_pose = getCurrentValue(document.getElementById('tmp_pose'),step_pose);
-		let tmp_enregistrement = getCurrentValue(document.getElementById('enregistrement'),step_enregistrement);
-
 		var now = new Date().getTime();
+		const doc_photos = document.getElementById('nb_photos');
+		const doc_pose = document.getElementById('tmp_pose');
+		const doc_save = document.getElementById('enregistrement');
+		var nb_photos = 1
 		
-		data["tmp_pose"] = tmp_pose;
-		data["tmp_enregistrement"] = tmp_enregistrement
-		data["date"] = now;
-        sendPostRequest(data);
-        showDialog(data["nb_photos"], tmp_pose, tmp_enregistrement); // Show the dialog box with the countdown
+		if (currentFileName === "home"){
+			data["tmp_pose"] = WheelConstruct.getCurrentValue(doc_pose,step_pose);
+			data["tmp_enregistrement"] = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
+			data["date"] = now;
+			if (test_status === "No"){
+				nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo);
+            }
+		}
+		
+		if (currentFileName === "home-V1"){
+			data["tmp_pose"] = parseFloat(doc_pose.value);
+			data["tmp_enregistrement"] = parseFloat(doc_save.value);
+			data["date"] = now;
+			if (test_status === "No"){
+				nb_photos = parseInt(doc_photos.value);
+            }
+		}
+        
+		data["nb_photos"] = nb_photos;
+			
+        sendPostRequest(data).then(() => {
+		if (http_status_post === 200){
+			const nowDate = new Date().getTime()
+			showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
+		}
+		});
     } else {
         console.error('Form data is not available. Please submit the form first.');
     }
@@ -215,32 +223,50 @@ function remoteTrigger(){
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function sendPostRequest(data) {
-    const xhr = new XMLHttpRequest();
-    var ip = location.host;
-    var http_head = 'http://'
-    xhr.open('POST', http_head.concat(ip), true);
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                console.log('Success:', xhr.responseText);
-                if (data === 'battery'){
-                    if (isNaN(xhr.responseText) === false){
-                        update_battery(xhr.responseText);
+    return new Promise((resolve, reject) => {
+        data = ensureDict(data);
+        data["token"] = sessionStorage.getItem("sessionToken");
+        const xhr = new XMLHttpRequest();
+        const ip = location.host;
+        const http_head = 'http://';
+        xhr.open('POST', http_head.concat(ip), true);
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) { // Request is complete
+                if (xhr.status === 200) {
+                    http_status_post = 200;
+                    console.log('Success:', xhr.responseText);
+                    if (data.battery) {
+                        if (!isNaN(xhr.responseText)) {
+                            updateBattery(xhr.responseText);
                         } else {
-                        update_battery("");
+                            updateBattery("");
                         }
+                    }
+                    resolve(xhr.responseText); // Resolve the promise with the response text
+                } else if (xhr.status === 400) {
+                    http_status_post = 400;
+                    console.log('Fail:', xhr.responseText);
+					if (xhr.responseText === "Unavailable"){
+						document.getElementById("dialogBoxTitle").innerHTML = " ";
+						document.getElementById("Compteur").innerHTML = "<span>Prise de vue en cours</span></br><span style='font-weight: 300;'>APN Indisponible</span>";
+						dialogBoxId.showModal();
+					}
+                    reject(new Error('Bad Request')); // Reject the promise with an error
+                } else {
+                    http_status_post = 0;
+                    console.error('Error:', xhr.statusText);
+                    reject(new Error(xhr.statusText)); // Reject the promise with the error status text
                 }
-            } else {
-                console.error('Error:', xhr.statusText);
             }
-        }
-    };
-
-    xhr.send(JSON.stringify(data));
+        };
+        
+        xhr.send(JSON.stringify(data));
+    });
 }
 
+	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 function sendGetRequest(fileName) {
@@ -259,12 +285,18 @@ function sendGetRequest(fileName) {
         return response.text();
     })
     .then(html => {
+		
+		const tokenPattern = /Token:\s*([^\s]+)/; // Regex to match "token: [unique_token]"
+        const match = html.match(tokenPattern);
+
+        if (match && match[1]) {
+            // If token found, store it in sessionStorage and return early
+            sessionStorage.setItem('sessionToken', match[1]);
+            return; // Exit the function without updating the DOM
+        }
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
-       
-	   // Replace the contents of <head>
-       // document.head.innerHTML = doc.head.innerHTML;
-		
+
         // Replace the contents of <body>
         document.body.innerHTML = doc.body.innerHTML;
     })
@@ -336,6 +368,31 @@ function detectLandscapeOrientation() {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
+// Function to handle screen and orientation changes
+function handleScreenChange() {
+    const new_screen_type = detectDevice() ? 'ordi' : 'tel';
+    const new_orientation = detectLandscapeOrientation() ? 'h' : 'v';
+
+    console.log(`Screen type: ${last_screen_type} -> ${new_screen_type}`);
+	console.log(`Orientation: ${last_orientation} -> ${new_orientation}`);
+
+    // Reload if orientation changes from horizontal to vertical
+    if (last_orientation === 'h' && new_orientation === 'v') {
+        location.reload();
+    }
+    
+    // Reload if screen type changes from 'ordi' to 'tel'
+    if (last_screen_type === 'ordi' && new_screen_type === 'tel') {
+        location.reload();
+    }
+
+    // Update the last known screen type and orientation
+    last_screen_type = new_screen_type;
+    last_orientation = new_orientation;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
 function toggleNotif(){
 	// Update notification message and title
 	var locPhotos = sessionStorage.getItem("nbPhotosNotif");
@@ -401,7 +458,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		notificationTitle.textContent = `La série se termine à ${locTime}`;
 	}
 
-
 	elementsToToggle.forEach(element => {
 		element.dataset.mode = notifState;
 	});
@@ -422,16 +478,15 @@ function changeColor(side) {
     document.getElementById(`photo-distance-${side}`).style.backgroundColor = "#C70039"
     setTimeout(() => {
     document.getElementById(`photo-distance-${side}`).style.backgroundColor = "transparent";
-    }, 350); // Temps en millisecondes
+    }, 250); // Temps en millisecondes
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function update_time() {
+function updateTime() {
     const now = new Date();
     const hoursHeader = now.getHours().toString().padStart(2, '0');
     const minutesHeader = now.getMinutes().toString().padStart(2, '0');
-    const secondsHeader = now.getSeconds().toString().padStart(2, '0');
     const currentTimeHeader = `${hoursHeader}:${minutesHeader}`;
     const timerHeader = document.getElementById('timer-header');
     timerHeader.textContent = currentTimeHeader;
@@ -439,189 +494,12 @@ function update_time() {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function update_battery(batteryLevel) {
+function updateBattery(batteryLevel) {
     const batteryHeader = document.getElementById('battery-header');
     batteryHeader.textContent = `${batteryLevel}%`;
     if (batteryLevel === ""){
         sendPostRequest("battery");
     }
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function startUp() {
-   update_time();
-   sendPostRequest("battery");
- }
- 
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-		
-function createWheel(elementId, step) {
-    const wheel = document.getElementById(elementId);
-    const paddingDiv = document.createElement('div');
-    paddingDiv.style.height = '50px';
-    wheel.appendChild(paddingDiv);
-
-    // Flag to determine if this is the first element
-    let isFirst = true;
-
-    step.forEach(({ start, end, step, fixed }) => {
-        for (let i = start; i <= end; i += step) {
-            const numberDiv = document.createElement('div');
-            numberDiv.className = 'number';
-            numberDiv.innerText = fixed ? i.toFixed(countDecimalPlaces(step)) : i;
-
-            // Apply attributes to the first numberDiv
-            if (isFirst) {
-                numberDiv.id = 'number_selected_' + elementId;
-                numberDiv.classList.add('selected');
-                isFirst = false;
-            }
-
-            wheel.appendChild(numberDiv);
-        }
-    });
-
-    const paddingDivEnd = document.createElement('div');
-    paddingDivEnd.style.height = '50px';
-    wheel.appendChild(paddingDivEnd);
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-		
-function getCurrentValue(wheel, step_array) {
-	const numbers = wheel.querySelectorAll('.number');
-	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
-	const currentValue = parseFloat(numbers[middleIndex].innerText, 10);
-
-	// Function to get the current step based on value and step_pose
-	function getStep(value, step_array) {
-		for (let i = 0; i < step_array.length; i++) {
-			if (value >= step_array[i].start && value < step_array[i].end) {
-				return step_array[i].step;
-			}
-		}
-		return step_array[step_array.length - 1].step; // Default to the last step if not found
-	}
-
-	const step = getStep(currentValue, step_array);
-	return currentValue.toFixed(countDecimalPlaces(step));
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function adjustScroll(wheel,wheelId) {
-	// Wheel = document.getElementById
-	// WheelId = Id of the element
-	const numbers = wheel.querySelectorAll('.number');
-	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/3 - 50)/50);
-	const targetScrollTop = middleIndex * 50 - wheel.clientHeight/3 + 50;
-
-	wheel.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
-	updateSelectedNumber(wheel,wheelId);
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function attachWheelEvents(wheelId) {
-	// Wheel = document.getElementById
-	// WheelId = Id of the element
-	const wheel = document.getElementById(wheelId);
-	let scrollTimeout;
-	wheel.addEventListener('scroll', () => {
-		clearTimeout(scrollTimeout);
-		scrollTimeout = setTimeout(() => {
-			adjustScroll(wheel,wheelId);
-		}, 100);
-	});
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function updateSelectedNumber(wheel,wheelId) {
-	// Wheel = document.getElementById
-	// WheelId = Id of the element
-	const numbers = wheel.querySelectorAll('.number');
-	const middleIndex = Math.round((wheel.scrollTop + wheel.clientHeight/12 - 25)/50);
-	numbers.forEach(num => {
-		num.classList.remove('selected'); 
-		delete num.dataset.mode;
-		num.removeAttribute('id');
-		});
-		
-	if (middleIndex >= 0 && middleIndex < numbers.length) {
-		numbers[middleIndex].classList.add('selected');
-		let selectedElements = document.getElementsByClassName('number selected');
-		let themeMode = sessionStorage.getItem('theme') || 'dark';
-		
-		for (let i = 0; i < selectedElements.length; i++) {
-			selectedElements[i].id = 'number_selected_'+wheelId;
-			selectedElements[i].dataset.mode = themeMode;
-		}
-	}
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-function updateWheel(wheelId, startValue, steps) {
-    const wheel = document.getElementById(wheelId);
-
-    // Ensure the element with the provided id exists
-    if (!wheel) {
-        console.error(`Element with id "${wheelId}" not found.`);
-        return;
-    }
-
-    // Ensure the steps array is not empty
-    if (!Array.isArray(steps) || steps.length === 0) {
-        console.error('Steps array is either not an array or is empty.');
-        return;
-    }
-
-    // Flatten the step ranges into a single array of possible values
-    let possibleValues = [];
-    for (let i = 0; i < steps.length; i++) {
-        let step = steps[i];
-        if (step.fixed) {
-            if (step.start === step.end) {
-                possibleValues.push(step.start);
-            } else {
-                for (let j = step.start; j <= step.end; j += step.step) {
-                    possibleValues.push(j);
-                }
-            }
-        } else {
-            for (let j = step.start; j <= step.end; j += step.step) {
-                possibleValues.push(j);
-            }
-        }
-    }
-
-    // Find the closest value in the possibleValues array to the startValue
-    let closestValue = possibleValues[0];
-    let smallestDifference = Math.abs(startValue - closestValue);
-
-    for (let i = 1; i < possibleValues.length; i++) {
-        const currentDifference = Math.abs(startValue - possibleValues[i]);
-        if (currentDifference < smallestDifference) {
-            closestValue = possibleValues[i];
-            smallestDifference = currentDifference;
-        }
-    }
-
-    // Find the index of the closest value
-    const startIndex = possibleValues.indexOf(closestValue);
-    if (startIndex === -1) {
-        console.error(`Closest value "${closestValue}" not found in possible values.`);
-        return;
-    }
-
-    // Calculate the initial scroll position based on the index of the closest value
-    const initialScrollPosition = startIndex * 50; // Assuming each step occupies 50px height
-    wheel.scrollTo({ top: initialScrollPosition, behavior: 'smooth' });
-
-    // Update the selected number
-    updateSelectedNumber(wheel, wheelId);
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -679,11 +557,12 @@ function serverEnd(status_var) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function updating_values(pageName,currentPage) {
+function updateValues() {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
-	
-	if (currentPage === 'home'){
+	let currentFileName = document.body.getAttribute('data-page');
+	console.log(currentFileName);
+	if (currentFileName === 'home-V1'){
 		
 		const nbPhotosElement = document.getElementById('nb_photos');
 		const tmpPoseElement = document.getElementById('tmp_pose');
@@ -702,50 +581,73 @@ function updating_values(pageName,currentPage) {
 			enregistrementElement.value = parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10) || 0;
 		}
 	}
-	if (currentPage === 'home-V1'){
-		createWheel('nb_photos', step_photo);
-		createWheel('tmp_pose', step_pose);
-		createWheel('enregistrement', step_enregistrement);
+	if (currentFileName === 'home'){
+		WheelConstruct.createWheel('nb_photos', step_photo);
+		WheelConstruct.createWheel('tmp_pose', step_pose);
+		WheelConstruct.createWheel('enregistrement', step_enregistrement);
 
-		attachWheelEvents('nb_photos');
-		attachWheelEvents('tmp_pose');
-		attachWheelEvents('enregistrement');
+		WheelConstruct.attachWheelEvents('nb_photos');
+		WheelConstruct.attachWheelEvents('tmp_pose');
+		WheelConstruct.attachWheelEvents('enregistrement');
 		
 		const nbPhotosElement = document.getElementById('nb_photos');
 		const tmpPoseElement = document.getElementById('tmp_pose');
 		const enregistrementElement = document.getElementById('enregistrement');
 		
 		if (nbPhotosElement) {
-			updateWheel("nb_photos", parseInt(sessionStorage.getItem("nb_photos_page_change"), 10), step_photo);
-			document.getElementById('nb_photos').offsetHeight;
-			updateWheel("tmp_pose", parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10), step_pose);
-			document.getElementById('tmp_pose').offsetHeight;
-			updateWheel("enregistrement", parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10), step_enregistrement);
-			document.getElementById('enregistrement').offsetHeight;
+			WheelConstruct.updateWheel("nb_photos", parseInt(sessionStorage.getItem("nb_photos_page_change"), 10), step_photo);
+			//document.getElementById('nb_photos').offsetHeight;
+			WheelConstruct.updateWheel("tmp_pose", parseFloat(sessionStorage.getItem("tmp_pose_page_change"), 10), step_pose);
+			//document.getElementById('tmp_pose').offsetHeight;
+			WheelConstruct.updateWheel("enregistrement", parseFloat(sessionStorage.getItem("enregistrement_page_change"), 10), step_enregistrement);
+			//document.getElementById('enregistrement').offsetHeight;
 		}
 	}
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function changePage(pageName,currentPage) {
+function changePage(pageName) {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
     // Store current data in the session storage to fill the next page with the current values set
-	if (currentPage === 'home'){
-		sessionStorage.nb_photos_page_change = getCurrentValue(nb_photos, step_photo);
-		sessionStorage.tmp_pose_page_change = getCurrentValue(tmp_pose, step_pose);
-		sessionStorage.enregistrement_page_change = getCurrentValue(enregistrement, step_enregistrement);
+	saveFormData();
+	sendPostRequest({"file_request":pageName}).then(() => {
+    location.reload();
+	});
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+function saveFormData(){
+	let currentFileName = document.body.getAttribute('data-page');
+	if (currentFileName === 'home'){
+		sessionStorage.nb_photos_page_change = WheelConstruct.getCurrentValue(nb_photos, step_photo);
+		sessionStorage.tmp_pose_page_change = WheelConstruct.getCurrentValue(tmp_pose, step_pose);
+		sessionStorage.enregistrement_page_change = WheelConstruct.getCurrentValue(enregistrement, step_enregistrement);
 	}
-	else{
+	else if (currentFileName === 'home-V1'){
 		sessionStorage.nb_photos_page_change = document.getElementById('nb_photos').value;
 		sessionStorage.tmp_pose_page_change = parseFloat(document.getElementById('tmp_pose').value).toFixed(1);
 		sessionStorage.enregistrement_page_change = parseFloat(document.getElementById('enregistrement').value).toFixed(1);
 	}
-	
-	sendPostRequest(pageName);
-	setTimeout(() => {
-    location.reload();
-	}, 250);
+	}
 
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+function ensureDict(data) {
+    if (typeof data === 'object' && data !== null && !Array.isArray(data)) {
+        // If data is already an object, return it as is
+        return data;
+    } else {
+        // If data is not an object, treat it as a string
+        const words = String(data).split(/\s+/); // Split data into words using whitespace
+        const dict = {};
+        
+        words.forEach(word => {
+            dict[word] = word; // Set each word as both key and value
+        });
+        
+        return dict;
+    }
 }

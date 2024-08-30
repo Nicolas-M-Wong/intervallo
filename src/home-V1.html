@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="css-home-V1.css">
+<link rel="stylesheet" href="css-home.css">
 <link rel="alternate" href="home-big-screen.html" id="big-screen">
 <link rel="alternate" href="home-landscape-screen.html" id="landscape-screen">
 
@@ -11,7 +11,7 @@
 
 </head>
 
-<body id="screen-container" data-mode="dark">
+<body id="screen-container" data-page="home-V1" data-mode="dark">
 <div id="phone-screen" class="phone-screen-class">
 <div class="container" id="main" data-mode="dark">
 
@@ -44,7 +44,7 @@
 	</div>
 </div>
 
-	<div class="IntervalForm" id="interval-Form">
+	<div class="IntervalForm">
 	
         	<div class="flex-container-title">
             	<div class="flex-column-title">
@@ -52,7 +52,7 @@
         		</div>
     		</div>
     		
-    		<form method="post" class="param-submit">
+    		<form id="interval-Form" method="post" class="param-submit">
     		
         		<div class="param-submit">
 				
@@ -60,7 +60,7 @@
 						<label for="nb_photo">Nombre de photo</label>
 						<span class="tooltip" title="Nombre de photo qui seront prise par l'appareil">&#x24D8</span>
             		</div>
-					<input type="number" name="nb_photo" id="nb_photos" data-mode="dark" required />
+					<input type="number" step="1" name="nb_photos" id="nb_photos" data-mode="dark" required />
 					
 					<div class="label-info">
 						<label for="tmp_pose">Temps d'expo</label>
@@ -72,9 +72,9 @@
 						<label for="enregistrement">Intervalle</label>
 						<span class="tooltip" title="Intervalle de temps entre chaque photo">&#x24D8</span>
             		</div>
-            		<input type="number" step="0.01" name="tmp_enregistrement" id="enregistrement" data-mode="dark"required />
+            		<input type="number" step="0.01" name="tmp_enregistrement" id="enregistrement" data-mode="dark" required />
      
-            		<input type="submit" id="form-submit" value="Ok"/>
+            		<button type="submit" id="form-submit" value="Ok" onclick="submitForm(event);">Ok</button>
                 </div>
             </form>  
     	</div>
@@ -83,14 +83,14 @@
             <h3>Temps de prise de vue estimé : </h3><h3 id="estimation_tmp"></h3>
             <form action = "" method="post" class = "confirmation-form">
                 <div class="flex-column-confirm">
-                    <button name="confirm" value="Confirmer" id="openDialogBox">Confirmer</button>
-                    <button name="test-shot" value="Photo_test" id="test-shot">Photo test</button>
+                    <button name="confirm" value="Confirmer" id="openDialogBox" onclick="handleButtonClick('No')">Confirmer</button>
+                    <button name="test-shot" value="Photo_test" id="test-shot" onclick="handleButtonClick('Yes')">Photo test</button>
                 </div>
             </form>
         </div>
     
         <dialog id="dialogBox" data-mode="dark">
-            <h3>Temps restant :‎</h3>
+            <h3 id="dialogBoxTitle"><h3>
             <h3 id="Compteur"></h3>
             <footer>
             <div class="back-button">
@@ -102,7 +102,7 @@
 		<div class="navbar-container">
 			<nav class="navbar" id="navbar-id" data-mode="dark">
 				<a name="photo-distance" id="photo-distance-L" onclick="remoteTrigger();changeColor('L');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
-				<a name="intervallo-home" id="intervallo-home" onclick="changePage('home.html','home-V1')"><img width="32" height="32" src="ico-intervallo.ico" ></a>
+				<a name="intervallo-home" id="intervallo-home" onclick="changePage('home')"><img width="32" height="32" src="ico-intervallo.ico" ></a>
 				<a name="photo-distance" id="photo-distance-R" onclick="remoteTrigger();changeColor('R');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
 			</nav>
 		</div>
@@ -112,7 +112,7 @@
 		<div id="shutdown-inf">
         <div class="shutdown-wrapper" id="shutdown-wrapper" data-mode="dark">
             <div class="shutdown-content" data-mode="dark">
-                <h1 class="shutdown-title">Hop au dodo</h1>
+                <h1 class="shutdown-title">Bonne nuit!</h1>
                 <p class="shutdown-message">L'intervallomètre va s'éteindre dans 15 sec</p>
             </div>
             <div class="loading-wrapper">
@@ -122,11 +122,12 @@
 		</div>
     </div>
 	</div>
-	</div>
+</div>
 
 
 <!-- ------------------------------------------------------------------------------- -->
 
-<script src="js-home-V1.js"></script>
+<script src="wheel-constructor.js"></script>
+<script src="js-home.js"></script>
 </body>
 </html>

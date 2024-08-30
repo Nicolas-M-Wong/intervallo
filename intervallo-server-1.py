@@ -3,10 +3,14 @@ import time
 import io
 import os
 import MAX17043
+import random
+import string
 
-battery = MAX17043.max17043()
+battery_getSoc = MAX17043.max17043()
 
 directory = os.path.dirname(os.path.abspath(__file__)) #absolute path to file
+
+client_dict = {}
 
 ############################### HTTP Header attribute dictionnary #############
 # Constructing dictionnary for most of the possible header sent by the serv to the client
@@ -38,15 +42,69 @@ http_type_header_dict.update({"js":"text/javascript"}) #adding .js files
 
 ################################# List of possible post request ###############
 
+#value is set as variable for ease of use as it send always a dict with a pair
+# key/value by the JS
 
-# post_request={
+def battery(value):
+    soc=battery_getSoc.getSoc()
+    response_body=f"{round(soc)}"
+    return response_body
+    
+def sleep(value):
+    client_socket.send(header().encode('utf-8'))
+    client_socket.close()
+    s.close()
+    return server_status
+    
+
+
+def shutdown(value):
+    client_socket.send(header().encode('utf-8'))
+    client_socket.close()
+    s.close()
+    os.popen("sudo shutdown -h now")
+
+def file_request(file_name):
+    file_location="src/"+file_name+".html"
+    print('searching for :',file_location)
+    if os.path.isfile(file_location):
+        print('success, new file name =',file_name)
+        global file
+        file="/src/"+file_name+".html"
+        
+post_request_dict = {
+    'battery' : battery,
+    'sleep' : sleep,
+    'shutdown': shutdown,
+    'file_request' : file_request
+    }
+
+def execute_request(request, *args):
+    #The key should match a key
+    
+    # Extract the first key-value pair from the dictionary
+    
+    if request in post_request_dict:
+        try:
+            result = post_request_dict[request](*args)
+            if result is not None:
+                return result
+        except:
+            print("failed")
+            pass
+    else:
+        return "Unknown request"
+
+    
+# post_request_dict={
 #     "nb_photo":"number of picture to take requested by the user",
 #     "tmp_pose": "exposure time for each picture",
 #     "tmp_enregistrement": "time interval between each frame",
 #     "date": "date & time at which the request has been sent by the user",
 #     "sleep": "shutdown the server but keeps the raspi online, used for testing purposes",
 #     "shutdown": "shutdown the raspi and the server",
-#     "battery": "request periodically the battery level to display to the user"}
+#     "battery": "request periodically the battery level to display to the user"
+#     "token": "token used to ensure that post messages are not ghost messages, behaviour seen on safari"}
 
 
 ########################################## Capturing photo ####################
@@ -100,7 +158,7 @@ def parsing_get_msg(data,active_dir):
             decrypted_data = ('HTTP/1.1 200 OK\r\nCache-Control: private, no-store, no-cache\r\nContent-Type:'+ type_header +'\r\ncharset=UTF-8\r\n\r\n').encode('utf-8')+image
             
     else:
-        response_body = "Data received"
+        response_body = "Failed 404"
         response = ("HTTP/1.1 404 Not Found\r\n"
                 f"Content-Length: {len(response_body)}\r\n"
                 "Cache-Control: private, no-store, no-cache\r\n"
@@ -124,9 +182,11 @@ def JSON_data (msg):
     
     for i in range(0,len(msg)):
         pairs_key_value = msg[i].split(':')
-        
-        dict_parameters [pairs_key_value[0].strip('"')] = float(pairs_key_value[1].strip('"'))
-
+        try:
+            dict_parameters [pairs_key_value[0].strip('"')] = float(pairs_key_value[1].strip('"'))
+        except:
+            dict_parameters [pairs_key_value[0].strip('"')] = pairs_key_value[1].strip('"')
+            #Data is NaN in this case
     return dict_parameters
 
 def get_ip():
@@ -150,10 +210,24 @@ def header ():
     script += "Content-Type: text/html;"
     script += "charset=UTF-8\r\n"
     script += "\r\n"
-    print(time.asctime(time.gmtime()))
     return script
 
+def parse_header_item(header,item):
+    header_list = []
+    for i in header:
+        header_list.append(i.split(': '))
+    for i in range (0,len(header_list)):
+        if header_list[i][0] == item:
+            return header_list[i][1]
+    return
+    
+    
+def generate_token():
+    token_length = 5
+    return ''.join(random.SystemRandom().choice(string.ascii_uppercase +string.digits) for _ in range (token_length))
+    
 time_delay = 0
+server_status = True
 while get_ip()=="127.0.0.1":
     print("waiting for a network connection")
     time.sleep(1.5)
@@ -186,29 +260,49 @@ if TCP_IP != "127.0.0.1":
     server_socket = s
     print(f'Serving on port {TCP_PORT}...')
     # Accept and handle incoming connections one at a time
-    while True:
+    while server_status:
 
         client_socket, client_address = server_socket.accept()
         print(f'Accepted connection from {client_address}')
             # Receive the request data
-        request = client_socket.recv(1024).decode('utf-8')
+        client_request = client_socket.recv(1024).decode('utf-8')
         # Parse the request to determine the type of request (GET/POST)
-        headers = request.split('\r\n')
+        headers = client_request.split('\r\n')
+        expect_content_len = parse_header_item(headers,'Content-Length')
+        if expect_content_len != None:
+            expect_content_len = int(expect_content_len)
+        if expect_content_len == None:
+            expect_content_len = 0
+        if expect_content_len != len(headers[-1]):
+                
+            print("Error: message received shorter than the HTTP request Content-Length")
+            print(parse_header_item(headers,'Content-Length'),len(headers[-1]))
+            client_request += client_socket.recv(1024).decode('utf-8')
+            #Identify why safari is behaving weirdly
+            
         first_line = headers[0].split(' ')
         method = first_line[0]
+        
         print(f'Received request: {first_line}')
         
         if method == 'GET':
             print(f'home: {file}\n')
             if str(first_line[1]).strip('/') != '':
-                try:
-                    response = parsing_get_msg(first_line,directory)
-                    client_socket.send(response)
-                except:
-                    response = 'HTTP/1.1 200 OK\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/html\r\ncharset=UTF-8\r\n\r\n'
-                    client_socket.send(response.encode('utf-8'))
-                    print("failed")
-                    pass
+                
+                if str(first_line[1]).strip('/') == 'token':
+                        user_token = generate_token()
+                        client_dict.update({client_address[0]:user_token}) 
+                        response = 'HTTP/1.1 200 OK\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/plain\r\ncharset=UTF-8\r\n\r\n'+'Token: '+user_token
+                        client_socket.send(response.encode('utf-8'))
+                else:
+                    try:
+                        response = parsing_get_msg(first_line,directory)
+                        client_socket.send(response)
+                    except:
+                        print(str(first_line[1]).strip('/'))
+                        response = 'HTTP/1.1 400 Bad Request\r\nCache-Control: private, no-store, no-cache\r\nContent-Type: text/plain\r\ncharset=UTF-8\r\n\r\n'+"failed bad request"
+                        print("failed bad request")
+                        pass
             else:
             # Serve the HTML file
                 home = io.open(directory+file, mode='r',encoding=('utf-8')).read()
@@ -221,52 +315,76 @@ if TCP_IP != "127.0.0.1":
             print(f"POST = {body}\n")
             response_body = "Data received"
             parameters = {}
+            http_header = "HTTP/1.1 200 OK\r\n"
             try:
                 parameters = JSON_data(body)
+                
             except:
                 pass
+                http_header = "HTTP/1.1 400 Bad Request\r\n"
             
-            if "nb_photos" in parameters.keys():
-                tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
-                print(tmp_prise)
-                new_cmd_date = parameters.get('date',0)
-                
-                #Avoid capturing pictures for command sent during the shoot
-                if new_cmd_date > expct_end_date:
+            if parameters.get('token') == client_dict.get(client_address[0]):
+                if "nb_photos" in parameters.keys():
+                    try:
+                        tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
+                        print(tmp_prise)
+                        new_cmd_date = parameters.get('date',0)
                     
-                    new_cmd_date +=1000*tmp_prise
-                    expct_end_date = new_cmd_date
-                    photo_capture(parameters.get('nb_photos',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
-                
+                        #Avoid capturing pictures for command sent during the shoot
+                        if new_cmd_date > expct_end_date:
+                            new_cmd_date +=1000*tmp_prise
+                            expct_end_date = new_cmd_date
+                            photo_capture(parameters.get('nb_photos',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
+                        
+                        else:
+                            print("shot command during an existing shoot")
+                            http_header = "HTTP/1.1 400 Bad Request\r\n"
+                            response_body = "Unavailable"
+                        
+                    except:
+                        print("Failed not a number")
+                        http_header = "HTTP/1.1 400 Bad Request\r\n"
+                        response_body = "Failed NaN"
+                        
                 else:
-                    print("shot command during an existing shoot")
-
+                    request, args = list(parameters.items())[0]
+                    result = execute_request(request,args)
+                    if type(result) is str:
+                        response_body = result
+                    if type(result) is bool:
+                        server_status = result
+                        
+                # elif 'shutdown' in parameters.keys():
+                #     client_socket.close()
+                #     s.close()
+                #     shutdown_raspi ()
+                #     break
                 
-            elif body == '"shutdown"':
-                client_socket.close()
-                s.close()
-                shutdown_raspi ()
-                break
-            
-            elif body == '"sleep"':
-                client_socket.close()
-                s.close()
-                break
-            
-            elif body == '"battery"':
-                soc=battery.getSoc()
-                response_body=f"{round(soc)}"
-            
-            elif body == '"home.html"':
-                file = "/src/home.html"
-                #Switching home page
+                # elif 'sleep' in parameters.keys():
+                #     client_socket.close()
+                #     s.close()
+                #     break
                 
-            elif body == '"home-V1.html"':
-                file = "/src/home-V1.html"
-                #Switching home page
+                # elif 'battery' in parameters.keys():
+                #     soc=battery_getSoc.getSoc()
+                #     response_body=f"{round(soc)}"
                 
+                # elif 'file_request' in parameters.keys():
+                #     file = "/src/"+parameters.get('file_request')+".html"
+                #     #Switching home page
+                    
+                # elif 'home-V1.html' in parameters.keys():
+                #     file = "/src/home-V1.html"
+                #     #Switching home page
+                
+                if not parameters.keys():
+                    print("empty post request")
+                    http_header = "HTTP/1.1 400 Bad Request\r\n"
+                    response_body = "Empty request"  
+            else:
+                http_header = "HTTP/1.1 400 Bad Request\r\n"
             response = (
-                    "HTTP/1.1 200 OK\r\n"
+                    f"{http_header}"
                     f"Content-Length: {len(response_body)}\r\n"
                     "Cache-Control: private, no-store, no-cache\r\n"
                     "Content-Type: text/plain\r\n"
@@ -274,6 +392,7 @@ if TCP_IP != "127.0.0.1":
                     "\r\n"
                     f"{response_body}"
                 )
+            print(http_header)
             client_socket.send(response.encode('utf-8'))
         # Close the client socket
         client_socket.close()
