@@ -127,49 +127,6 @@
 
 <script src="wheel-constructor.js"></script>
 <script src="js-home.js"></script>
-    <script>
-        // Variables to store touch positions
-        let startX, startY, endX, endY;
 
-        // Function to handle the start of a touch event
-        function handleTouchStart(event) {
-            startX = event.touches[0].clientX;
-            startY = event.touches[0].clientY;
-        }
-
-        // Function to handle the end of a touch event
-        function handleTouchEnd(event) {
-            endX = event.changedTouches[0].clientX;
-            endY = event.changedTouches[0].clientY;
-
-            const diffX = endX - startX;
-            const diffY = endY - startY;
-
-            const swipeArea = document.getElementById('screen-container');
-
-            // Check if the swipe is horizontal
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                if (diffX > 0) {
-                    // Swipe right
-                    swipeArea.classList.add('swipe-right');
-					changePage('home-V1');
-                } else {
-                    // Swipe left
-					window.location.href =  "home-V1.html";
-                    changePage('home-V1');
-                }
-
-                // Remove the class after animation to allow re-triggering
-                setTimeout(() => {
-                    swipeArea.classList.remove('swipe-left', 'swipe-right');
-                }, 500); // Duration of the animation in milliseconds
-            }
-        }
-
-        // Attach touch event listeners to the swipe area
-        const swipeArea = document.getElementById('screen-container');
-        swipeArea.addEventListener('touchstart', handleTouchStart);
-        swipeArea.addEventListener('touchend', handleTouchEnd);
-    </script>
 </body>
 </html>
