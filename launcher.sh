@@ -1,5 +1,8 @@
 #!/bin/bash
 # Determine terminal width
+DESKTOP_DIR=$(xdg-user-dir DESKTOP)
+: > "$DESKTOP_DIR/logfile.txt"
+exec > >(tee -a "$DESKTOP_DIR/logfile.txt") 2> >(tee -a "$DESKTOP_DIR/logfile.txt" >&2)
 
 center_text() {
     local msg="$1"
