@@ -1,9 +1,17 @@
 #!/bin/bash
-# Determine terminal width
+
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 : > "$DESKTOP_DIR/logfile.txt"
 exec > >(tee -a "$DESKTOP_DIR/logfile.txt") 2> >(tee -a "$DESKTOP_DIR/logfile.txt" >&2)
 
+# Function to check if the Raspberry Pi is connected to the internet using DNS
+check_internet() {
+    # Use curl to check if we can reach google.com with a short timeout (0.5 seconds)
+    curl -s --head --connect-timeout 1 https://www.google.com > /dev/null 2>&1
+    return $?
+}
+
+# Determine terminal width
 center_text() {
     local msg="$1"
     local character="$2"
@@ -31,19 +39,25 @@ if [ "$#" -lt 1 ]; then
 fi
 
 branch="$1"
-DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 #find the user desktop directory
 
 if ! cd "$DESKTOP_DIR/intervallo-$1"; then
+    echo "No folder named $DESKTOP_DIR/intervallo-$1 found."
     center_text "fatal error" "-"
     exit 1
 fi
+
 cd "$DESKTOP_DIR/intervallo-$1"
+#go to the folder
 
-#go to main
-
-git config pull.rebase false
-git pull https://www.github.com/Nicolas-M-Wong/intervallo "$1"
+# Check internet connection then git pull
+if check_internet; then
+    echo "Internet connection is active, updating the programm"
+    git config pull.rebase false
+    git pull https://www.github.com/Nicolas-M-Wong/intervallo "$1"
+else
+    echo "Internet unavailable, continuing without the latest update"
+fi
 
 DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
 
@@ -62,5 +76,3 @@ cd $DIR
 python3 intervallo-server-1.py
 
 center_text "" "-"
-
-
