@@ -25,20 +25,42 @@ center_text() {
     printf "%*s\n" "$width" | tr ' ' "$character"
     }
 
-if ! check_internet; then
-    echo "No internet connection detected, unable to install the program"
-    exit 1  # Early exit if no internet
-    #Be aware, a very slow internet connexion ~10kbs might prevent you from launching the installer
-fi
+display_usage() {
+    center_text "Help" "-"
+    echo "Usage: ./$0 <branch-name> [options]"
+    echo "Options:"
+    echo "  --no-check    Bypass the internet connection check."
+    echo "  --help        Display this help message."
+    echo ""
+    echo "If you use --no-check, the script will skip checking for an internet connection."
+    echo "Use this command if you are connected with a very slow internet (<10kbs) but still need an update"
+}
 
 branch="$1"
-
+option="$2"
 if [ "$#" -lt 1 ]; then
     echo "$0 missing branch to install"
+    echo "Usage: $0 <branch_name> [option]"
     exit 1
 fi
 
-center_text "Installing $1 $(date)" "-"
+if [[ "$option" == "--help" ]]; then
+    display_usage
+    exit 0
+# Check for the '--no-check' argument to bypass internet check
+elif [[ "$option" == "--no-check" ]]; then
+    center_text "Installing $branch $(date)" "-"
+    echo "Bypassing internet connection check"
+else
+    center_text "Installing $branch $(date)" "-"
+    # Check internet connection
+    if ! check_internet; then
+        echo "No internet connection detected."
+        echo "You can bypass this check by using the '--no-check' argument when running the script."
+        echo "Example: ./installer.sh main --no-check"
+        exit 1  # Early exit if no internet and no bypass argument
+    fi
+fi
 
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 #find the user desktop directory
@@ -66,8 +88,8 @@ else
     echo "Trigger.exe already exists in $DIR."
 fi
 DESKTOP_FOLDER=$(xdg-user-dir DESKTOP)
-mv "$DIR/launcher.sh" "$DESKTOP_FOLDER/launcher-$1.sh"
-chmod +x "$DESKTOP_FOLDER/launcher-$1.sh"
+mv "$DIR/launcher.sh" "$DESKTOP_FOLDER/launcher-$branch.sh"
+chmod +x "$DESKTOP_FOLDER/launcher-$branch.sh"
 
 center_text "Installation finished" "-"
-"$DESKTOP_FOLDER/./launcher-$1.sh" "$1"
+"$DESKTOP_FOLDER/launcher-$branch.sh" "$branch"
