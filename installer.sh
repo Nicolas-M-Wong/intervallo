@@ -1,6 +1,12 @@
 #!/bin/bash
 # Determine terminal width
 
+check_internet() {
+    # Use curl to check if we can reach google.com with a short timeout (0.5 seconds)
+    curl -s --head --connect-timeout 1 https://www.google.com > /dev/null 2>&1
+    return $?
+}
+
 center_text() {
     local msg="$1"
     local character="$2"
@@ -18,11 +24,17 @@ center_text() {
     printf "%*s%s\n" $CENTER_COL "" "$msg"
     printf "%*s\n" "$width" | tr ' ' "$character"
     }
-    
+
+if ! check_internet; then
+    echo "No internet connection detected, unable to install the program"
+    exit 1  # Early exit if no internet
+    #Be aware, a very slow internet connexion ~10kbs might prevent you from launching the installer
+fi
+
 branch="$1"
 
 if [ "$#" -lt 1 ]; then
-    echo "$0 missing branch to install\nCommand syntax: installer.sh [github-branch-name] "
+    echo "$0 missing branch to install"
     exit 1
 fi
 
@@ -55,6 +67,7 @@ else
 fi
 DESKTOP_FOLDER=$(xdg-user-dir DESKTOP)
 mv "$DIR/launcher.sh" "$DESKTOP_FOLDER/launcher-$1.sh"
+chmod +x "$DESKTOP_FOLDER/launcher-$1.sh"
 
 center_text "Installation finished" "-"
-sh "$DESKTOP_FOLDER/launcher-$1.sh" "$1"
+"$DESKTOP_FOLDER/./launcher-$1.sh" "$1"
