@@ -145,18 +145,18 @@
 		const diffX = endX - startX;
 		const diffY = endY - startY;
 
-		const swipeArea = document.getElementById('screen-container');
+		const swipeArea = document.getElementById('swipeArea');
 
 		// Check if the swipe is horizontal
 		if (Math.abs(diffX) > Math.abs(diffY)) {
 			if (diffX > 0) {
 				// Swipe right
 				swipeArea.classList.add('swipe-right');
-				changePage('home-V1');
+				window.location.href =  "home.html";
 			} else {
 				// Swipe left
-				window.location.href =  "home-V1.html";
 				changePage('home-V1');
+				swipeArea.classList.add('swipe-left');
 			}
 
 			// Remove the class after animation to allow re-triggering
