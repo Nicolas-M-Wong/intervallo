@@ -209,18 +209,18 @@
 		if (Math.abs(diffX) > Math.abs(diffY)) {
 			// Horizontal swipe
 			if (diffX > 0) {
-				console.log('Swiped right!');
+				// console.log('Swiped right!');
 			} else {
-				console.log('Swiped left!');
+				// console.log('Swiped left!');
 			}
 		} else {
 			// Vertical swipe
 			if (diffY > 0) {
-				console.log('Swiped down!');
+				// console.log('Swiped down!');
 				changePage('home-V1');
 			} else {
-				console.log('Swiped up!');
-				window.location.href =  "home.html";
+				// console.log('Swiped up!');
+				changePage('home-V1');
 			}
 		}
 	}
