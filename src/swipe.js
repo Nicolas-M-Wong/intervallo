@@ -18,10 +18,10 @@
 			// Horizontal swipe
 			if (diffX > 0) {
 				
-				home.changePage('home-V1');
+				changePage('home-V1');
 			} else {
 				
-				home.changePage('home-V1');
+				changePage('home-V1');
 			}
 		} 
 
