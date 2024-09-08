@@ -192,26 +192,20 @@
 	// Variables to store touch positions
 	let startX, startY, endX, endY;
 
-	const minSwipeDistance = 0.75; 
+	const minSwipeDistance = 0.5; 
 	// Function to handle the start of a touch event
 	function handleTouchStart(event) {
 		startX = event.touches[0].clientX;
-		startY = event.touches[0].clientY;
 	}
 
 	// Function to handle the end of a touch event
 	function handleTouchEnd(event) {
 		const viewportWidth = window.innerWidth;
-		const viewportHeight = window.innerHeight;
 		const minSwipeDistanceX = viewportWidth * minSwipeDistance;
-		const minSwipeDistanceY = viewportHeight * minSwipeDistance;
 		endX = event.changedTouches[0].clientX;
-		endY = event.changedTouches[0].clientY;
-
 		const diffX = endX - startX;
-		const diffY = endY - startY;
 
-		if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > minSwipeDistanceX) {
+		if (Math.abs(diffX) > minSwipeDistanceX) {
 			// Horizontal swipe
 			if (diffX > 0) {
 				
@@ -221,17 +215,7 @@
 				changePage('home-V1');
 			}
 		} 
-		else if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > minSwipeDistanceY){
-			// Vertical swipe
-			if (diffY > 0) {
-				window.location.reload();
-				//console.log('Swiped down!');
-				
-			} else {
-				//console.log('Swiped up!');
-				window.location.reload();
-			}
-		}
+
 	}
 
 	// Attach touch event listeners to the swipe area
