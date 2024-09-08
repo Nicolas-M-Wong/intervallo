@@ -12,7 +12,7 @@ WheelConstruct.createWheel = function(elementId, step) {
     let isFirst = true;
 
     step.forEach(({ start, end, step, fixed }) => {
-        for (let i = start; i < end; i += step) {
+        for (let i = start; i <= end; i += step) {
             const numberDiv = document.createElement('div');
             numberDiv.className = 'number';
             numberDiv.innerText = fixed ? i.toFixed(countDecimalPlaces(step)) : i;
