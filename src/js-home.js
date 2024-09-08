@@ -18,14 +18,14 @@ const step_photo = [
 
 const step_pose = [
 	{ start: step_ms, end: 1-step_ms, step: step_ms, fixed: true }, //Between 0 and 1, 0.1s step
-	{ start: 1, end: 5, step: 5 * step_ms, fixed: true }, //Between 1 and 5, 0.5s step
+	{ start: 1, end: 5-5*step_ms, step: 5 * step_ms, fixed: true }, //Between 1 and 5, 0.5s step
 	{ start: 5, end: 60-step_s, step: step_s, fixed: false }, //Between 5 and 60, 1s step
 	{ start: 60, end: length_pose, step: 10*step_s, fixed: false } //Between 60 to the end, 10s step
 ];
 
 const step_enregistrement = [
 	{ start: step_ms, end: 1-step_ms, step: step_ms, fixed: true }, //Between 0 and 1, 0.1s step
-	{ start: 1, end: 5, step: 5 * step_ms, fixed: true }, //Between 1 and 5, 0.5s step
+	{ start: 1, end: 5-5*step_ms, step: 5 * step_ms, fixed: true }, //Between 1 and 5, 0.5s step
 	{ start: 5, end: 60-step_s, step: step_s, fixed: false }, //Between 5 and 60, 1s step
 	{ start: 60, end: length_enregistrement, step: 10*step_s, fixed: false } //Between 60 to the end, 10s step
 ];
