@@ -220,7 +220,8 @@
 				
 				changePage('home-V1');
 			}
-		} else {
+		} 
+		else if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > minSwipeDistanceY){
 			// Vertical swipe
 			if (diffY > 0) {
 				window.location.reload();
