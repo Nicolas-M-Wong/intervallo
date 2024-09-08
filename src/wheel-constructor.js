@@ -146,7 +146,7 @@ WheelConstruct.updateWheel = function(wheelId, startValue, steps) {
     // Find the closest value in the possibleValues array to the startValue
     let closestValue = possibleValues[0];
     let smallestDifference = Math.abs(startValue - closestValue);
-
+	
     for (let i = 1; i < possibleValues.length; i++) {
         const currentDifference = Math.abs(startValue - possibleValues[i]);
         if (currentDifference < smallestDifference) {
@@ -154,7 +154,7 @@ WheelConstruct.updateWheel = function(wheelId, startValue, steps) {
             smallestDifference = currentDifference;
         }
     }
-
+	console.log(smallestDifference,closestValue);
     // Find the index of the closest value
     const startIndex = possibleValues.indexOf(closestValue);
     if (startIndex === -1) {
