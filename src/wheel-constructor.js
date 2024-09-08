@@ -154,10 +154,10 @@ WheelConstruct.updateWheel = function(wheelId, startValue, steps) {
             smallestDifference = currentDifference;
         }
     }
-	console.log(smallestDifference,closestValue);
+
     // Find the index of the closest value
     const startIndex = possibleValues.indexOf(closestValue);
-	console.log(startIndex,closestValue)
+
     if (startIndex === -1) {
         console.error(`Closest value "${closestValue}" not found in possible values.`);
         return;
