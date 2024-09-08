@@ -620,6 +620,7 @@ function changePage() {
     };
 	// Find the URL of the other page
     const pageName = pageMapping[currentPage];
+	console.log(pageName,currentPage);
 	saveFormData();
 	sendPostRequest({"file_request":pageName}).then(() => {
     location.reload();
