@@ -53,6 +53,92 @@
 <body>
     <div id="swipeArea">Swipe Here</div>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swipe Animation Example</title>
+    <style>
+        /* Basic styles for the swipe area */
+        #swipeArea {
+            width: 100%;
+            height: 100vh;
+            background-color: lightgrey;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s, opacity 0.5s;
+        }
+
+        /* Swipe animation styles */
+        .swipe-left {
+            animation: swipeLeft 0.5s forwards;
+        }
+
+        .swipe-right {
+            animation: swipeRight 0.5s forwards;
+        }
+
+        .swipe-up {
+            animation: swipeUp 0.5s forwards;
+        }
+
+        .swipe-down {
+            animation: swipeDown 0.5s forwards;
+        }
+
+        @keyframes swipeLeft {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(-100vw);
+                opacity: 0;
+            }
+        }
+
+        @keyframes swipeRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100vw);
+                opacity: 0;
+            }
+        }
+
+        @keyframes swipeUp {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes swipeDown {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="swipeArea">Swipe Here</div>
+
     <script>
         // Variables to store touch positions
         let startX, startY, endX, endY;
@@ -70,26 +156,32 @@
 
             const diffX = endX - startX;
             const diffY = endY - startY;
-
             const swipeArea = document.getElementById('swipeArea');
 
-            // Check if the swipe is horizontal
+            // Remove previous swipe classes
+            swipeArea.classList.remove('swipe-left', 'swipe-right', 'swipe-up', 'swipe-down');
+
+            // Determine swipe direction
             if (Math.abs(diffX) > Math.abs(diffY)) {
+                // Horizontal swipe
                 if (diffX > 0) {
-                    // Swipe right
                     swipeArea.classList.add('swipe-right');
-					window.location.href =  "home.html";
                 } else {
-                    // Swipe left
-					window.location.href =  "home-V1.html";
                     swipeArea.classList.add('swipe-left');
                 }
-
-                // Remove the class after animation to allow re-triggering
-                setTimeout(() => {
-                    swipeArea.classList.remove('swipe-left', 'swipe-right');
-                }, 500); // Duration of the animation in milliseconds
+            } else {
+                // Vertical swipe
+                if (diffY > 0) {
+                    swipeArea.classList.add('swipe-down');
+                } else {
+                    swipeArea.classList.add('swipe-up');
+                }
             }
+
+            // Remove the class after animation to allow re-triggering
+            setTimeout(() => {
+                swipeArea.classList.remove('swipe-left', 'swipe-right', 'swipe-up', 'swipe-down');
+            }, 500); // Duration of the animation in milliseconds
         }
 
         // Attach touch event listeners to the swipe area
@@ -97,5 +189,8 @@
         swipeArea.addEventListener('touchstart', handleTouchStart);
         swipeArea.addEventListener('touchend', handleTouchEnd);
     </script>
+</body>
+</html>
+
 </body>
 </html>
