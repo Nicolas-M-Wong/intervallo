@@ -149,7 +149,7 @@ WheelConstruct.updateWheel = function(wheelId, startValue, steps) {
 	
     for (let i = 1; i < possibleValues.length; i++) {
         const currentDifference = Math.abs(startValue - possibleValues[i]);
-        if (currentDifference < smallestDifference) {
+        if (currentDifference =< smallestDifference) {
             closestValue = possibleValues[i];
             smallestDifference = currentDifference;
         }
