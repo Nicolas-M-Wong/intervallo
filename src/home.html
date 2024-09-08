@@ -191,8 +191,8 @@
 <script>
 	// Variables to store touch positions
 	let startX, startY, endX, endY;
-	const minSwipeDistance = 0.25; 
 
+	const minSwipeDistance = 0.75; 
 	// Function to handle the start of a touch event
 	function handleTouchStart(event) {
 		startX = event.touches[0].clientX;
@@ -214,20 +214,21 @@
 		if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > minSwipeDistanceX) {
 			// Horizontal swipe
 			if (diffX > 0) {
-				console.log('Swiped right!');
+				
 				changePage('home-V1');
 			} else {
-				console.log('Swiped left!');
+				
 				changePage('home-V1');
 			}
 		} else {
 			// Vertical swipe
 			if (diffY > 0) {
-				console.log('Swiped down!');
+				window.location.reload();
+				//console.log('Swiped down!');
 				
 			} else {
-				console.log('Swiped up!');
-				
+				//console.log('Swiped up!');
+				window.location.reload();
 			}
 		}
 	}
