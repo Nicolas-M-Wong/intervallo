@@ -6,7 +6,68 @@
 <link rel="alternate" href="home-landscape-screen.html" id="landscape-screen">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0", charset="UTF-8">
+<style>
+	/* Swipe animation styles */
+	.swipe-left {
+		animation: swipeLeft 0.5s forwards;
+	}
 
+	.swipe-right {
+		animation: swipeRight 0.5s forwards;
+	}
+
+	.swipe-up {
+		animation: swipeUp 0.5s forwards;
+	}
+
+	.swipe-down {
+		animation: swipeDown 0.5s forwards;
+	}
+
+	@keyframes swipeLeft {
+		from {
+			transform: translateX(0);
+			opacity: 1;
+		}
+		to {
+			transform: translateX(-100vw);
+			opacity: 0;
+		}
+	}
+
+	@keyframes swipeRight {
+		from {
+			transform: translateX(0);
+			opacity: 1;
+		}
+		to {
+			transform: translateX(100vw);
+			opacity: 0;
+		}
+	}
+
+	@keyframes swipeUp {
+		from {
+			transform: translateY(0);
+			opacity: 1;
+		}
+		to {
+			transform: translateY(-100vh);
+			opacity: 0;
+		}
+	}
+
+	@keyframes swipeDown {
+		from {
+			transform: translateY(0);
+			opacity: 1;
+		}
+		to {
+			transform: translateY(100vh);
+			opacity: 0;
+		}
+	}
+</style>
 <title>Intervallomètre</title>
 
 </head>
@@ -145,24 +206,22 @@
 		const diffX = endX - startX;
 		const diffY = endY - startY;
 
-		const swipeArea = document.getElementById('swipeArea');
-
-		// Check if the swipe is horizontal
 		if (Math.abs(diffX) > Math.abs(diffY)) {
+			// Horizontal swipe
 			if (diffX > 0) {
-				// Swipe right
-				swipeArea.classList.add('swipe-right');
-				window.location.href =  "home.html";
+				console.log('Swiped right!');
 			} else {
-				// Swipe left
-				changePage('home-V1');
-				swipeArea.classList.add('swipe-left');
+				console.log('Swiped left!');
 			}
-
-			// Remove the class after animation to allow re-triggering
-			setTimeout(() => {
-				swipeArea.classList.remove('swipe-left', 'swipe-right');
-			}, 500); // Duration of the animation in milliseconds
+		} else {
+			// Vertical swipe
+			if (diffY > 0) {
+				console.log('Swiped down!');
+				changePage('home-V1');
+			} else {
+				console.log('Swiped up!');
+				window.location.href =  "home.html";
+			}
 		}
 	}
 
@@ -170,6 +229,7 @@
 	const swipeArea = document.getElementById('screen-container');
 	swipeArea.addEventListener('touchstart', handleTouchStart);
 	swipeArea.addEventListener('touchend', handleTouchEnd);
+
 </script>
 </body>
 </html>
