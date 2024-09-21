@@ -73,13 +73,12 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos,now) {
 	document.getElementById("dialogBoxTitle").innerHTML = "Temps restant :";
     document.getElementById("Compteur").innerHTML = "00:00:00"; // Initialize countdown display
     dialogBoxId.showModal();
+	var totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
     // Calculate the total time
 	if (currentFileName === "home-V3"){
-		var totalTime = timeBetweenPhotos * (nb_photos - 1)+exposureTime;
+		totalTime = timeBetweenPhotos * (nb_photos - 1)+exposureTime;
 	}
-	else{
-    const totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
-    }
+
      // Set countdown date to current time plus total time
      
     const countDownDate = now + totalTime * 1000;
