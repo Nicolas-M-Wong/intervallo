@@ -48,7 +48,7 @@ def f(num_points,y_start_user,y_end_user,interval_time):
         print(f"min de f' {min(Y2)}, f est strictement croissante : {min(Y2)>0}")
     else:
         print(f"max de f' {max(Y2)}, f est strictement décroissante : {max(Y2)<0}")
-    Y2 = Y-interval_time
+    Y2 = interval_time-Y
     return X, Y,Y2
 
 # def remap(y, y_start, y_end):
