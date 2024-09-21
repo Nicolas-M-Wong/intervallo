@@ -661,7 +661,8 @@ function changePage() {
     // Define the mapping of page names
     const pageMapping = {
         'home': 'home-V1',
-        'home-V1': 'home'
+        'home-V1': 'home-V3',
+		'home-V3': 'home'
     };
 	// Find the URL of the other page
     const pageName = pageMapping[currentPage];
