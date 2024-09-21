@@ -360,8 +360,8 @@ if TCP_IP != "127.0.0.1":
                         
                 if 'non-constant' in parameters.keys() and 'nb_photos' in parameters.keys():
                     nb_photos = parameters.get('nb_photos',0)
-                    start_expo_time = parameters.get('start_expo_time',0)
-                    end_expo_time = parameters.get('end_expo_time',0)
+                    start_expo_time = parameters.get('tmp_pose_start',0)
+                    end_expo_time = parameters.get('tmp_pose_end',0)
                     tmp_enregistrement =  parameters.get('tmp_enregistrement',0)
                     y,y2 = non_constant(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
                     print(f"y: {y}; y2: {y2}")
