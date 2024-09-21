@@ -466,13 +466,26 @@ function handleButtonClickBack(event) {
 document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('toggle-mode');
     const body = document.body;
-    const elementsToToggle = [body, document.getElementById('dialogBox'),
-	document.getElementById('main'),document.getElementById('navbar-id'),
-	document.getElementById('nb_photos'),document.getElementById('tmp_pose'),
-	document.getElementById('enregistrement'),document.getElementById('shutdown'),
-	document.getElementById('big-screen'),document.getElementById('landscape-screen'),
-	document.getElementById('shutdown-wrapper'),document.getElementById('half-circle')];
-
+	let currentFileName = document.body.getAttribute('data-page');
+	
+	if(currentFileName === "home-V3"){
+		const elementsToToggle = [body, document.getElementById('dialogBox'),
+		document.getElementById('main'),document.getElementById('navbar-id'),
+		document.getElementById('nb_photos'),document.getElementById('tmp_pose_start'),
+		document.getElementById('tmp_pose_end'),
+		document.getElementById('enregistrement'),document.getElementById('shutdown'),
+		document.getElementById('big-screen'),document.getElementById('landscape-screen'),
+		document.getElementById('shutdown-wrapper'),document.getElementById('half-circle')];
+	}
+	else{
+		const elementsToToggle = [body, document.getElementById('dialogBox'),
+		document.getElementById('main'),document.getElementById('navbar-id'),
+		document.getElementById('nb_photos'),document.getElementById('tmp_pose'),
+		document.getElementById('enregistrement'),document.getElementById('shutdown'),
+		document.getElementById('big-screen'),document.getElementById('landscape-screen'),
+		document.getElementById('shutdown-wrapper'),document.getElementById('half-circle')];
+	}
+	
     const currentTheme = sessionStorage.getItem('theme') || 'dark';
     elementsToToggle.forEach(element => {
         element.dataset.mode = currentTheme;
