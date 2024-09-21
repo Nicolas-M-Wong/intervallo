@@ -61,10 +61,10 @@ window.addEventListener('beforeunload', function(event) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function showDialog(nbPhotos, exposureTime, timeBetweenPhotos, now) {
+function showDialog(nbPhotos, exposureTime, timeBetweenPhotos,now) {
 	const notificationMessage = document.getElementById("notificationMessage");
 	const notificationTitle = document.getElementById("notificationTitle");
-	
+	let currentFileName = document.body.getAttribute('data-page');
     dialogBoxId.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
             e.preventDefault();
@@ -74,9 +74,12 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos, now) {
     document.getElementById("Compteur").innerHTML = "00:00:00"; // Initialize countdown display
     dialogBoxId.showModal();
     // Calculate the total time
-
+	if (currentFileName === "home-V3"){
+		var totalTime = tmp_enregistrement * (nb_photos - 1)+tmp_pose;
+	}
+	else{
     const totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
-    
+    }
      // Set countdown date to current time plus total time
      
     const countDownDate = now + totalTime * 1000;
@@ -130,42 +133,67 @@ function submitForm(event){
 	
 	let nb_photos = 0;
 	let tmp_pose = 0;
+	let tmp_pose_start = 0;
+	let tmp_pose_end = 0;
 	let tmp_enregistrement = 0;
 	
 	const doc_photos = document.getElementById('nb_photos');
-	const doc_pose = document.getElementById('tmp_pose');
 	const doc_save = document.getElementById('enregistrement');
 	
-	if (currentFileName === "home"){
-		console.log("success home");
-		nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo);
-		tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose);
-		tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
-	}
-	
-	if (currentFileName === "home-V1"){
-		console.log("success home-V1");
-		nb_photos = parseInt(doc_photos.value);
-		tmp_pose = parseFloat(doc_pose.value);
-		tmp_enregistrement = parseFloat(doc_save.value);
-	}
-	
-	var totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
-	console.log("Total time for the interval:", totalTime, "seconds");
-	if (Number.isNaN(totalTime) || totalTime <= 0){
-		totalTime=0;
-		document.getElementById("confirmation").style.display = "none";
+	if (currentFileName != "home-V3"){
+		const doc_pose = document.getElementById('tmp_pose');
+		if (currentFileName === "home"){
+			console.log("success home");
+			nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo);
+			tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose);
+			tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
+		}
+		
+		if (currentFileName === "home-V1"){
+			console.log("success home-V1");
+			nb_photos = parseInt(doc_photos.value);
+			tmp_pose = parseFloat(doc_pose.value);
+			tmp_enregistrement = parseFloat(doc_save.value);
+		}
+		
+		var totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
+		console.log("Total time for the interval:", totalTime, "seconds");
+		if (Number.isNaN(totalTime) || totalTime <= 0){
+			totalTime=0;
+			document.getElementById("confirmation").style.display = "none";
+		}
+		else{
+		// Display formatted time in confirmation
+		document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
+		document.getElementById("confirmation").style.display = "block";
+		// Prepare form data for the POST request
+		formData = new FormData(document.getElementById('interval-Form'));
+		}
 	}
 	else{
-	// Display formatted time in confirmation
-	document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
-	document.getElementById("confirmation").style.display = "block";
-	// Prepare form data for the POST request
-	formData = new FormData(document.getElementById('interval-Form'));
+		const doc_pose_start = document.getElementById('tmp_pose_start');
+		const doc_pose_end = document.getElementById('tmp_pose_end');
+		console.log("success home-V3");
+		nb_photos = parseInt(doc_photos.value);
+		tmp_pose_start = parseFloat(doc_pose_start.value);
+		tmp_pose_end = parseFloat(doc_pose_end.value);
+		tmp_enregistrement = parseFloat(doc_save.value);		
+		
+		var totalTime = tmp_enregistrement * (nb_photos - 1)+tmp_pose_end;
+		console.log("Total time for the interval:", totalTime, "seconds");
+		if (Number.isNaN(totalTime) || totalTime <= 0){
+			totalTime=0;
+			document.getElementById("confirmation").style.display = "none";
+		}
+		else{
+		// Display formatted time in confirmation
+		document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
+		document.getElementById("confirmation").style.display = "block";
+		// Prepare form data for the POST request
+		formData = new FormData(document.getElementById('interval-Form'));
+		}
 	}
-}
-
-	
+}	
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -175,11 +203,11 @@ function handleButtonClick(test_status) {
         const data = {};
 		var now = new Date().getTime();
 		const doc_photos = document.getElementById('nb_photos');
-		const doc_pose = document.getElementById('tmp_pose');
 		const doc_save = document.getElementById('enregistrement');
 		var nb_photos = 1
 		
 		if (currentFileName === "home"){
+			const doc_pose = document.getElementById('tmp_pose');
 			data["tmp_pose"] = WheelConstruct.getCurrentValue(doc_pose,step_pose);
 			data["tmp_enregistrement"] = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
 			data["date"] = now;
@@ -189,6 +217,7 @@ function handleButtonClick(test_status) {
 		}
 		
 		if (currentFileName === "home-V1"){
+			const doc_pose = document.getElementById('tmp_pose');
 			data["tmp_pose"] = parseFloat(doc_pose.value);
 			data["tmp_enregistrement"] = parseFloat(doc_save.value);
 			data["date"] = now;
@@ -197,12 +226,28 @@ function handleButtonClick(test_status) {
             }
 		}
         
+		if (currentFileName === "home-V3"){
+			const doc_pose_start = document.getElementById('tmp_pose_start');
+			const doc_pose_end = document.getElementById('tmp_pose_end');
+			data["tmp_pose_start"] = parseFloat(doc_pose_start.value);
+			data["tmp_pose_end"] = parseFloat(doc_pose_end.value);
+			data["tmp_enregistrement"] = parseFloat(doc_save.value);
+			data["date"] = now;
+			if (test_status === "No"){
+				nb_photos = parseInt(doc_photos.value);
+            }
+		}
 		data["nb_photos"] = nb_photos;
 			
         sendPostRequest(data).then(() => {
 		if (http_status_post === 200){
 			const nowDate = new Date().getTime()
-			showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
+			if (currentFileName === "home-V3{
+				showDialog(data["nb_photos"], data["tmp_pose_end"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
+			}
+			else{
+				showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
+			}
 		}
 		});
     } else {
