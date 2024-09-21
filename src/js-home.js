@@ -76,7 +76,7 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos,now) {
 	var totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
     // Calculate the total time
 	if (currentFileName === "home-V3"){
-		totalTime = timeBetweenPhotos * (nb_photos - 1)+exposureTime;
+		totalTime = timeBetweenPhotos*(nb_photos- 1)+exposureTime;
 	}
 
      // Set countdown date to current time plus total time
