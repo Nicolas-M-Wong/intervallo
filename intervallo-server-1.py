@@ -366,10 +366,10 @@ if TCP_IP != "127.0.0.1":
                     y,y2 = non_constant(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
                     print(f"y: {y}; y2: {y2}")
                     if (y2 > 1.5).all():
-                        command = f"./non-constant.exe '{y}' '{y2}' 'Trigger.exe'"
+                        command = f"sudo {directory}/non-constant.exe '{y}' '{y2}' 'Trigger.exe'"
                         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                        print(command)
                     else :
-                       
                         print("Tmp enregistrement insuffisant")
                         http_header = "HTTP/1.1 400 Bad Request\r\n"
                         response_body = "Interval too short"
