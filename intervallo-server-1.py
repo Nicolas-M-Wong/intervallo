@@ -363,7 +363,7 @@ if TCP_IP != "127.0.0.1":
                     start_expo_time = parameters.get('start_expo_time',0)
                     end_expo_time = parameters.get('end_expo_time',0)
                     tmp_enregistrement =  parameters.get('tmp_enregistrement',0)
-                    y,y2 = non_constant(int(nb_photos), start_expo_time, end_expo_time,tmp_enregistrement)
+                    y,y2 = non_constant(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
                     
                     if y2.all()>1.5:
                         command = f"./non-constant.exe '{y}' '{y2}' 'Trigger.exe'"
