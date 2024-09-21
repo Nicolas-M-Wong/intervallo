@@ -242,7 +242,7 @@ function handleButtonClick(test_status) {
         sendPostRequest(data).then(() => {
 		if (http_status_post === 200){
 			const nowDate = new Date().getTime()
-			if (currentFileName === "home-V3{
+			if (currentFileName === "home-V3"){
 				showDialog(data["nb_photos"], data["tmp_pose_end"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
 			}
 			else{
