@@ -373,9 +373,9 @@ if TCP_IP != "127.0.0.1":
                     tmp_enregistrement =  parameters.get('tmp_enregistrement',0)
                     y,y2 = non_constant(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
                     print(f"y: {y}; y2: {y2}")
-                    y, y2 = construct_vect(y), construct_vect(y2)
                     
                     if (y2 > 1.5).all():
+                        y, y2 = construct_vect(y), construct_vect(y2)
                         command = f"sudo {directory}/non-constant.exe '{y}' '{y2}' 'Trigger.exe'"
                         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                         print(command)
