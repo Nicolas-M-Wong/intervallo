@@ -5,6 +5,8 @@ import os
 import MAX17043
 import random
 import string
+from cubic_spline import f
+import subprocess
 
 battery_getSoc = MAX17043.max17043()
 
@@ -56,8 +58,6 @@ def sleep(value):
     s.close()
     return server_status
     
-
-
 def shutdown(value):
     client_socket.send(header().encode('utf-8'))
     client_socket.close()
@@ -72,11 +72,15 @@ def file_request(file_name):
         global file
         file="/src/"+file_name+".html"
         
+def non_constant (nb_photo_loc, start_expo_time, end_expo_time, tmp_enregistrement_loc):
+    x,y,y2 = f(nb_photo_loc, start_expo_time, end_expo_time, tmp_enregistrement_loc)
+    return y,y2
+        
 post_request_dict = {
     'battery' : battery,
     'sleep' : sleep,
     'shutdown': shutdown,
-    'file_request' : file_request
+    'file_request' : file_request,
     }
 
 def execute_request(request, *args):
@@ -123,8 +127,7 @@ def photo_capture(nb_photos_loc,tmp_pose_loc,tmp_enregistrement_loc):
     addr_command = "./Trigger.exe "
     command = "sudo "+addr_command+str(tmp_pose_loc)+" "+str(nb_photos_loc)+" "+str(tmp_enregistrement_loc)
     print(command)
-    os.popen(command)
-    return
+    return command
 
 ###############################################################################
 
@@ -324,7 +327,7 @@ if TCP_IP != "127.0.0.1":
                 http_header = "HTTP/1.1 400 Bad Request\r\n"
             
             if parameters.get('token') == client_dict.get(client_address[0]):
-                if "nb_photos" in parameters.keys():
+                if "nb_photos" in parameters.keys() and 'non-constant' not in parameters.keys():
                     try:
                         tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
                         print(tmp_prise)
@@ -334,8 +337,9 @@ if TCP_IP != "127.0.0.1":
                         if new_cmd_date > expct_end_date:
                             new_cmd_date +=1000*tmp_prise
                             expct_end_date = new_cmd_date
-                            photo_capture(parameters.get('nb_photos',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
-                        
+                            cmd = photo_capture(parameters.get('nb_photos',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
+                            os.popen(cmd)
+                            
                         else:
                             print("shot command during an existing shoot")
                             http_header = "HTTP/1.1 400 Bad Request\r\n"
@@ -354,11 +358,26 @@ if TCP_IP != "127.0.0.1":
                     if type(result) is bool:
                         server_status = result
                         
-                # elif 'shutdown' in parameters.keys():
-                #     client_socket.close()
-                #     s.close()
-                #     shutdown_raspi ()
-                #     break
+                if 'non-constant' in parameters.keys() and 'nb_photos' in parameters.keys():
+                    nb_photos = parameters.get('nb_photos',0)
+                    start_expo_time = parameters.get('start_expo_time',0)
+                    end_expo_time = parameters.get('end_expo_time',0)
+                    tmp_enregistrement =  parameters.get('tmp_enregistrement',0)
+                    y,y2 = non_constant(nb_photos, start_expo_time, end_expo_time,tmp_enregistrement)
+                    
+                    if y2.all() >1.5:
+                        command = f"./non-constant.exe '{y}' '{y2}' 'Trigger.exe'"
+                        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    else :
+                        
+                        print("Tmp enregistrement insuffisant")
+                        http_header = "HTTP/1.1 400 Bad Request\r\n"
+                        response_body = "Interval too short"
+                                            # open("tmp_cmd.sh", "w").close()
+                    # open("tmp_cmd.sh", "a")
+                    # for i in range (0,len(y)):
+                    #     f.write(f"{photo_capture(1,y[i],0)}\nsleep {tmp_enregistrement-y[i]}\n")
+                    # os.popen("sh tmp_cmd.sh")
                 
                 # elif 'sleep' in parameters.keys():
                 #     client_socket.close()
@@ -396,4 +415,5 @@ if TCP_IP != "127.0.0.1":
             client_socket.send(response.encode('utf-8'))
         # Close the client socket
         client_socket.close()
+
 
