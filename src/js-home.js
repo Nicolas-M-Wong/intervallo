@@ -233,6 +233,7 @@ function handleButtonClick(test_status) {
 			data["tmp_pose_end"] = parseFloat(doc_pose_end.value);
 			data["tmp_enregistrement"] = parseFloat(doc_save.value);
 			data["date"] = now;
+			data["non-constant"] = "yes";
 			if (test_status === "No"){
 				nb_photos = parseInt(doc_photos.value);
             }
