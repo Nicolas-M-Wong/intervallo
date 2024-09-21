@@ -228,6 +228,14 @@ def parse_header_item(header,item):
 def generate_token():
     token_length = 5
     return ''.join(random.SystemRandom().choice(string.ascii_uppercase +string.digits) for _ in range (token_length))
+
+
+def construct_vect (vect):
+    output = '['
+    for i in range (0,len(vect)-1):
+        output+=str(vect[i])+";"
+    output+=str(vect[-1])+"]"
+    return output
     
 time_delay = 0
 server_status = True
@@ -365,6 +373,8 @@ if TCP_IP != "127.0.0.1":
                     tmp_enregistrement =  parameters.get('tmp_enregistrement',0)
                     y,y2 = non_constant(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
                     print(f"y: {y}; y2: {y2}")
+                    y, y2 = construct_vect(y), construct_vect(y2)
+                    
                     if (y2 > 1.5).all():
                         command = f"sudo {directory}/non-constant.exe '{y}' '{y2}' 'Trigger.exe'"
                         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
