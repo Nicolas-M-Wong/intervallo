@@ -75,7 +75,7 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos,now) {
     dialogBoxId.showModal();
     // Calculate the total time
 	if (currentFileName === "home-V3"){
-		var totalTime = tmp_enregistrement * (nb_photos - 1)+tmp_pose;
+		var totalTime = timeBetweenPhotos * (nb_photos - 1)+exposureTime;
 	}
 	else{
     const totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
