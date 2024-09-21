@@ -107,11 +107,15 @@ int main(int argc, char** argv) {
                 std::string exePath = file_location();
                 exePath += "/" + executable; // Simplified path construction
                 std::cout << "Executable Directory: " << exePath << std::endl;
-        
+                std::cout << "Pose value: " << pose_value << std::endl;
+                
                 // Construct command line using both tmp_enregistrement and pose_value
-                std::string command_line = "sudo " + exePath + " 1 " + " "+ pose_value +"  0";
+                
+                std::string command_line = "sudo " + exePath + " 1 " + " "+ tmp_pose_vector[i] +"  0";
+                std::cout << "Command line: " << command_line<< std::endl;
                 int result = system(command_line.c_str()); // Convert to const char*
-                unsigned int seconds = std::stoul(enregistrement_value);
+                
+                unsigned int seconds = std::stoul(tmp_enregistrement_vector[i]);
                 sleep(seconds);
                 // Check the result of the command execution
                 if (result != 0) {
