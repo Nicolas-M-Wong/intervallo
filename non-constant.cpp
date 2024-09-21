@@ -6,6 +6,8 @@
 #include <sstream>   // For stringstream
 #include <filesystem>
 #include <unistd.h>
+#include <limits.h>
+
 
 // Function to check if a string is a valid float
 bool isFloat(const std::string& str) {
@@ -57,8 +59,16 @@ std::vector<std::string> parseInput(const std::string& input) {
 
 std::string file_location() {
     // Get the current path of the executable
-    std::filesystem::path exePath = std::filesystem::current_path();  
-    return exePath;
+	char result[PATH_MAX];
+	ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
+	std::filesystem::path executablePath = std::string(result, (count > 0) ? count : 0);
+	
+	// Get the directory of the executable
+	std::filesystem::path directory = executablePath.parent_path();
+	
+	// Print the directory
+	
+    return directory;
 }
 
 int main(int argc, char** argv) {
@@ -93,6 +103,7 @@ int main(int argc, char** argv) {
             const auto& pose_value = tmp_pose_vector[i]; // Access corresponding value in tmp_pose
         
             if (isFloat(enregistrement_value) && isFloat(pose_value)) {
+						
                 std::string exePath = file_location();
                 exePath += "/" + executable; // Simplified path construction
                 std::cout << "Executable Directory: " << exePath << std::endl;
