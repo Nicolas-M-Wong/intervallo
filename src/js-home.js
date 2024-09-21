@@ -477,6 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		document.getElementById('big-screen'),document.getElementById('landscape-screen'),
 		document.getElementById('shutdown-wrapper'),document.getElementById('half-circle')];
 	}
+	
 	else{
 		const elementsToToggle = [body, document.getElementById('dialogBox'),
 		document.getElementById('main'),document.getElementById('navbar-id'),
