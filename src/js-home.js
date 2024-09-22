@@ -76,8 +76,7 @@ function showDialog(nbPhotos, exposureTime, timeBetweenPhotos,now) {
 	var totalTime = nbPhotos * exposureTime + timeBetweenPhotos * (nbPhotos - 1);
     // Calculate the total time
 	if (currentFileName === "home-V3"){
-		totalTime = timeBetweenPhotos*(nb_photos- 1)+exposureTime;
-		console.log(totalTime);
+		totalTime = timeBetweenPhotos*(nbPhotos- 1)+exposureTime;
 	}
 
      // Set countdown date to current time plus total time
@@ -294,9 +293,19 @@ function sendPostRequest(data) {
                 } else if (xhr.status === 400) {
                     http_status_post = 400;
                     console.log('Fail:', xhr.responseText);
+					const messageElement = document.querySelector('#Compteur');
+					const titleElement = document.querySelector('#dialogBoxTitle');
+					
 					if (xhr.responseText === "Unavailable"){
 						document.getElementById("dialogBoxTitle").innerHTML = " ";
 						document.getElementById("Compteur").innerHTML = "<span>Prise de vue en cours</span></br><span style='font-weight: 300;'>APN Indisponible</span>";
+						dialogBoxId.showModal();
+					}
+					if (xhr.responseText === "Interval too short"){
+						// document.getElementById("dialogBoxTitle").innerHTML = " ";
+						titleElement.textContent = " ";
+						// messageElement.textContent = "";
+						document.getElementById("Compteur").innerHTML = "<span>Intervalle trop court</span></br>`${batteryLevel}%`<span style='font-weight: 300;'></span>";
 						dialogBoxId.showModal();
 					}
                     reject(new Error('Bad Request')); // Reject the promise with an error
