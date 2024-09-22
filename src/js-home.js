@@ -184,6 +184,10 @@ function submitForm(event){
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "none";
 		}
+		else if (Math.max(tmp_pose_start,tmp_pose_start)>=totalTime+1.5){
+			totalTime=0;
+			document.getElementById("confirmation").style.display = "none";
+		}
 		else{
 		// Display formatted time in confirmation
 		document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
