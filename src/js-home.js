@@ -185,7 +185,7 @@ function submitForm(event){
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "none";
 		}
-		else if (intervalTimeCondition>=tmp_enregistrement){
+		else if (intervalTimeCondition>tmp_enregistrement){
 			document.getElementById("openDialogBox").disabled = true;
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "block";
