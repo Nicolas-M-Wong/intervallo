@@ -193,12 +193,13 @@ function submitForm(event){
 			document.getElementById("estimation_tmp").innerHTML = `<span>Intervalle trop court</span></br><span style='font-weight: 300;'>Intervalle minimum de ${intervalTimeCondition}s</span>`;
 		}
 		else{
-		document.getElementById("openDialogBox").disabled = false;
-		// Display formatted time in confirmation
-		document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
-		document.getElementById("confirmation").style.display = "block";
-		// Prepare form data for the POST request
-		formData = new FormData(document.getElementById('interval-Form'));
+			document.getElementById("title_tmp_estime").style.display = "block";
+			document.getElementById("openDialogBox").disabled = false;
+			// Display formatted time in confirmation
+			document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
+			document.getElementById("confirmation").style.display = "block";
+			// Prepare form data for the POST request
+			formData = new FormData(document.getElementById('interval-Form'));
 		}
 	}
 }	
