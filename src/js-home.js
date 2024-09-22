@@ -184,7 +184,7 @@ function submitForm(event){
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "none";
 		}
-		else if (Math.max(tmp_pose_start,tmp_pose_start)>=totalTime+1.5){
+		else if (Math.max(tmp_pose_start,tmp_pose_end)>=tmp_enregistrement+1.5){
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "none";
 		}
