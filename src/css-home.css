@@ -231,6 +231,11 @@ margin: 0 auto;
 	box-sizing: border-box;
 }
 
+button:disabled {
+  /* your styling here */
+  opacity: 0.5; 
+}
+
 /* ----------- ---------- ----------- */
 
 .flex-column-title,
