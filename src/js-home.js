@@ -181,6 +181,7 @@ function submitForm(event){
 		var totalTime = tmp_enregistrement * (nb_photos - 1)+tmp_pose_end;
 		var intervalTimeCondition = Math.max(tmp_pose_start,tmp_pose_end) - 1.5;
 		console.log("Total time for the interval:", totalTime, "seconds");
+		console.log(intervalTimeCondition>=tmp_enregistrement, intervalTimeCondition, tmp_enregistrement);
 		if (Number.isNaN(totalTime) || totalTime <= 0){
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "none";
