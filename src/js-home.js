@@ -179,16 +179,17 @@ function submitForm(event){
 		tmp_enregistrement = parseFloat(doc_save.value);		
 		
 		var totalTime = tmp_enregistrement * (nb_photos - 1)+tmp_pose_end;
-		var intervalTimeCondition = Math.max(tmp_pose_start,tmp_pose_end) - 1.5;
+		var intervalTimeCondition = Math.max(tmp_pose_start,tmp_pose_end) + 1.5;
 		console.log("Total time for the interval:", totalTime, "seconds");
 		if (Number.isNaN(totalTime) || totalTime <= 0){
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "none";
 		}
-		else if (intervalTimeCondition<=tmp_enregistrement){
+		else if (intervalTimeCondition>=tmp_enregistrement){
 			document.getElementById("openDialogBox").disabled = true;
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "block";
+			document.getElementById("estimation_tmp").innerHTML = `<span>Intervalle trop court</span></br><span style='font-weight: 300;'>Intervalle minimum de ${intervalTimeCondition}s</span>`;
 		}
 		else{
 		document.getElementById("openDialogBox").disabled = false;
