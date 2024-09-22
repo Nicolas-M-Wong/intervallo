@@ -303,9 +303,9 @@ function sendPostRequest(data) {
 					}
 					if (xhr.responseText === "Interval too short"){
 						// document.getElementById("dialogBoxTitle").innerHTML = " ";
-						titleElement.textContent = " ";
+						titleElement.textContent = "Intervalle trop court";
 						// messageElement.textContent = "";
-						document.getElementById("Compteur").innerHTML = "<span>Intervalle trop court</span></br>`${batteryLevel}%`<span style='font-weight: 300;'></span>";
+						document.getElementById("Compteur").innerHTML = "<span></span></br><span style='font-weight: 300;'></span>";
 						dialogBoxId.showModal();
 					}
                     reject(new Error('Bad Request')); // Reject the promise with an error
