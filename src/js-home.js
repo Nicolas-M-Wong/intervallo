@@ -293,8 +293,6 @@ function sendPostRequest(data) {
                 } else if (xhr.status === 400) {
                     http_status_post = 400;
                     console.log('Fail:', xhr.responseText);
-					const messageElement = document.querySelector('#Compteur');
-					const titleElement = document.querySelector('#dialogBoxTitle');
 					
 					if (xhr.responseText === "Unavailable"){
 						document.getElementById("dialogBoxTitle").innerHTML = " ";
@@ -302,12 +300,9 @@ function sendPostRequest(data) {
 						dialogBoxId.showModal();
 					}
 					if (xhr.responseText === "Interval too short"){
-						// document.getElementById("dialogBoxTitle").innerHTML = " ";
-						titleElement.textContent = "Intervalle trop court";
+						document.getElementById("dialogBoxTitle").innerHTML = " ";
 						const max_pose = Math.max(data["tmp_pose_start"],data["tmp_pose_end"])+1.5;
-						messageElement.textContent = `Intervalle minimal ${max_pose}s`;
-						console.log(Math.max(data["tmp_pose_start"],data["tmp_pose_end"]));
-						document.getElementById("Compteur").innerHTML = `<span></span></br><span style='font-weight: 300;'>${max_pose}s</span>`;
+						document.getElementById("Compteur").innerHTML = `<span>Intervalle trop court</span></br><span style='font-weight: 300;'>Intervalle minimum ${max_pose}s</span>`;
 						dialogBoxId.showModal();
 					}
                     reject(new Error('Bad Request')); // Reject the promise with an error
