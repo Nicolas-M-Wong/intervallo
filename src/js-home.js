@@ -304,8 +304,8 @@ function sendPostRequest(data) {
 					if (xhr.responseText === "Interval too short"){
 						// document.getElementById("dialogBoxTitle").innerHTML = " ";
 						titleElement.textContent = "Intervalle trop court";
-						const max_pose = Math.max(data["tmp_pose_start"],data["tmp_pose_end"]);
-						messageElement.textContent = `Intervalle minimal ${max_pose}%`;
+						const max_pose = Math.max(data["tmp_pose_start"],data["tmp_pose_end"])+1.5;
+						messageElement.textContent = `Intervalle minimal ${max_pose}s`;
 						console.log(Math.max(data["tmp_pose_start"],data["tmp_pose_end"]));
 						//document.getElementById("Compteur").innerHTML = "<span></span></br><span style='font-weight: 300;'></span>";
 						dialogBoxId.showModal();
