@@ -688,20 +688,27 @@ function updateValues() {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-function changePage() {
+function changePage(direction) {
 	//pageName = requested page
 	//currentPage = the page currently displayed to the client
     // Store current data in the session storage to fill the next page with the current values set
 	const currentPage = document.body.getAttribute('data-page');
-
-    // Define the mapping of page names
-    const pageMapping = {
+	
+	const pageMappingLeft = {
         'home': 'home-V1',
         'home-V1': 'home-V3',
 		'home-V3': 'home'
     };
+	const pageMappingRight = {
+        'home': 'home-V3',
+        'home-V3': 'home-V1',
+		'home-V1': 'home'
+    };
 	// Find the URL of the other page
-    const pageName = pageMapping[currentPage];
+	var pageName = pageMappingLeft[currentPage];
+	if (direction === "right"){
+		pageName = pageMappingRight[currentPage];
+	}
 	console.log(pageName,currentPage);
 	saveFormData();
 	sendPostRequest({"file_request":pageName}).then(() => {
