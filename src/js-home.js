@@ -188,9 +188,10 @@ function submitForm(event){
 		else if (intervalTimeCondition<=tmp_enregistrement){
 			document.getElementById("openDialogBox").disabled = true;
 			totalTime=0;
-			document.getElementById("confirmation").style.display = "none";
+			document.getElementById("confirmation").style.display = "block";
 		}
 		else{
+		document.getElementById("openDialogBox").disabled = false;
 		// Display formatted time in confirmation
 		document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
 		document.getElementById("confirmation").style.display = "block";
