@@ -184,12 +184,16 @@ function submitForm(event){
 		if (Number.isNaN(totalTime) || totalTime <= 0){
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "none";
+			
+			
 		}
 		else if (intervalTimeCondition<=tmp_enregistrement){
+			document.getElementById("openDialogBox").disabled = true;
 			totalTime=0;
-			document.getElementById("confirmation").style.display = "none";
+			document.getElementById("estimation_tmp").innerHTML = `<span>Intervalle trop court</span></br><span style='font-weight: 300;'>Intervalle minimum de ${Math.max(tmp_pose_start,tmp_pose_end)+1.5}s</span>`;
 		}
 		else{
+		document.getElementById("openDialogBox).disabled = false;
 		// Display formatted time in confirmation
 		document.getElementById("estimation_tmp").innerHTML = formatTime(Math.round(totalTime));
 		document.getElementById("confirmation").style.display = "block";
