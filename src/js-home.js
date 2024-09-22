@@ -179,12 +179,13 @@ function submitForm(event){
 		tmp_enregistrement = parseFloat(doc_save.value);		
 		
 		var totalTime = tmp_enregistrement * (nb_photos - 1)+tmp_pose_end;
+		var intervalTimeCondition = Math.max(tmp_pose_start,tmp_pose_end) - 1.5;
 		console.log("Total time for the interval:", totalTime, "seconds");
 		if (Number.isNaN(totalTime) || totalTime <= 0){
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "none";
 		}
-		else if (Math.max(tmp_pose_start,tmp_pose_end)>=tmp_enregistrement+1.5){
+		else if (intervalTimeCondition>=tmp_enregistrement){
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "none";
 		}
