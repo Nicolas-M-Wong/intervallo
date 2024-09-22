@@ -302,7 +302,7 @@ function sendPostRequest(data) {
 					if (xhr.responseText === "Interval too short"){
 						document.getElementById("dialogBoxTitle").innerHTML = " ";
 						const max_pose = Math.max(data["tmp_pose_start"],data["tmp_pose_end"])+1.5;
-						document.getElementById("Compteur").innerHTML = `<span>Intervalle trop court</span></br><span style='font-weight: 300;'>Intervalle minimum ${max_pose}s</span>`;
+						document.getElementById("Compteur").innerHTML = `<span>Intervalle trop court</span></br><span style='font-weight: 300;'>Intervalle minimum de ${max_pose}s</span>`;
 						dialogBoxId.showModal();
 					}
                     reject(new Error('Bad Request')); // Reject the promise with an error
