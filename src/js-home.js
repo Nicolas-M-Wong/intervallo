@@ -304,7 +304,8 @@ function sendPostRequest(data) {
 					if (xhr.responseText === "Interval too short"){
 						// document.getElementById("dialogBoxTitle").innerHTML = " ";
 						titleElement.textContent = "Intervalle trop court";
-						messageElement.textContent = "`${batteryLevel}%`";
+						messageElement.textContent = `Intervalle minimal ${Math.max(data["tmp_pose_start"],data["tmp_pose_end"])}%`;
+						console.log(Math.max(data["tmp_pose_start"],data["tmp_pose_end"]));
 						document.getElementById("Compteur").innerHTML = "<span></span></br><span style='font-weight: 300;'></span>";
 						dialogBoxId.showModal();
 					}
