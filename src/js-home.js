@@ -189,6 +189,7 @@ function submitForm(event){
 			document.getElementById("openDialogBox").disabled = true;
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "block";
+			document.getElementById("title_tmp_estime").style.display = "none";
 			document.getElementById("estimation_tmp").innerHTML = `<span>Intervalle trop court</span></br><span style='font-weight: 300;'>Intervalle minimum de ${intervalTimeCondition}s</span>`;
 		}
 		else{
