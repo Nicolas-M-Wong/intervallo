@@ -72,7 +72,7 @@ def file_request(file_name):
         global file
         file="/src/"+file_name+".html"
         
-def non_constant (nb_photo_loc, start_expo_time, end_expo_time, tmp_enregistrement_loc):
+def variable_trigger (nb_photo_loc, start_expo_time, end_expo_time, tmp_enregistrement_loc):
     x,y,y2 = f(nb_photo_loc, start_expo_time, end_expo_time, tmp_enregistrement_loc)
     return y,y2
         
@@ -371,12 +371,12 @@ if TCP_IP != "127.0.0.1":
                     start_expo_time = parameters.get('tmp_pose_start',0)
                     end_expo_time = parameters.get('tmp_pose_end',0)
                     tmp_enregistrement =  parameters.get('tmp_enregistrement',0)
-                    y,y2 = non_constant(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
+                    y,y2 = variable_trigger(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
                     print(f"y: {y}; y2: {y2}")
                     
                     if (y2 >= 1.49).all():
                         y, y2 = construct_vect(y), construct_vect(y2)
-                        command = f"sudo {directory}/non-constant.exe '{y}' '{y2}' 'Trigger.exe'"
+                        command = f"sudo {directory}/Variable_Trigger.exe '{y}' '{y2}' 'Constant_Trigger.exe'"
                         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                         print(command)
                     else :
