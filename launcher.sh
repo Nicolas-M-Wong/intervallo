@@ -33,15 +33,16 @@ center_text() {
 compiler_request(){
 local file_path="$1"
 local compiler_path="$2"
+local compiler_arg="$3"
 if [ ! -f "$file_path" ]; then
-    echo "$1 does not exist in $DIR. Compiling trigger.cpp..."
+    echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
     # Compile trigger.cpp
-    sh "$compiler_path" &
+    sh "$compiler_path" "$compiler_arg" &
     if [ $? -eq 1 ]; then
         echo "Compilation failed." 
     fi
 else
-    echo "$1 already exists in $DIR."
+    echo "Trigger.exe already exists in $DIR."
 fi
 }
 
@@ -76,20 +77,8 @@ fi
 
 DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
 
-
-compiler_request "$DIR/Variable_Trigger.exe" "$DIR/Compiler.sh"
-compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh"
-
-if [ ! -f "$DIR/Trigger.exe" ]; then
-    echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
-    # Compile trigger.cpp
-    sh "$DIR/trigger_compiler.sh" &
-    if [ $? -eq 1 ]; then
-        echo "Compilation failed." 
-    fi
-else
-    echo "Trigger.exe already exists in $DIR."
-fi
+compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh" "Constant_Trigger"
+compiler_request "$DIR/Variable_Trigger.exe" "$DIR/Compiler.sh" "Variable_Trigger"
 
 cd $DIR
 python3 intervallo-server-1.py
