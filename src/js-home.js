@@ -242,7 +242,7 @@ function handleButtonClick(test_status) {
 			data["tmp_pose_end"] = parseFloat(doc_pose_end.value);
 			data["tmp_enregistrement"] = parseFloat(doc_save.value);
 			data["date"] = now;
-			data["non-constant"] = "yes";
+			data["variable"] = true;
 			if (test_status === "No"){
 				nb_photos = parseInt(doc_photos.value);
             }
@@ -254,6 +254,7 @@ function handleButtonClick(test_status) {
 			const nowDate = new Date().getTime()
 			if (currentFileName === "home-V3"){
 				showDialog(data["nb_photos"], data["tmp_pose_end"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
+				//
 			}
 			else{
 				showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
@@ -286,7 +287,6 @@ function sendPostRequest(data) {
         const http_head = 'http://';
         xhr.open('POST', http_head.concat(ip), true);
         xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) { // Request is complete
                 if (xhr.status === 200) {
@@ -299,6 +299,12 @@ function sendPostRequest(data) {
                             updateBattery("");
                         }
                     }
+					// construction d'un graph à partir des info retourné par le serveur
+/* 					if (data.variable) {
+						console.log(xhr.responseText);
+						const dataY = GraphConstruct.ParseData(xhr.responseText);
+						GraphConstruct.drawGraph(dataY);
+					} */
                     resolve(xhr.responseText); // Resolve the promise with the response text
                 } else if (xhr.status === 400) {
                     http_status_post = 400;
@@ -326,6 +332,7 @@ function sendPostRequest(data) {
         
         xhr.send(JSON.stringify(data));
     });
+	return xhr.responseText
 }
 
 	
