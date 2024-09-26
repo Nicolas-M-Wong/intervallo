@@ -335,7 +335,7 @@ if TCP_IP != "127.0.0.1":
                 http_header = "HTTP/1.1 400 Bad Request\r\n"
             
             if parameters.get('token') == client_dict.get(client_address[0]):
-                if "nb_photos" in parameters.keys() and 'non-constant' not in parameters.keys():
+                if "nb_photos" in parameters.keys() and 'variable' not in parameters.keys():
                     try:
                         tmp_prise = parameters.get('nb_photos',0)*parameters.get('tmp_pose',0)+parameters.get('tmp_enregistrement',0)*(parameters.get('nb_photos',0)-1)
                         print(tmp_prise)
@@ -366,7 +366,7 @@ if TCP_IP != "127.0.0.1":
                     if type(result) is bool:
                         server_status = result
                         
-                if 'non-constant' in parameters.keys() and 'nb_photos' in parameters.keys():
+                if 'variable' in parameters.keys() and 'nb_photos' in parameters.keys():
                     nb_photos = parameters.get('nb_photos',0)
                     start_expo_time = parameters.get('tmp_pose_start',0)
                     end_expo_time = parameters.get('tmp_pose_end',0)
@@ -378,7 +378,7 @@ if TCP_IP != "127.0.0.1":
                         y, y2 = construct_vect(y), construct_vect(y2)
                         command = f"sudo {directory}/Variable_Trigger.exe '{y}' '{y2}' 'Constant_Trigger.exe'"
                         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                        print(command)
+                        response_body = f'{y}'
                     else :
                         print("Tmp enregistrement insuffisant")
                         http_header = "HTTP/1.1 400 Bad Request\r\n"
