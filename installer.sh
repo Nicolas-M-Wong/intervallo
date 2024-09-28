@@ -28,8 +28,8 @@ center_text() {
 
 display_usage() {
     center_text "Help" "-"
-    echo "Usage: ./$0 <branch-name> [options]"
-    echo "Options:"
+    echo "Usage: ./$0 <branch-name> [option]"
+    echo "Option:"
     echo "  --no-check    Bypass the internet connection check."
     echo "  --help        Display this help message."
     echo ""
