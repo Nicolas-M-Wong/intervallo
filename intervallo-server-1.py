@@ -72,10 +72,6 @@ def file_request(file_name):
         global file
         file="/src/"+file_name+".html"
         
-def variable_trigger (nb_photo_loc, start_expo_time, end_expo_time, tmp_enregistrement_loc):
-    x,y,y2 = f(nb_photo_loc, start_expo_time, end_expo_time, tmp_enregistrement_loc)
-    return y,y2
-        
 post_request_dict = {
     'battery' : battery,
     'sleep' : sleep,
@@ -128,6 +124,10 @@ def photo_capture(nb_photos_loc,tmp_pose_loc,tmp_enregistrement_loc):
     command = "sudo "+addr_command+str(tmp_pose_loc)+" "+str(nb_photos_loc)+" "+str(tmp_enregistrement_loc)
     print(command)
     return command
+
+def variable_trigger (nb_photo_loc, start_expo_time, end_expo_time, tmp_enregistrement_loc):
+    x,y,y2 = f(nb_photo_loc, start_expo_time, end_expo_time, tmp_enregistrement_loc)
+    return y,y2
 
 ###############################################################################
 
@@ -366,7 +366,7 @@ if TCP_IP != "127.0.0.1":
                     end_expo_time = parameters.get('tmp_pose_end',0)
                     tmp_enregistrement =  parameters.get('tmp_enregistrement',0)
                     new_cmd_date = parameters.get('date',0)
-                    tmp_prise = (nb_photos-1)*tmp_enregistrement 
+                    tmp_prise = (nb_photos-1)*tmp_enregistrement+tmp_pose_end
                     #Check that a photoshoot is not currently underway, if its not then proceed, else sent a message to the client
                     if new_cmd_date > expct_end_date:
                         new_cmd_date +=1000*tmp_prise
