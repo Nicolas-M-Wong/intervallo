@@ -83,9 +83,10 @@ else
     # Check internet connection
     if ! check_internet; then
         echo "No internet connection detected."
-        echo "You can bypass this check by using the '--no-check' argument when running the script."
-        echo "Example: ./installer.sh main --no-check"
-        exit 1  # Early exit if no internet and no bypass argument
+		echo "Launching the server without the latest update"
+        # echo "You can bypass this check by using the '--no-check' argument when running the script."
+        # echo "Example: ./installer.sh main --no-check"
+        # exit 1  # Early exit if no internet and no bypass argument
     fi
 fi
 
