@@ -42,11 +42,47 @@ if [ ! -f "$file_path" ]; then
         echo "Compilation failed." 
     fi
 else
-    echo "Trigger.exe already exists in $DIR."
+    echo "$3.exe already exists in $DIR."
 fi
 }
 
+display_usage() {
+    center_text "Help" "-"
+    echo "Usage: ./$0 <branch-name> [options]"
+    echo "Options:"
+    echo "  --no-check    Bypass the internet connection check."
+	echo "  --no-update   Bypass the gitpull and launch the version already installed"
+    echo "  --help        Display this help message."
+    echo ""
+    echo "If you use --no-check, the script will skip checking for an internet connection."
+    echo "Use this command if you are connected with a very slow internet (<10kbs) but still need an update"
+}
+
 center_text "$(date)" "-"
+
+
+if [[ "$option" == "--help" ]]; then
+    display_usage
+    exit 0
+# Check for the '--no-check' argument to bypass internet check
+elif [[$option == "--no-update" ]]; then
+    center_text "Launching $branch $(date)" "-"
+    echo "Bypassing gitpull update"
+	
+elif [[ "$option" == "--no-check" ]]; then
+    center_text "Installing $branch $(date)" "-"
+    echo "Bypassing internet connection check"
+else
+    center_text "Installing $branch $(date)" "-"
+    # Check internet connection
+    if ! check_internet; then
+        echo "No internet connection detected."
+        echo "You can bypass this check by using the '--no-check' argument when running the script."
+        echo "Example: ./installer.sh main --no-check"
+        exit 1  # Early exit if no internet and no bypass argument
+    fi
+fi
+
 
 if [ "$#" -lt 1 ]; then
     echo "$0 missing branch to launch"
@@ -66,15 +102,6 @@ fi
 cd "$DESKTOP_DIR/intervallo-$1"
 #go to the folder
 
-# Check internet connection then git pull
-if check_internet; then
-    echo "Internet connection is active, updating the programm"
-    git config pull.rebase false
-    git pull https://www.github.com/Nicolas-M-Wong/intervallo "$1"
-else
-    echo "Internet unavailable, continuing without the latest update"
-fi
-
 DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
 
 compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh" "Constant_Trigger"
@@ -84,3 +111,5 @@ cd $DIR
 python3 intervallo-server-1.py
 
 center_text "" "-"
+
+
