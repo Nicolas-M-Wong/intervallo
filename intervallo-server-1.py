@@ -372,13 +372,13 @@ if TCP_IP != "127.0.0.1":
                     end_expo_time = parameters.get('tmp_pose_end',0)
                     tmp_enregistrement =  parameters.get('tmp_enregistrement',0)
                     y,y2 = variable_trigger(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
-                    print(f"y: {y}; y2: {y2}")
+                    # print(f"y: {y}; y2: {y2}")
                     
                     if (y2 >= 1.49).all():
                         y, y2 = construct_vect(y), construct_vect(y2)
-                        command = f"sudo {directory}/Variable_Trigger.exe '{y}' '{y2}' 'Constant_Trigger.exe'"
+                        command = f"sudo {directory}/Variable_Trigger.exe '{y}' '{y2}' Constant_Trigger.exe'"
                         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                        response_body = f'{y}'
+                        # response_body = f'{y}'
                     else :
                         print("Tmp enregistrement insuffisant")
                         http_header = "HTTP/1.1 400 Bad Request\r\n"
