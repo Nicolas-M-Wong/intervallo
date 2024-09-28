@@ -174,10 +174,6 @@ def parsing_get_msg(data,active_dir):
     
 ########################################## Web server #########################
 
-def shutdown_raspi ():
-    os.popen("sudo shutdown -h now")
-    return
-
 def JSON_data (msg):
     msg =msg.strip('{}')
     msg = msg.split(',')
