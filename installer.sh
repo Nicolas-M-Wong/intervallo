@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Determine terminal width
 
 check_internet() {
@@ -34,6 +35,22 @@ display_usage() {
     echo ""
     echo "If you use --no-check, the script will skip checking for an internet connection."
     echo "Use this command if you are connected with a very slow internet (<10kbs) but still need an update"
+}
+
+compiler_request(){
+local file_path="$1"
+local compiler_path="$2"
+local compiler_arg="$3"
+if [ ! -f "$file_path" ]; then
+    echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
+    # Compile trigger.cpp
+    sh "$compiler_path" "$compiler_arg" &
+    if [ $? -eq 1 ]; then
+        echo "Compilation failed." 
+    fi
+else
+    echo "$3 already exists in $DIR."
+fi
 }
 
 branch="$1"
@@ -77,16 +94,9 @@ git pull "${url}" "${branch%/}"
 
 DIR=$(xdg-user-dir DESKTOP)/$REPO
 
-if [ ! -f "$DIR/Trigger.exe" ]; then
-    echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
-    # Compile trigger.cpp
-    sh "$DIR/trigger_compiler.sh" &
-    if [ $? -eq 1 ]; then
-        echo "Compilation failed." 
-    fi
-else
-    echo "Trigger.exe already exists in $DIR."
-fi
+compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh" "Constant_Trigger"
+compiler_request "$DIR/Variable_Trigger.exe" "$DIR/Compiler.sh" "Variable_Trigger"
+
 DESKTOP_FOLDER=$(xdg-user-dir DESKTOP)
 mv "$DIR/launcher.sh" "$DESKTOP_FOLDER/launcher-$branch.sh"
 chmod +x "$DESKTOP_FOLDER/launcher-$branch.sh"
