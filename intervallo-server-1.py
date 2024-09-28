@@ -366,7 +366,7 @@ if TCP_IP != "127.0.0.1":
                     end_expo_time = parameters.get('tmp_pose_end',0)
                     tmp_enregistrement =  parameters.get('tmp_enregistrement',0)
                     new_cmd_date = parameters.get('date',0)
-                    tmp_prise = (nb_photos-1)*tmp_enregistrement+tmp_pose_end
+                    tmp_prise = (nb_photos-1)*tmp_enregistrement+end_expo_time
                     #Check that a photoshoot is not currently underway, if its not then proceed, else sent a message to the client
                     if new_cmd_date > expct_end_date:
                         new_cmd_date +=1000*tmp_prise
