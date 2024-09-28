@@ -104,8 +104,17 @@ cd "$DESKTOP_DIR/intervallo-$1"
 
 DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
 
-compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh" "Constant_Trigger"
-compiler_request "$DIR/Variable_Trigger.exe" "$DIR/Compiler.sh" "Variable_Trigger"
+if [[ "$option" != "--no-update" ]]; then
+	git init
+	git config pull.rebase false
+	url="https://www.github.com/Nicolas-M-Wong/intervallo"
+	git pull "${url}" "${branch%/}"
+
+
+	compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh" "Constant_Trigger"
+	compiler_request "$DIR/Variable_Trigger.exe" "$DIR/Compiler.sh" "Variable_Trigger"
+	fi 
+
 
 cd $DIR
 python3 intervallo-server-1.py
