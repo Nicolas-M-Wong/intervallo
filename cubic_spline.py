@@ -44,10 +44,10 @@ def f(num_points,y_start_user,y_end_user,interval_time):
     Y = continuous_func(X)
     Y = (abs(Y)*(y_end_user-y_start_user)/30)+y_start_user
     Y2 = continuous_func(X, nu=1)
-    if sign == 1:
-        print(f"min de f' {min(Y2)}, f est strictement croissante : {min(Y2)>0}")
-    else:
-        print(f"max de f' {max(Y2)}, f est strictement décroissante : {max(Y2)<0}")
+    # if sign == 1:
+    #     print(f"min de f' {min(Y2)}, f est strictement croissante : {min(Y2)>0}")
+    # else:
+    #     print(f"max de f' {max(Y2)}, f est strictement décroissante : {max(Y2)<0}")
     Y2 = interval_time-Y
     return X, Y,Y2
 
