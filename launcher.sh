@@ -4,6 +4,9 @@ DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 : > "$DESKTOP_DIR/logfile.txt"
 exec > >(tee -a "$DESKTOP_DIR/logfile.txt") 2> >(tee -a "$DESKTOP_DIR/logfile.txt" >&2)
 
+branch="$1"
+option="$2"
+
 # Function to check if the Raspberry Pi is connected to the internet using DNS
 check_internet() {
     # Use curl to check if we can reach google.com with a short timeout (0.5 seconds)
@@ -58,17 +61,19 @@ display_usage() {
     echo "Use this command if you are connected with a very slow internet (<10kbs) but still need an update"
 }
 
-center_text "$(date)" "-"
-
-
 if [[ "$option" == "--help" ]]; then
     display_usage
     exit 0
-# Check for the '--no-check' argument to bypass internet check
+# Check for the '--no-update' argument to launch the python directly
 elif [[ $option == "--no-update" ]]; then
     center_text "Launching $branch $(date)" "-"
-    echo "Bypassing gitpull update"
-	
+    echo "Launching python server"
+	cd $DIR
+	python3 intervallo-server-1.py
+	center_text "" "-"
+	exit 0
+
+# Check for the '--no-check' argument to bypass internet check
 elif [[ "$option" == "--no-check" ]]; then
     center_text "Installing $branch $(date)" "-"
     echo "Bypassing internet connection check"
@@ -91,7 +96,6 @@ if [ "$#" -lt 1 ]; then
     exit 1
 fi
 
-branch="$1"
 #find the user desktop directory
 
 if ! cd "$DESKTOP_DIR/intervallo-$1"; then
