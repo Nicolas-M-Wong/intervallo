@@ -86,6 +86,7 @@ fi
 
 if [ "$#" -lt 1 ]; then
     echo "$0 missing branch to launch"
+	display_usage
     center_text "fatal error" "-"
     exit 1
 fi
