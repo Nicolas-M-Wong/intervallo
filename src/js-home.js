@@ -142,14 +142,14 @@ function submitForm(event){
 	if (currentFileName != "home-V3"){
 		const doc_pose = document.getElementById('tmp_pose');
 		if (currentFileName === "home"){
-			console.log("success home");
+			// console.log("success home");
 			nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo);
 			tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose);
 			tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
 		}
 		
 		if (currentFileName === "home-V1"){
-			console.log("success home-V1");
+			// console.log("success home-V1");
 			nb_photos = parseInt(doc_photos.value);
 			tmp_pose = parseFloat(doc_pose.value);
 			tmp_enregistrement = parseFloat(doc_save.value);
@@ -658,7 +658,7 @@ function updateValues() {
 		
 		if (nbPhotosElement) {
 			nbPhotosElement.value = parseInt(sessionStorage.getItem("nb_photos_page_change"), 10) || 0;
-			console.log(nbPhotosElement.value);
+			// console.log(nbPhotosElement.value);
 		}
 		
 		if (tmpPoseElement) {
