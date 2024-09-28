@@ -65,7 +65,7 @@ if [[ "$option" == "--help" ]]; then
     display_usage
     exit 0
 # Check for the '--no-check' argument to bypass internet check
-elif [[$option == "--no-update" ]]; then
+elif [[ $option == "--no-update" ]]; then
     center_text "Launching $branch $(date)" "-"
     echo "Bypassing gitpull update"
 	
