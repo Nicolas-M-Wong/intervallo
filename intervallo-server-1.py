@@ -345,6 +345,7 @@ if TCP_IP != "127.0.0.1":
                         if new_cmd_date > expct_end_date:
                             new_cmd_date +=1000*tmp_prise
                             expct_end_date = new_cmd_date
+                            
                             cmd = photo_capture(parameters.get('nb_photos',0),parameters.get('tmp_pose',0),parameters.get('tmp_enregistrement',0))
                             os.popen(cmd)
                             
@@ -372,7 +373,7 @@ if TCP_IP != "127.0.0.1":
                         expct_end_date = new_cmd_date
                         y,y2 = variable_trigger(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
                         # print(f"y: {y}; y2: {y2}")
-                        
+                        print("launching command")
                         if (y2 >= 1.49).all():
                             y, y2 = construct_vect(y), construct_vect(y2)
                             command = f"sudo {directory}/Variable_Trigger.exe '{y}' '{y2}' Constant_Trigger.exe'"
