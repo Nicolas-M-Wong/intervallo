@@ -25,11 +25,11 @@
 		<div class="circle" id="half-circle" data-mode="dark"></div>
 		</a>
 
-		<a class="checkbox-round-sleep" value="sleep" onclick="serverEnd('sleep')">
+		<a class="checkbox-round-sleep" value="sleep" onclick="home.serverEnd('sleep')">
 		<div class="circle" id="full-circle-sleep"></div>
 		</a>
 
-		<a class="checkbox-round-shutdown" value="shutdown" onclick="serverEnd('shutdown')">
+		<a class="checkbox-round-shutdown" value="shutdown" onclick="home.serverEnd('shutdown')">
 		<div class="circle" id="full-circle-shutdown"></div>
 		</a>
 		</div>
@@ -73,7 +73,7 @@
 					<input type="hidden" id="value1" name="value1">
 					<input type="hidden" id="value2" name="value2">
 					<input type="hidden" id="value3" name="value3">
-					<button type="submit" id="form-submit" value="Ok" onclick="submitForm(event);">Ok</button>
+					<button type="submit" id="form-submit" value="Ok" onclick="home.submitForm(event);">Ok</button>
 				</form>
     	</div>
     
@@ -81,8 +81,8 @@
             <h3>Temps de prise de vue estimé : </h3><h3 id="estimation_tmp"></h3>
             <form action = "" method="post" class = "confirmation-form">
                 <div class="flex-column-confirm">
-                    <button name="confirm" value="Confirmer" id="openDialogBox" onclick="handleButtonClick('No')">Confirmer</button>
-                    <button name="test-shot" value="Photo_test" id="test-shot" onclick="handleButtonClick('Yes')">Photo test</button>
+                    <button name="confirm" value="Confirmer" id="openDialogBox" onclick="home.handleButtonClick('No')">Confirmer</button>
+                    <button name="test-shot" value="Photo_test" id="test-shot" onclick="home.handleButtonClick('Yes')">Photo test</button>
                 </div>
             </form>
         </div>
@@ -92,16 +92,16 @@
             <h3 id="Compteur"></h3>
             <footer>
             <div class="back-button">
-                <button id="back-button" onclick="handleButtonClickBack(event)" type="button">
+                <button id="back-button" onclick="home.handleButtonClickBack(event)" type="button">
                 Retour </button>
             </div>
             </footer>
         </dialog>
 		<div class="navbar-container">
 			<nav class="navbar" id="navbar-id" data-mode="dark">
-				<a name="photo-distance" id="photo-distance-L" onclick="remoteTrigger();changeColor('L');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
-				<a name="intervallo-home" id="intervallo-home" onclick="changePage('left');"><img width="32" height="32" src="ico-intervallo.ico" ></a>
-				<a name="photo-distance" id="photo-distance-R" onclick="remoteTrigger();changeColor('R');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
+				<a name="photo-distance" id="photo-distance-L" onclick="home.remoteTrigger();home.changeColor('L');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
+				<a name="intervallo-home" id="intervallo-home" onclick="home.changePage('left');"><img width="32" height="32" src="ico-intervallo.ico" ></a>
+				<a name="photo-distance" id="photo-distance-R" onclick="home.remoteTrigger();home.changeColor('R');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
 			</nav>
 		</div>
     </div>
@@ -124,6 +124,7 @@
 <!-- ------------------------------------------------------------------------------- -->
 
 <script src="wheel-constructor.js"></script>
+<script src="function-home.js"></script>
 <script src="js-home.js"></script>
 <script src="swipe.js"></script>
 </body>
