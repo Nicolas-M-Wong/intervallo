@@ -73,7 +73,7 @@ std::string file_location() {
 
 int main(int argc, char** argv) {
     if (argc != 4) {
-        std::cerr << "Usage: ./my_program '[4;5;6 ...]' 'executable-name' 'saving interval time'" << std::endl;
+        std::cerr << "Usage: ./my_program '[4;5;exposure_time;...]' '[3;2;saving_time;...]'executable-name' " << std::endl;
         return 1;
     }
 
@@ -111,7 +111,7 @@ int main(int argc, char** argv) {
                 
                 // Construct command line using both tmp_enregistrement and pose_value
                 
-                std::string command_line = "sudo " + exePath + " 1 " + " "+ tmp_pose_vector[i] +"  0";
+                std::string command_line = "sudo " + exePath + " " + tmp_pose_vector[i] + " 1 " + "  0";
                 std::cout << "Command line: " << command_line<< std::endl;
                 int result = system(command_line.c_str()); // Convert to const char*
                 
