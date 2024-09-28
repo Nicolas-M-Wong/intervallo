@@ -376,7 +376,7 @@ if TCP_IP != "127.0.0.1":
                         print("launching command")
                         if (y2 >= 1.49).all():
                             y, y2 = construct_vect(y), construct_vect(y2)
-                            command = f"sudo {directory}/./Variable_Trigger.exe '{y}' '{y2}' Constant_Trigger.exe'"
+                            command = f"sudo {directory}/./Variable_Trigger.exe '{y}' '{y2}' 'Constant_Trigger.exe'"
                             process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                             # response_body = f'{y}'
                         else :
