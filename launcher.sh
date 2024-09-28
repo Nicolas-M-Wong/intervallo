@@ -68,6 +68,7 @@ if [[ "$option" == "--help" ]]; then
 elif [[ $option == "--no-update" ]]; then
     center_text "Launching $branch $(date)" "-"
     echo "Launching python server"
+	DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
 	cd $DIR
 	python3 intervallo-server-1.py
 	center_text "" "-"
