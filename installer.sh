@@ -98,7 +98,7 @@ compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh" "Constant_Trigge
 compiler_request "$DIR/Variable_Trigger.exe" "$DIR/Compiler.sh" "Variable_Trigger"
 
 DESKTOP_FOLDER=$(xdg-user-dir DESKTOP)
-mv "$DIR/launcher.sh" "$DESKTOP_FOLDER/launcher-$branch.sh"
+mv "$DIR/launcher.sh" "$DESKTOP_FOLDER/launcher-$branch.sh" "--no-update"
 chmod +x "$DESKTOP_FOLDER/launcher-$branch.sh"
 
 center_text "Installation finished" "-"
