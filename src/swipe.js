@@ -53,14 +53,14 @@ function handleTouchEnd() {
 		container.style.transition = 'transform 0.3s ease-out'; // Smooth transition
 		container.style.transform = 'translateX(-100vw)'; // Move off-screen left
 		setTimeout(() => {
-			changePage("left");
+			home.changePage("left");
 		}, 300); // Reload after transition
 	} else if (currentX >= thresholdX) {
 		// Swiped right beyond 66%
 		container.style.transition = 'transform 0.3s ease-out'; // Smooth transition
 		container.style.transform = 'translateX(100vw)'; // Move off-screen right
 		setTimeout(() => {
-			changePage("right");
+			home.changePage("right");
 		}, 300); // Reload after transition
 	} else {
 		// Reset the swipe position if the threshold is not met
