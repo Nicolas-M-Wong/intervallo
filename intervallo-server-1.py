@@ -358,15 +358,7 @@ if TCP_IP != "127.0.0.1":
                         http_header = "HTTP/1.1 400 Bad Request\r\n"
                         response_body = "Failed NaN"
                         
-                else:
-                    request, args = list(parameters.items())[0]
-                    result = execute_request(request,args)
-                    if type(result) is str:
-                        response_body = result
-                    if type(result) is bool:
-                        server_status = result
-                        
-                if 'variable' in parameters.keys() and 'nb_photos' in parameters.keys():
+                elif 'variable' in parameters.keys() and 'nb_photos' in parameters.keys():
                    
                     nb_photos = parameters.get('nb_photos',0)
                     start_expo_time = parameters.get('tmp_pose_start',0)
@@ -395,6 +387,14 @@ if TCP_IP != "127.0.0.1":
                         print("shot command during an existing shoot")
                         http_header = "HTTP/1.1 400 Bad Request\r\n"
                         response_body = "Unavailable"
+                        
+                else:
+                    request, args = list(parameters.items())[0]
+                    result = execute_request(request,args)
+                    if type(result) is str:
+                        response_body = result
+                    if type(result) is bool:
+                        server_status = result
                                             # open("tmp_cmd.sh", "w").close()
                     # open("tmp_cmd.sh", "a")
                     # for i in range (0,len(y)):
