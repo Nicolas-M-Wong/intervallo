@@ -367,22 +367,34 @@ if TCP_IP != "127.0.0.1":
                         server_status = result
                         
                 if 'variable' in parameters.keys() and 'nb_photos' in parameters.keys():
+                   
                     nb_photos = parameters.get('nb_photos',0)
                     start_expo_time = parameters.get('tmp_pose_start',0)
                     end_expo_time = parameters.get('tmp_pose_end',0)
                     tmp_enregistrement =  parameters.get('tmp_enregistrement',0)
-                    y,y2 = variable_trigger(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
-                    # print(f"y: {y}; y2: {y2}")
-                    
-                    if (y2 >= 1.49).all():
-                        y, y2 = construct_vect(y), construct_vect(y2)
-                        command = f"sudo {directory}/Variable_Trigger.exe '{y}' '{y2}' Constant_Trigger.exe'"
-                        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                        # response_body = f'{y}'
-                    else :
-                        print("Tmp enregistrement insuffisant")
+                    new_cmd_date = parameters.get('date',0)
+                    tmp_prise = (nb_photos-1)*tmp_enregistrement 
+                    #Check that a photoshoot is not currently underway, if its not then proceed, else sent a message to the client
+                    if new_cmd_date > expct_end_date:
+                        new_cmd_date +=1000*tmp_prise
+                        expct_end_date = new_cmd_date
+                        y,y2 = variable_trigger(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
+                        # print(f"y: {y}; y2: {y2}")
+                        
+                        if (y2 >= 1.49).all():
+                            y, y2 = construct_vect(y), construct_vect(y2)
+                            command = f"sudo {directory}/Variable_Trigger.exe '{y}' '{y2}' Constant_Trigger.exe'"
+                            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                            # response_body = f'{y}'
+                        else :
+                            print("Tmp enregistrement insuffisant")
+                            http_header = "HTTP/1.1 400 Bad Request\r\n"
+                            response_body = "Interval too short"
+                            
+                    else:
+                        print("shot command during an existing shoot")
                         http_header = "HTTP/1.1 400 Bad Request\r\n"
-                        response_body = "Interval too short"
+                        response_body = "Unavailable"
                                             # open("tmp_cmd.sh", "w").close()
                     # open("tmp_cmd.sh", "a")
                     # for i in range (0,len(y)):
