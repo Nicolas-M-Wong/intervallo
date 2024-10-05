@@ -178,11 +178,11 @@ home.handleButtonClick = function(test_status) {
 		if (currentFileName === "home-V3"){
 			const doc_pose_start = document.getElementById('tmp_pose_start');
 			const doc_pose_end = document.getElementById('tmp_pose_end');
-			data["tmp_pose_start"] = parseFloat(doc_pose_start.value);
-			data["tmp_pose_end"] = parseFloat(doc_pose_end.value);
+			data["variable_start"] = parseFloat(doc_pose_start.value);
+			data["variable_end"] = parseFloat(doc_pose_end.value);
 			data["tmp_enregistrement"] = parseFloat(doc_save.value);
 			data["date"] = now;
-			data["variable"] = true;
+			data["variable_expo"] = true;
 			if (test_status === "No"){
 				nb_photos = parseInt(doc_photos.value);
             }
@@ -193,7 +193,7 @@ home.handleButtonClick = function(test_status) {
 		if (http_status_post === 200){
 			const nowDate = new Date().getTime()
 			if (currentFileName === "home-V3"){
-				home.showDialog(data["nb_photos"], data["tmp_pose_end"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
+				home.showDialog(data["nb_photos"], data["variable_end"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
 				//
 			}
 			else{
@@ -494,7 +494,7 @@ home.updateValues = function() {
 	//currentPage = the page currently displayed to the client
 	let currentFileName = document.body.getAttribute('data-page');
 	console.log(currentFileName);
-	if (currentFileName === 'home-V1'){
+	if (currentFileName != 'home'){
 		
 		const nbPhotosElement = document.getElementById('nb_photos');
 		const tmpPoseElement = document.getElementById('tmp_pose');
