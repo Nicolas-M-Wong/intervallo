@@ -79,9 +79,8 @@ post_request_dict = {
     'file_request' : file_request,
     }
 
-def execute_request(request, *args):
+def execute_request(request, *args): 
     #The key should match a key
-    
     # Extract the first key-value pair from the dictionary
     
     if request in post_request_dict:
@@ -355,7 +354,7 @@ if TCP_IP != "127.0.0.1":
                         http_header = "HTTP/1.1 400 Bad Request\r\n"
                         response_body = "Failed NaN"
                         
-                elif 'variable' in parameters.keys() and 'nb_photos' in parameters.keys():
+                elif 'variable_expo' in parameters.keys() and 'nb_photos' in parameters.keys():
                    
                     nb_photos = parameters.get('nb_photos',0)
                     start_expo_time = parameters.get('tmp_pose_start',0)
