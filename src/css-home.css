@@ -548,6 +548,12 @@ border-color: red;
 
 /* ----------- ---------- ----------- */
 
+.toggle_button {
+	background-color: #C70039;
+}
+
+/* ----------- ---------- ----------- */
+
 .container-wheel {
 	display: flex;
 	justify-content: center;
@@ -616,6 +622,8 @@ border-color: red;
 #wheelForm {
 	display: flex;
 }
+
+---------- ----------- */
 
 /* media querry screen width */
 
