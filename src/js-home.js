@@ -141,3 +141,21 @@ document.addEventListener('DOMContentLoaded', () => {
 		sessionStorage.setItem('notifState', newMode);
     });
 });
+
+var checkbox = document.querySelector("input[name=varSlider]");
+
+checkbox.addEventListener('change', function() {
+	// checked = enregistrement variable
+	// not checked = exposition variable
+	
+  if (this.checked) {
+    console.log("Checkbox is checked..");
+/* 	document.getElementById(Id).textContent = title;
+	document.getElementById(Id).textContent = title;
+	document.getElementById(Id).textContent = title; */
+  } else {
+/* 	document.getElementById(Id).textContent = title;
+	document.getElementById(Id).textContent = title;
+	document.getElementById(Id).textContent = title; */
+  }
+});
