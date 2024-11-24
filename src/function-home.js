@@ -37,7 +37,7 @@ home.showDialog = function(nbPhotos, exposureTime, timeBetweenPhotos,now) {
     countdownInterval = setInterval(function() {
         var now = new Date().getTime();
         var distance = (countDownDate - now);
-        document.getElementById("Compteur").innerHTML = home.fomratTime(distance / 1000);
+        document.getElementById("Compteur").innerHTML = home.formatTime(distance / 1000);
         if (distance < 0) {
             clearInterval(countdownInterval);
             document.getElementById("Compteur").innerHTML = "00:00:00";
@@ -57,7 +57,7 @@ home.closeDialog = function() {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 // Function to format time in hh:mm:ss
-home.fomratTime = function(totalSeconds) {
+home.formatTime = function(totalSeconds) {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = Math.floor(totalSeconds % 60);
@@ -103,7 +103,7 @@ home.submitForm = function(event){
 		}
 		else{
 		// Display formatted time in confirmation
-		document.getElementById("estimation_tmp").innerHTML = home.fomratTime(Math.round(totalTime));
+		document.getElementById("estimation_tmp").innerHTML = home.formatTime(Math.round(totalTime));
 		document.getElementById("confirmation").style.display = "block";
 		// Prepare form data for the POST request
 		formData = new FormData(document.getElementById('interval-Form'));
@@ -136,7 +136,7 @@ home.submitForm = function(event){
 			document.getElementById("title_tmp_estime").style.display = "block";
 			document.getElementById("openDialogBox").disabled = false;
 			// Display formatted time in confirmation
-			document.getElementById("estimation_tmp").innerHTML = home.fomratTime(Math.round(totalTime));
+			document.getElementById("estimation_tmp").innerHTML = home.formatTime(Math.round(totalTime));
 			document.getElementById("confirmation").style.display = "block";
 			// Prepare form data for the POST request
 			formData = new FormData(document.getElementById('interval-Form'));
@@ -219,6 +219,7 @@ home.remoteTrigger = function(){
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 home.sendPostRequest =  function(data) {
+	console.log("Sending data :",data);
     return new Promise((resolve, reject) => {
         data = home.ensureDict(data);
         data["token"] = sessionStorage.getItem("sessionToken");
