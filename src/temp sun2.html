@@ -1,0 +1,214 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sun Photo Spacing Calculator</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+			
+        }
+
+        body {
+            background: linear-gradient(135deg, #f39c12, #f1c40f);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+			flex-direction: column;
+        }
+
+        .container {
+			margin-top: 25px;
+			margin-bottom: 50px;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 90%;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .container h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+		
+        .container p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #2c3e50;
+        }
+
+        input[type="number"]:focus {
+            border-color: #f39c12;
+            outline: none;
+        }
+
+        button {
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #d35400;
+        }
+
+        .output, .next-page {
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #34495e;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="page1">
+        <h1>Solar eclipse intervallometers</h1>
+        <p>Calculate the optimal photo interval and sun size for your setup.</p>
+        <form id="sunForm">
+            <input type="number" id="resolutionWidth" placeholder="Sensor Width (pixels)" value="6000" required>
+            <input type="number" id="resolutionHeight" placeholder="Sensor Height (pixels)" value="4000" required>
+            <input type="number" id="focalLength" placeholder="Focal Length (mm)" value="300" required>
+            <input type="number" id="sensorWidth" placeholder="Sensor Width (mm)" value="23.5" required>
+            <button type="button" onclick="sunPhotoSpacing()">Calculate</button>
+        </form>
+        <div class="output" id="output">
+            <!-- Results will appear here -->
+        </div>
+        <button class="hidden" id="nextButton" onclick="showNextPage()">Next</button>
+    </div>
+
+    <div class="container hidden" id="page2">
+        <h1>Photo Settings</h1>
+        <form id="photoSettingsForm">
+            <input type="number" id="numPictures" name="numPictures" placeholder="Number of Pictures" required>
+            <input type="number" id="timeInterval" name="timeInterval" placeholder="Time Interval (seconds)" required>
+            <button type="submit" onclick="submitPhotoSettings()" >Submit</button>
+        </form>
+    </div>
+
+    <script>
+        let calculatedTimeInterval = 0; // Store the calculated time interval for use in the second form
+
+        async function sunPhotoSpacing() {
+			const outputDiv = document.getElementById("output");
+			outputDiv.textContent = "";
+			
+            const resolutionWidth = parseInt(document.getElementById("resolutionWidth").value);
+            const resolutionHeight = parseInt(document.getElementById("resolutionHeight").value);
+            const focalLength = parseFloat(document.getElementById("focalLength").value);
+            const sensorWidth = parseFloat(document.getElementById("sensorWidth").value);
+			
+            if (!resolutionWidth || !resolutionHeight || !focalLength || !sensorWidth) {
+                outputDiv.innerHTML = "<p style='color: red;'>Please fill in all fields.</p>";
+                return;
+            }
+
+            // Default angular diameter if API fails
+            let angularDiameterArcsec = 1920;
+
+            try {
+                // Generate dynamic start and stop times
+				throw new Error("Python script not connected");
+            } catch (error) {
+				console.error(error);
+				outputDiv.innerHTML += '<p style="color: orange;">Warning: Using fallback angular diameter of 1920 arcseconds.</p>';
+			}
+
+            // Perform calculations
+            const angularSizeRad = angularDiameterArcsec * (Math.PI / 180) * (1 / 3600);
+            const sensorPixelPitch = sensorWidth / resolutionWidth;
+            const angularSizePerPixelRad = sensorPixelPitch / focalLength;
+            const sunSizePixels = angularSizeRad / angularSizePerPixelRad;
+
+            const sunMotionRadPerSec = Math.PI / (180) * 0.004166;
+            const timeBetweenPhotos = 2 * angularSizeRad / sunMotionRadPerSec;
+
+            const diagonal = Math.sqrt(resolutionWidth ** 2 + resolutionHeight ** 2);
+            const maxSuns = Math.floor(diagonal / (2 * sunSizePixels));
+
+            calculatedTimeInterval = timeBetweenPhotos; // Store for next page
+
+            outputDiv.innerHTML += `
+                <p>Sun Size: <strong>${sunSizePixels.toFixed(2)}</strong> pixels</p>
+                <p>Recommended Time Interval: <strong>${timeBetweenPhotos.toFixed(2)}</strong> seconds</p>
+                <p>Maximum Suns per Photo: <strong>${maxSuns}</strong></p>
+            `;
+
+            document.getElementById("nextButton").classList.remove("hidden");
+        }
+
+        function showNextPage() {
+            document.getElementById("page1").classList.add("hidden");
+            document.getElementById("page2").classList.remove("hidden");
+
+            // Pre-fill the time interval
+            document.getElementById("timeInterval").value = calculatedTimeInterval.toFixed(2);
+        }
+
+        function submitPhotoSettings() {
+            event.preventDefault();
+			let data = {};
+			data["nb_photos"] = document.getElementById("numPictures").value;
+			data["tmp_enregistrement"] = document.getElementById("timeInterval").value;
+			data["tmp_pose"] = 0.1;
+			var now = new Date().getTime();
+			data["date"] = now;
+            console.log("Photo Settings Submitted:");
+            console.log(`Number of Pictures: ${data["numPictures"]}`);
+            console.log(`Time Interval: ${data["timeInterval"] }`);
+			home.sendPostRequest (data);
+        }
+		
+
+window.addEventListener('load', function() {
+  home.sendGetRequest("token").then(() => {
+    home.updateTime();
+    home.updateValues();
+    home.sendPostRequest("battery");
+  }).catch(error => {
+    console.error('Error fetching token:', error);
+  });
+});
+
+window.addEventListener('beforeunload', function(event) {
+            home.saveFormData();
+        });
+
+    </script>
+<script src="function-home.js"></script>
+</body>
+</html>
