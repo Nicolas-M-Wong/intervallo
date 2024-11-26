@@ -30,6 +30,22 @@ center_text() {
     printf "%*s\n" "$width" | tr ' ' "$character"
     }
 
+compiler_request(){
+local file_path="$1"
+local compiler_path="$2"
+local compiler_arg="$3"
+if [ ! -f "$file_path" ]; then
+    echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
+    # Compile trigger.cpp
+    sh "$compiler_path" "$compiler_arg" &
+    if [ $? -eq 1 ]; then
+        echo "Compilation failed." 
+    fi
+else
+    echo "$3 already exists in $DIR."
+fi
+}
+
 center_text "$(date)" "-"
 
 if [ "$#" -lt 1 ]; then
