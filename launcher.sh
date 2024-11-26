@@ -62,9 +62,9 @@ fi
 DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
 
 if [ ! -f "$DIR/Trigger.exe" ]; then
-    echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
+    # echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
     # Compile trigger.cpp
-    sh "$DIR/trigger_compiler.sh" &
+    compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh" "Constant_Trigger"
     if [ $? -eq 1 ]; then
         echo "Compilation failed." 
     fi
