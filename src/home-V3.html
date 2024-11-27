@@ -89,7 +89,7 @@
             		</div>
             		<input type="number" step="0.01" name="tmp_enregistrement" id="enregistrement" data-mode="dark" required />
      
-            		<button type="submit" id="form-submit" value="Ok" onclick="home.submitForm(event);">Ok</button>
+            		<button type="submit" id="form-submit" value="Ok" onclick="home.submitForm(event,'interval-Form');">Ok</button>
                 </div>
             </form>  
     	</div>
@@ -98,8 +98,8 @@
             <h3 id="title_tmp_estime">Temps de prise de vue estimé : </h3><h3 id="estimation_tmp"></h3>
             <form action = "" method="post" class = "confirmation-form">
                 <div class="flex-column-confirm">
-                    <button name="confirm" value="Confirmer" id="openDialogBox" onclick="home.handleButtonClick('No')">Confirmer</button>
-                    <button name="test-shot" value="Photo_test" id="test-shot" onclick="home.handleButtonClick('Yes')" disabled>Photo test</button>
+                    <button name="confirm" value="Confirmer" id="openDialogBox" onclick="home.handleButtonClick('No','interval-Form')">Confirmer</button>
+                    <button name="test-shot" value="Photo_test" id="test-shot" onclick="home.handleButtonClick('Yes','interval-Form')" disabled>Photo test</button>
                 </div>
             </form>
         </div>
