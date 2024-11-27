@@ -73,7 +73,7 @@
 					<input type="hidden" id="value1" name="value1">
 					<input type="hidden" id="value2" name="value2">
 					<input type="hidden" id="value3" name="value3">
-					<button type="submit" id="form-submit" value="Ok" onclick="home.submitForm(event);">Ok</button>
+					<button type="submit" id="form-submit" value="Ok" onclick="home.submitForm(event,'interval-Form');">Ok</button>
 				</form>
     	</div>
     
@@ -81,8 +81,8 @@
             <h3>Temps de prise de vue estimé : </h3><h3 id="estimation_tmp"></h3>
             <form action = "" method="post" class = "confirmation-form">
                 <div class="flex-column-confirm">
-                    <button name="confirm" value="Confirmer" id="openDialogBox" onclick="home.handleButtonClick('No')">Confirmer</button>
-                    <button name="test-shot" value="Photo_test" id="test-shot" onclick="home.handleButtonClick('Yes')">Photo test</button>
+                    <button name="confirm" value="Confirmer" id="openDialogBox" onclick="home.handleButtonClick('No','interval-Form')">Confirmer</button>
+                    <button name="test-shot" value="Photo_test" id="test-shot" onclick="home.handleButtonClick('Yes','interval-Form')">Photo test</button>
                 </div>
             </form>
         </div>
