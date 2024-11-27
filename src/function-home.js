@@ -74,9 +74,9 @@ home.getFormData = function(formName){
 	const inputs = form.querySelectorAll("input"); // Collect all inputs
 	inputs.forEach(input => data[input.name] = parseFloat(input.value)); // Log each input's name and value
 	
-	if (formName === "photoSettingsForm"){
+/*	if (formName === "photoSettingsForm"){
 		data["tmp_pose"]=0.01;
-	}
+	} */
 	
 	if (currentFileName === "home"){
 		data = {};
@@ -243,7 +243,7 @@ home.sendPostRequest = function (data) {
 
         xhr.send(JSON.stringify(data));
     });
-	}
+}
 	
 
 
@@ -577,6 +577,8 @@ home.ensureDict = function(data) {
         return dict;
     }
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------------------
 
 home.string2Dict = function(input){
     if (!input || typeof input !== "string") {
