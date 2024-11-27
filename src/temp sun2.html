@@ -103,12 +103,12 @@
             <input type="number" id="resolutionHeight" name="resolutionHeight" placeholder="Sensor Height (pixels)" value="4000" required>
             <input type="number" id="focalLength" name="focalLength" placeholder="Focal Length (mm)" value="300" required>
             <input type="number" id="sensorWidth" name="sensorWidth" placeholder="Sensor Width (mm)" value="23.5" required>
-            <button type="button" onclick="sunPhotoSpacing();">Calculate</button>
+            <button type="button" onclick="sun.sunPhotoSpacing();">Calculate</button>
         </form>
         <div class="output" id="output">
             <!-- Results will appear here -->
         </div>
-        <button class="hidden" id="nextButton" onclick="showNextPage()">Next</button>
+        <button class="hidden" id="nextButton" onclick="sun.showNextPage()">Next</button>
     </div>
 
     <div class="container hidden" id="page2">
@@ -116,105 +116,17 @@
         <form id="photoSettingsForm">
             <input type="number" id="numPictures" name="nb_photos" placeholder="Number of Pictures" required>
             <input type="number" id="timeInterval" name="tmp_enregistrement" placeholder="Time Interval (seconds)" required>
-            <button type="submit" onclick="submitFormUpdated('photoSettingsForm')" >Submit</button>
+			<input type="number" id="timeExpo" name="tmp_pose" placeholder="Time Interval (seconds)" value=0.01 style="display: none;">
+            <button type="submit" onclick="sun.submitForm('photoSettingsForm')" >Submit</button>
         </form>
+		<div class="output" id="photoCountdown">
+		<!-- counting down pictures and time -->
+		</div>
+		
     </div>
 
-    <script>
-        let calculatedTimeInterval = 0; // Store the calculated time interval for use in the second form
-
-        async function sunPhotoSpacing() {
-			const outputDiv = document.getElementById("output");
-			outputDiv.textContent = "";
-			
-            const resolutionWidth = parseInt(document.getElementById("resolutionWidth").value);
-            const resolutionHeight = parseInt(document.getElementById("resolutionHeight").value);
-            const focalLength = parseFloat(document.getElementById("focalLength").value);
-            const sensorWidth = parseFloat(document.getElementById("sensorWidth").value);
-			var timeBetweenPhotos;
-			var sunSizePixels;
-			var maxSuns;
-			 
-            if (!resolutionWidth || !resolutionHeight || !focalLength || !sensorWidth) {
-                outputDiv.innerHTML = "<p style='color: red;'>Please fill in all fields.</p>";
-                return;
-            }
-
-            // Default angular diameter if API fails
-            let angularDiameterArcsec = 1920;
-
-            try {
-				
-				let txt = await submitFormUpdated('sunForm');
-				txt = home.string2Dict(txt);
-				timeBetweenPhotos = txt['time_between_photos_sec'];
-				sunSizePixels = txt ['sun_size_pixels'];
-				maxSuns = txt['max_sun'];
-                // Generate dynamic start and stop times
-				// throw new Error("Python script not connected");
-            } catch (error) {
-				console.error(error);
-				outputDiv.innerHTML += '<p style="color: orange;">Warning: Using fallback angular diameter of 1920 arcseconds.</p>';
-				// Perform calculations
-				const angularSizeRad = angularDiameterArcsec * (Math.PI / 180) * (1 / 3600);
-				const sensorPixelPitch = sensorWidth / resolutionWidth;
-				const angularSizePerPixelRad = sensorPixelPitch / focalLength;
-				sunSizePixels = (angularSizeRad / angularSizePerPixelRad).toFixed(0);
-
-				const sunMotionRadPerSec = Math.PI / (180) * 0.004166;
-				timeBetweenPhotos = (2 * angularSizeRad / sunMotionRadPerSec).toFixed(1);
-
-				const diagonal = Math.sqrt(resolutionWidth ** 2 + resolutionHeight ** 2);
-				maxSuns = (Math.floor(diagonal / (2 * sunSizePixels))).toFixed(0);
-			}
-			
-            calculatedTimeInterval = timeBetweenPhotos; // Store for next page
-            outputDiv.innerHTML += `
-                <p>Sun Size: <strong>${sunSizePixels}</strong> pixels</p>
-                <p>Recommended Time Interval: <strong>${timeBetweenPhotos}</strong> seconds</p>
-                <p>Maximum Suns per Photo: <strong>${maxSuns}</strong></p>
-            `;
-
-            document.getElementById("nextButton").classList.remove("hidden");
-        }
-
-        function showNextPage() {
-            document.getElementById("page1").classList.add("hidden");
-            document.getElementById("page2").classList.remove("hidden");
-            // Pre-fill the time interval
-            document.getElementById("timeInterval").value = calculatedTimeInterval;
-        }
-
-
-window.addEventListener('load', function() {
-  home.sendGetRequest("token").then(() => {
-    home.updateTime();
-    home.updateValues();
-    home.sendPostRequest("battery");
-  }).catch(error => {
-    console.error('Error fetching token:', error);
-  });
-});
-
-window.addEventListener('beforeunload', function(event) {
-            home.saveFormData();
-        });
-		
-		function submitFormUpdated(formName){
-			event.preventDefault();
-			let data = {};
-			const form = document.getElementById(formName);
-			const inputs = form.querySelectorAll("input"); // Collect all inputs
-			inputs.forEach(input => data[input.name] = parseFloat(input.value)); // Log each input's name and value
-			console.log(data);
-			if (formName === "photoSettingsForm"){
-				data["tmp_pose"]=0.01;
-			}
-			return(home.sendPostRequest (data));
-		}
-
-
-    </script>
+<script src="js-sun.js"></script>
 <script src="function-home.js"></script>
+<script src="js-home.js"></script>
 </body>
 </html>
