@@ -146,7 +146,7 @@
             try {
 				
 				let txt = await submitFormUpdated('sunForm');
-				txt = string2Dict(txt);
+				txt = home.string2Dict(txt);
 				timeBetweenPhotos = txt['time_between_photos_sec'];
 				sunSizePixels = txt ['sun_size_pixels'];
 				maxSuns = txt['max_sun'];
