@@ -66,36 +66,37 @@ home.formatTime = function(totalSeconds) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-home.submitForm = function(event){
-	event.preventDefault();
+home.getFormData = function(formName){
 	let currentFileName = document.body.getAttribute('data-page');
+	let data = {};
 	
-	let nb_photos = 0;
-	let tmp_pose = 0;
-	let tmp_pose_start = 0;
-	let tmp_pose_end = 0;
-	let tmp_enregistrement = 0;
+	const form = document.getElementById(formName);
+	const inputs = form.querySelectorAll("input"); // Collect all inputs
+	inputs.forEach(input => data[input.name] = parseFloat(input.value)); // Log each input's name and value
 	
-	const doc_photos = document.getElementById('nb_photos');
-	const doc_save = document.getElementById('enregistrement');
+	if (formName === "photoSettingsForm"){
+		data["tmp_pose"]=0.01;
+	}
 	
+	if (currentFileName === "home"){
+		data = {};
+		// console.log("success home");
+		data["nb_photos"] = WheelConstruct.getCurrentValue(document.getElementById('nb_photos'),step_photo);
+		data["tmp_pose"] = WheelConstruct.getCurrentValue(document.getElementById('tmp_pose'),step_pose);
+		data["tmp_enregistrement"] = WheelConstruct.getCurrentValue(document.getElementById('enregistrement'),step_enregistrement);
+	}
+	console.log("updated form dataquery ", data);
+	return (data);
+}
+
+home.submitForm = function(event, formName){
+	event.preventDefault();
+	var data = home.getFormData(formName);
+	let currentFileName = document.body.getAttribute('data-page');
 	if (currentFileName != "home-V3"){
 		const doc_pose = document.getElementById('tmp_pose');
-		if (currentFileName === "home"){
-			// console.log("success home");
-			nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo);
-			tmp_pose = WheelConstruct.getCurrentValue(doc_pose,step_pose);
-			tmp_enregistrement = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
-		}
-		
-		if (currentFileName === "home-V1"){
-			// console.log("success home-V1");
-			nb_photos = parseInt(doc_photos.value);
-			tmp_pose = parseFloat(doc_pose.value);
-			tmp_enregistrement = parseFloat(doc_save.value);
-		}
-		
-		var totalTime = nb_photos * tmp_pose + tmp_enregistrement * (nb_photos - 1);
+
+		var totalTime = data["nb_photos"] * data["tmp_pose"] + data["tmp_enregistrement"] * (data["nb_photos"] - 1);
 		console.log("Total time for the interval:", totalTime, "seconds");
 		if (Number.isNaN(totalTime) || totalTime <= 0){
 			totalTime=0;
@@ -109,23 +110,16 @@ home.submitForm = function(event){
 		formData = new FormData(document.getElementById('interval-Form'));
 		}
 	}
-	else{
-		const doc_pose_start = document.getElementById('tmp_pose_start');
-		const doc_pose_end = document.getElementById('tmp_pose_end');
-		console.log("success home-V3");
-		nb_photos = parseInt(doc_photos.value);
-		tmp_pose_start = parseFloat(doc_pose_start.value);
-		tmp_pose_end = parseFloat(doc_pose_end.value);
-		tmp_enregistrement = parseFloat(doc_save.value);		
+	else{		
 		
-		var totalTime = tmp_enregistrement * (nb_photos - 1)+tmp_pose_end;
-		var intervalTimeCondition = Math.max(tmp_pose_start,tmp_pose_end) + 1.5;
+		var totalTime = data["tmp_enregistrement"] * (data["nb_photos"] - 1)+data["tmp_pose_end"];
+		var intervalTimeCondition = Math.max(data["tmp_pose_start"],data["tmp_pose_end"]) + 1.5;
 		console.log("Total time for the interval:", totalTime, "seconds");
 		if (Number.isNaN(totalTime) || totalTime <= 0){
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "none";
 		}
-		else if (intervalTimeCondition>tmp_enregistrement){
+		else if (intervalTimeCondition>data["tmp_enregistrement"]){
 			document.getElementById("openDialogBox").disabled = true;
 			totalTime=0;
 			document.getElementById("confirmation").style.display = "block";
@@ -146,57 +140,46 @@ home.submitForm = function(event){
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-home.handleButtonClick = function(test_status) {
+home.handleButtonClick = function(test_status,formName) {
     if (formData) {
+		var data = home.getFormData(formName);
 		let currentFileName = document.body.getAttribute('data-page');
-        const data = {};
-		const doc_photos = document.getElementById('nb_photos');
-		const doc_save = document.getElementById('enregistrement');
-		var nb_photos = 1
-		
-		if (currentFileName === "home"){
-			const doc_pose = document.getElementById('tmp_pose');
-			data["tmp_pose"] = WheelConstruct.getCurrentValue(doc_pose,step_pose);
-			data["tmp_enregistrement"] = WheelConstruct.getCurrentValue(doc_save,step_enregistrement);
-			if (test_status === "No"){
-				nb_photos = WheelConstruct.getCurrentValue(doc_photos,step_photo);
-            }
+		if (test_status === "Yes"){
+			data["nb_photos"] = 1;
 		}
-		
-		if (currentFileName === "home-V1"){
-			const doc_pose = document.getElementById('tmp_pose');
-			data["tmp_pose"] = parseFloat(doc_pose.value);
-			data["tmp_enregistrement"] = parseFloat(doc_save.value);
-			if (test_status === "No"){
-				nb_photos = parseInt(doc_photos.value);
-            }
-		}
-        
-		if (currentFileName === "home-V3"){
-			const doc_pose_start = document.getElementById('tmp_pose_start');
-			const doc_pose_end = document.getElementById('tmp_pose_end');
-			data["variable_start"] = parseFloat(doc_pose_start.value);
-			data["variable_end"] = parseFloat(doc_pose_end.value);
-			data["tmp_enregistrement"] = parseFloat(doc_save.value);
-			data["variable_expo"] = true;
-			if (test_status === "No"){
-				nb_photos = parseInt(doc_photos.value);
-            }
-		}
-		data["nb_photos"] = nb_photos;
+        home.sendPostRequest(data)
+            .then((answer) => {
+                console.log(answer, http_status_post);
+                if (http_status_post === 200) {
+                    const nowDate = new Date().getTime();
+                    if (currentFileName === "home-V3") {
+                        home.showDialog(data["nb_photos"], data["variable_end"], data["tmp_enregistrement"], nowDate); // Show the dialog box with the countdown
+                    } else {
+                        home.showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"], nowDate); // Show the dialog box with the countdown
+                    }
+                }
+            })
+            .catch(({ error, responseText }) => {
+                console.error("Request failed:", error.message);
+                console.log("Server response:", responseText);
+
+                // Handle the 400 error specifically if needed
+                if (http_status_post === 400) {
+					
+					if (responseText === "Unavailable") {
+                    document.getElementById("dialogBoxTitle").innerHTML = " ";
+                    document.getElementById("Compteur").innerHTML = "<span>Prise de vue en cours</span></br><span style='font-weight: 300;'>APN Indisponible</span>";
+                    dialogBoxId.showModal();
+								
+					} else{
+                    // Example: Display an error dialog
+                    document.getElementById("dialogBoxTitle").innerHTML = "Error";
+                    document.getElementById("Compteur").innerHTML = `<span>${responseText}</span>`;
+                    dialogBoxId.showModal();
+					}
+                }
+            });
 			
-        home.sendPostRequest(data).then(() => {
-		if (http_status_post === 200){
-			const nowDate = new Date().getTime()
-			if (currentFileName === "home-V3"){
-				home.showDialog(data["nb_photos"], data["variable_end"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
-				//
-			}
-			else{
-				home.showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"],nowDate); // Show the dialog box with the countdown
-			}
-		}
-		});
     } else {
         console.error('Form data is not available. Please submit the form first.');
     }
@@ -212,21 +195,22 @@ home.remoteTrigger = function(){
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-home.sendPostRequest =  function(data) {
+home.sendPostRequest = function (data) {
     return new Promise((resolve, reject) => {
         data = home.ensureDict(data);
         data["token"] = sessionStorage.getItem("sessionToken");
-		var now = new Date().getTime();
-		data["date"] = now;
-		console.log("Sending data :",data);
+        const now = new Date().getTime();
+        data["date"] = now;
+        console.log("Sending data:", data);
         const xhr = new XMLHttpRequest();
         const ip = location.host;
         const http_head = 'http://';
         xhr.open('POST', http_head.concat(ip), true);
         xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) { // Request is complete
                 if (xhr.status === 200) {
+					
                     http_status_post = 200;
                     console.log('Success:', xhr.responseText);
                     if (data.battery) {
@@ -236,41 +220,32 @@ home.sendPostRequest =  function(data) {
                             home.updateBattery("");
                         }
                     }
-					// construction d'un graph à partir des info retourné par le serveur
-/* 					if (data.variable) {
-						console.log(xhr.responseText);
-						const dataY = GraphConstruct.ParseData(xhr.responseText);
-						GraphConstruct.drawGraph(dataY);
-					} */
-                    resolve(xhr.responseText); // Resolve the promise with the response text
+                    http_status_post = 200;
+                    console.log('Success:', xhr.responseText);
+                    resolve(xhr.responseText); // Resolve with the response text
                 } else if (xhr.status === 400) {
                     http_status_post = 400;
                     console.log('Fail:', xhr.responseText);
-					
-					if (xhr.responseText === "Unavailable"){
-						document.getElementById("dialogBoxTitle").innerHTML = " ";
-						document.getElementById("Compteur").innerHTML = "<span>Prise de vue en cours</span></br><span style='font-weight: 300;'>APN Indisponible</span>";
-						dialogBoxId.showModal();
-					}
-					if (xhr.responseText === "Interval too short"){
-						document.getElementById("dialogBoxTitle").innerHTML = " ";
-						const max_pose = Math.max(data["tmp_pose_start"],data["tmp_pose_end"])+1.5;
-						document.getElementById("Compteur").innerHTML = `<span>Intervalle trop court</span></br><span style='font-weight: 300;'>Intervalle minimum de ${max_pose}s</span>`;
-						dialogBoxId.showModal();
-					}
-                    reject(new Error('Bad Request')); // Reject the promise with an error
+                    reject({
+                        error: new Error('Bad Request'),
+                        responseText: xhr.responseText // Include responseText in the rejection
+                    });
                 } else {
                     http_status_post = 0;
                     console.error('Error:', xhr.statusText);
-                    reject(new Error(xhr.statusText)); // Reject the promise with the error status text
+                    reject({
+                        error: new Error(xhr.statusText),
+                        responseText: xhr.responseText || null
+                    });
                 }
             }
         };
-        
+
         xhr.send(JSON.stringify(data));
     });
-	return xhr.responseText
-}
+	}
+	
+
 
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -603,7 +578,7 @@ home.ensureDict = function(data) {
     }
 }
 
-function string2Dict(input){
+home.string2Dict = function(input){
     if (!input || typeof input !== "string") {
         throw new Error("Input must be a non-empty string.");
     }
