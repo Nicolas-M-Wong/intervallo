@@ -120,7 +120,7 @@ def sec_2_min_h (tmp_prise_loc):
 
 def photo_capture(nb_photos_loc,tmp_pose_loc,tmp_enregistrement_loc):
     #Capture d'une unique photo
-    addr_command = "./Trigger.exe "
+    addr_command = "./Constant_Trigger.exe "
     command = "sudo "+addr_command+str(tmp_pose_loc)+" "+str(nb_photos_loc)+" "+str(tmp_enregistrement_loc)
     print(command)
     os.popen(command)
