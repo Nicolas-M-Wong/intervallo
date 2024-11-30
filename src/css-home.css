@@ -10,7 +10,7 @@
 	
 	/* ----------- Light mode color palette ----------- */
 	--bg-color-light: #fff;
-	--text-color-Light: #333;
+	--text-color-light: #333;
 	--secondary-text-color-light: #666;
 	--border-color-light: #dfdfdf;
 	--highlight-bg-color-light: #CCCCCC;
@@ -22,18 +22,15 @@
 	--opacity-solid: 1;
 }
 
-html{
-	overflow-x: hidden; /* Optional: to prevent scrollbars */
+*{
+	box-sizing: border-box;
 }
 
 body{ 
-	will-change: transform;
-	position: absolute;
-	left: 1vw;
-	top: 1vh;
+	
 	margin: 0;
-    height: 98vh;
-    width: 98vw;
+    height: 100vh;
+    width: 100vw;
 }
 
 /* ----------- ---------- ----------- */
@@ -145,6 +142,11 @@ dialog::backdrop {
 
 /* Main containers and button */
 
+#screen-container {
+	display: flex;
+	flex-direction: column;
+}
+
 form { 
 	display: table; 
 	width: 100%;
@@ -177,8 +179,8 @@ label {
 .container{
 	display: flex;
 	flex-direction: column;
-	margin: 15px 25px;
-	margin-bottom: 90px;
+	margin: 50px 25px;
+	margin-bottom: 100px;
 }
 
 .content{
@@ -343,7 +345,8 @@ orientation */
 }
 
 .phone-screen-class {
-	display: block;
+	display: flex;
+	flex-direction: column;
 }
 
 /* ----------- ---------- ----------- */
@@ -357,19 +360,20 @@ orientation */
 } 
 
 .navbar { 
-	background-color: var(--border-color-dark); 
+	
+	background: var(--border-color-dark); 
 	display: flex; 
 	justify-content: space-around; 
 	align-items: center; 
 	position: fixed; 
 	bottom: 15px; 
+	max-width: 500px;
 	width: 90%;
 	border-radius: 25px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 } 
 
 .navbar a { 
-	
 	text-align: center; 
 	padding: 8px 8px; 
 	text-decoration: none; 
@@ -383,6 +387,20 @@ orientation */
 
 /* ----------- ---------- ----------- */
 
+.time {
+    flex: 1;
+}
+
+.battery {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.battery-icon {
+    font-size: 16px;
+}
+
 #toggle-mode{
 	font-size: 0px;
 }
@@ -394,7 +412,7 @@ orientation */
 .checkbox-round-shutdown,
 .checkbox-round-sleep,
 #toggle-mode{
-margin-left: 9px;
+margin-left: 12px;
 }
 
 .checkbox-round-sleep{
@@ -405,8 +423,8 @@ color: #C70039;
 }
 
 .circle {
-    width: 1.7vh;
-    height: 1.7vh;
+    width: 1.9vh;
+    height: 1.9vh;
 	border: solid;
 	border-width: 2px;
 	border-radius: 50%;
@@ -495,9 +513,15 @@ border-color: red;
 
 /* ----------- ---------- ----------- */
 
-#header-bar {
+.header-bar {
 	display: flex;
 	justify-content: space-between;
+	top: 0;
+	width: 100%;
+	height: 35px;
+    padding: 5px 10px;
+	background-color: var(--border-color-dark);
+	position: fixed;
 }
 
 #left-side {
@@ -515,7 +539,6 @@ border-color: red;
 /* ----------- ---------- ----------- */
 
 #notification{
-	margin-top: 15px;
 	background-color: var(--accent-color);
 	padding: 15px;
 	border-radius: 7px;
