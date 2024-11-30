@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
     <title>Sun Photo Spacing Calculator</title>
     <style>
         /* General Reset */
@@ -10,23 +11,101 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: Segoe UI, sans-serif;
 			
         }
 
-        body {
-            background: linear-gradient(135deg, #f39c12, #f1c40f);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #333;
-			flex-direction: column;
-        }
+body, html {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #f39c12, #f1c40f);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
 
+
+
+/* ----------- ---------- ----------- */
+
+#toggle-mode{
+	font-size: 0px;
+}
+.checkbox-round-sleep,
+.checkbox-round-shutdown{
+	font-size: 0px;
+}
+
+.checkbox-round-shutdown,
+.checkbox-round-sleep,
+#toggle-mode{
+margin-left: 9px;
+}
+
+.checkbox-round-sleep{
+color: #FFED00;
+}
+.checkbox-round-shutdown{
+color: #C70039;
+}
+
+.circle {
+    width: 1.7vh;
+    height: 1.7vh;
+	border: solid;
+	border-width: 2px;
+	border-radius: 50%;
+}
+
+#full-circle-sleep{
+background-color: yellow;
+border-color: yellow;
+}
+
+#full-circle-shutdown{
+background-color: red;
+border-color: red;
+}
+
+
+/* ----------- ---------- ----------- */
+
+#header-bar {
+	display: flex;
+	justify-content: space-between;
+}
+
+#left-side {
+	font-size: 18px;
+}
+
+#timer-header {
+    margin-right: 18px;
+}
+
+#battery-header{
+    margin-right: 18px;
+}
+
+.flex-column-title {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+/* ----------- ---------- ----------- */
+
+.outer_container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	flex-direction: column;
+}
         .container {
 			margin-top: 25px;
-			margin-bottom: 50px;
+			margin-bottom: 100px;
             background: #ffffff;
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -34,7 +113,8 @@
             width: 90%;
             padding: 30px;
             text-align: center;
-        }
+		}
+			
 
         .container h1 {
             font-size: 2rem;
@@ -92,9 +172,118 @@
         .hidden {
             display: none;
         }
+		
+		
+		
+/* Status Bar */
+.status-bar {
+    background: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.time {
+    flex: 1;
+}
+
+.battery {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.battery-icon {
+    font-size: 16px;
+}
+
+.indicators {
+    display: flex;
+    gap: 8px;
+}
+
+.indicators .moon,
+.indicators .yellow-light,
+.indicators .red-light {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.indicators .moon {
+    background: #ccc;
+}
+
+.indicators .yellow-light {
+    background: yellow;
+}
+
+.indicators .red-light {
+    background: red;
+}
+
+/* ----------- ---------- ----------- */
+/* Navigation bar */
+
+.navbar-container { 
+	display: flex; 
+	flex-direction: column; 
+	align-items: center;
+	margin: 0px 25px 0px 25px;
+} 
+
+.navbar { 
+	background-color: var(--border-color-dark); 
+	display: flex; 
+	justify-content: space-around; 
+	align-items: center; 
+	position: fixed; 
+	bottom: 15px; 
+	max-width 500px;
+	width: 90%;
+	border-radius: 25px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+} 
+
+.navbar a { 
+	text-align: center; 
+	padding: 8px 8px; 
+	text-decoration: none; 
+	border-radius: 15px;
+	margin: 8px;
+} 
+
+.navbar a:hover { 
+	background-color: var(--accent-color); 
+} 
+
+
     </style>
 </head>
 <body>
+
+    <!-- Top Status Bar -->
+    <div class="status-bar">
+		<div id="left-side" class="flex-column-title">
+		<span id="timer-header">hh:mm</span>
+		<span id="logo">🔋</span>
+		<span id="battery-header">xx%</span>
+		</div>
+		<div id="right-side" class="flex-column-title">
+
+			<a class="checkbox-round-sleep" value="sleep" onclick="home.serverEnd('sleep')">
+			<div class="circle" id="full-circle-sleep"></div>
+			</a>
+
+			<a class="checkbox-round-shutdown" value="shutdown" onclick="home.serverEnd('shutdown')">
+			<div class="circle" id="full-circle-shutdown"></div>
+			</a>
+			</div>
+    </div>
+	<div class="outer_container">
     <div class="container" id="page1">
         <h1>Solar eclipse intervallometers</h1>
         <p>Calculate the optimal photo interval and sun size for your setup.</p>
@@ -110,6 +299,7 @@
         </div>
         <button class="hidden" id="nextButton" onclick="sun.showNextPage()">Next</button>
     </div>
+	
 
     <div class="container hidden" id="page2">
         <h1>Photo Settings</h1>
@@ -122,8 +312,16 @@
 		<div class="output" id="photoCountdown">
 		<!-- counting down pictures and time -->
 		</div>
-		
-    </div>
+	</div>
+	
+	<div class="navbar-container">
+		<nav class="navbar" id="navbar-id" data-mode="dark">
+			<a name="photo-distance" id="photo-distance-L" onclick="home.remoteTrigger();home.changeColor('L');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
+			<a name="intervallo-home" id="intervallo-home" onclick="home.changePage('left');"><img width="32" height="32" src="ico-intervallo.ico" ></a>
+			<a name="sun-eclipse" id="photo-distance-R" onclick="home.changePage('sun');"><img src="ico-sun.ico" width="32" height="32" alt="Mode eclipse"></a>
+		</nav>
+	</div>
+</div>
 
 <script src="js-sun.js"></script>
 <script src="function-home.js"></script>
