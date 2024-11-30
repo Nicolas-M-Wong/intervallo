@@ -189,7 +189,7 @@ margin: 0 auto;
 
 .container,
 .content {
-	padding: 20px 20px 5px 20px;
+	padding: 5px 20px 5px 20px;
 	background-color: var(--border-color-dark);
 	color: var(--text-color-dark);
 	border-radius: 10px;
@@ -539,6 +539,7 @@ border-color: red;
 /* ----------- ---------- ----------- */
 
 #notification{
+	margin-top: 15px;
 	background-color: var(--accent-color);
 	padding: 15px;
 	border-radius: 7px;
