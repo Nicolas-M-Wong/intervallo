@@ -533,7 +533,12 @@ home.changePage = function(direction) {
 		pageName = pageMappingRight[currentPage];
 	}
 	if (direction === "sun"){
+		//going from regular intervallometer mode to eclipse mode
 		pageName = "temp sun2";
+	}
+	if (direction === "home"){
+		//going from eclipse mode to regular intervallometer mode
+		pageName = "home";
 	}
 	console.log(pageName,currentPage);
 	home.saveFormData();
