@@ -414,7 +414,7 @@ orientation */
 .checkbox-round-shutdown,
 .checkbox-round-sleep,
 #toggle-mode{
-margin-left: 12px;
+margin-left: 15px;
 }
 
 .checkbox-round-sleep{
@@ -427,6 +427,8 @@ color: #C70039;
 .circle {
     width: 1.9vh;
     height: 1.9vh;
+	min-height: 18px;
+	min-width: 18px;
 	border: solid;
 	border-width: 2px;
 	border-radius: 50%;
@@ -523,6 +525,7 @@ border-color: red;
 	height: 35px;
     padding: 5px 10px;
 	background-color: var(--border-color-dark);
+	color: var(--text-color-dark);
 	position: fixed;
 }
 
