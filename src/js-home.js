@@ -84,7 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	  document.getElementById('big-screen'),
 	  document.getElementById('landscape-screen'),
 	  document.getElementById('shutdown-wrapper'),
-	  document.getElementById('half-circle')
+	  document.getElementById('half-circle'),
+	  document.getElementById('header-bar')
 	];
 
 	// Elements that vary based on currentFileName
