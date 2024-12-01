@@ -8,7 +8,7 @@ let calculatedTimeInterval = 0; // Store the calculated time interval for use in
 
 sun.sunPhotoSpacing = async function() {
 	const outputDiv = document.getElementById("output");
-	outputDiv.textContent = "";
+	
 	const resolutionWidth = parseInt(document.getElementById("resolutionWidth").value);
 	const resolutionHeight = parseInt(document.getElementById("resolutionHeight").value);
 	const focalLength = parseFloat(document.getElementById("focalLength").value);
@@ -35,6 +35,7 @@ sun.sunPhotoSpacing = async function() {
 		// Generate dynamic start and stop times
 		// throw new Error("Python script not connected");
 	} catch (error) {
+		outputDiv.textContent = "";
 		console.error(error);
 		outputDiv.innerHTML += '<p style="color: orange;">Warning: Using fallback angular diameter of 1920 arcseconds.</p>';
 		// Perform calculations
@@ -49,7 +50,7 @@ sun.sunPhotoSpacing = async function() {
 		const diagonal = Math.sqrt(resolutionWidth ** 2 + resolutionHeight ** 2);
 		maxSuns = (Math.floor(diagonal / (2 * sunSizePixels))).toFixed(0);
 	}
-	
+	outputDiv.textContent = "";
 	calculatedTimeInterval = timeBetweenPhotos; // Store for next page
 	outputDiv.innerHTML += `
 		<p>Sun Size: <strong>${sunSizePixels}</strong> pixels</p>
