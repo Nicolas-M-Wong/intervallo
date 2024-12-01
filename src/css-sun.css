@@ -92,6 +92,6 @@ button.solar {
 	display: none;
 }
 
-.navbar.solar a {
+.navbar.solar a:hover {
 background-color: transparent;
 }
