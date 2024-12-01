@@ -393,11 +393,15 @@ if TCP_IP != "127.0.0.1":
                         response_body = "Unavailable"
                         
                 elif 'resolutionWidth' in parameters.keys():
-                    focal_length_mm, sensor_width_mm = parameters.get('focalLength',0), parameters.get('sensorWidth',0)
-                    resolution_width, resolution_height = parameters.get('resolutionWidth',0), parameters.get('resolutionHeight',0)
-                    sun_size_pixels, time_between_photos_sec, max_sun = sun_photo_spacing (focal_length_mm, resolution_width, resolution_height, sensor_width_mm)
-                    response_body = f"sun_size_pixels={round(sun_size_pixels)};time_between_photos_sec={round(time_between_photos_sec,1)};max_sun={max_sun}"
-                            
+                    try:
+                        focal_length_mm, sensor_width_mm = parameters.get('focalLength',0), parameters.get('sensorWidth',0)
+                        resolution_width, resolution_height = parameters.get('resolutionWidth',0), parameters.get('resolutionHeight',0)
+                        sun_size_pixels, time_between_photos_sec, max_sun = sun_photo_spacing (focal_length_mm, resolution_width, resolution_height, sensor_width_mm)
+                        response_body = f"sun_size_pixels={round(sun_size_pixels)};time_between_photos_sec={round(time_between_photos_sec,1)};max_sun={max_sun}"
+                    except:
+                        print("Failed to calculate sun size")
+                        http_header = "HTTP/1.1 400 Bad Request\r\n"
+                        response_body = "Failed to calculate sun size"
                 else:
                     request, args = list(parameters.items())[0]
                     result = execute_request(request,args)
