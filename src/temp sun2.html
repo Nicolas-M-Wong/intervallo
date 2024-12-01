@@ -165,57 +165,6 @@ border-color: red;
         .hidden {
             display: none;
         }
-		
-
-.time {
-    flex: 1;
-}
-
-.battery {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.battery-icon {
-    font-size: 16px;
-}
-
-/* ----------- ---------- ----------- */
-/* Navigation bar */
-
-.navbar-container { 
-	display: flex; 
-	flex-direction: column; 
-	align-items: center;
-	margin: 0px 25px 0px 25px;
-} 
-
-.navbar { 
-	
-	background: #f1c40f;
-	display: flex; 
-	justify-content: space-around; 
-	align-items: center; 
-	position: fixed; 
-	bottom: 15px; 
-	max-width 500px;
-	width: 90%;
-	border-radius: 25px;
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-} 
-
-.navbar a { 
-	text-align: center; 
-	padding: 8px 8px; 
-	text-decoration: none; 
-	border-radius: 15px;
-	margin: 8px;
-} 
-
-.navbar a:hover { 
-	background-color: var(--accent-color); 
-} 
 
 
     </style>
@@ -272,7 +221,7 @@ border-color: red;
 	</div>
 	
 	<div class="navbar-container">
-		<nav class="navbar" id="navbar-id" data-mode="dark">
+		<nav class="navbar" id="navbar-id" style="background: #f1c40f;">
 			<a name="photo-distance" id="photo-distance-L" onclick="home.remoteTrigger();home.changeColor('L');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
 			<a name="intervallo-home" id="intervallo-home" onclick="home.changePage('left');"><img width="32" height="32" src="ico-intervallo.ico" ></a>
 			<a name="sun-eclipse" id="photo-distance-R" onclick="home.changePage('home');"><img src="ico-moon.ico" width="32" height="32" alt="Mode eclipse"></a>
