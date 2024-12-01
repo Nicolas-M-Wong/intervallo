@@ -17,7 +17,7 @@
 
 	/* ----------- Color Accent ----------- */
 	--accent-color: #C70039;   /* red accent*/
-	
+
 	--opacity-transparent: 0;
 	--opacity-solid: 1;
 }
@@ -70,7 +70,8 @@ body[data-mode="dark"],
 
 #main[data-mode="dark"],
 #navbar-id[data-mode="dark"],
-.shutdown-wrapper[data-mode="dark"] {
+.shutdown-wrapper[data-mode="dark"],
+#header-bar[data-mode="dark"] {
     background-color: var(--border-color-dark);
 	transition: background-color 0.3s, color 0.3s;
 }
@@ -110,7 +111,8 @@ body[data-mode="light"],
 
 #main[data-mode="light"],
 #navbar-id[data-mode="light"],
-.shutdown-wrapper[data-mode="light"] {
+.shutdown-wrapper[data-mode="light"],
+#header-bar[data-mode="light"] {
 	color: var(--text-color-light);
     background-color: var(--border-color-light);
 	transition: background-color 0.3s, color 0.3s;
