@@ -12,9 +12,6 @@
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: Segoe UI, sans-serif;
-			
         }
 html {
 background: #f1c40f;
@@ -27,69 +24,6 @@ body, html {
     display: flex;
     flex-direction: column;
     height: 100vh;
-}
-
-/* ----------- ---------- ----------- */
-
-.checkbox-round-sleep,
-.checkbox-round-shutdown{
-	font-size: 0px;
-}
-
-.checkbox-round-shutdown,
-.checkbox-round-sleep{
-margin-left: 9px;
-}
-
-.checkbox-round-sleep{
-color: #FFED00;
-}
-.checkbox-round-shutdown{
-color: #C70039;
-}
-
-.circle {
-    width: 1.7vh;
-    height: 1.7vh;
-	border: solid;
-	border-width: 2px;
-	border-radius: 50%;
-}
-
-#full-circle-sleep{
-background-color: yellow;
-border-color: yellow;
-}
-
-#full-circle-shutdown{
-background-color: red;
-border-color: red;
-}
-
-
-/* ----------- ---------- ----------- */
-
-#header-bar {
-	display: flex;
-	justify-content: space-between;
-}
-
-#left-side {
-	font-size: 18px;
-}
-
-#timer-header {
-    margin-right: 18px;
-}
-
-#battery-header{
-    margin-right: 18px;
-}
-
-.flex-column-title {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
 }
 
 /* ----------- ---------- ----------- */
@@ -165,7 +99,11 @@ border-color: red;
         .hidden {
             display: none;
         }
-
+		
+		.navbar.solar a {
+		background-color: transparent;
+		}
+		
 
     </style>
 </head>
@@ -191,7 +129,7 @@ border-color: red;
     </div>
 	<div class="outer_container">
     <div class="container-solar" id="page1">
-        <h1>Solar eclipse intervallometers</h1>
+        <h1>Solar eclipse intervallometer</h1>
         <p>Calculate the optimal photo interval and sun size for your setup.</p>
         <form id="sunForm">
             <input type="number" id="resolutionWidth" name="resolutionWidth" placeholder="Sensor Width (pixels)" value="6000" required>
@@ -221,8 +159,8 @@ border-color: red;
 	</div>
 	
 	<div class="navbar-container">
-		<nav class="navbar" id="navbar-id" style="background: #f1c40f;">
-			<a name="photo-distance" id="photo-distance-L" onclick="home.remoteTrigger();home.changeColor('L');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
+		<nav class="navbar solar" id="navbar-id" style="background: #f1c40f;">
+			<a name="photo-distance" id="photo-distance-L" onclick="home.remoteTrigger();navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
 			<a name="intervallo-home" id="intervallo-home" onclick="home.changePage('left');"><img width="32" height="32" src="ico-intervallo.ico" ></a>
 			<a name="sun-eclipse" id="photo-distance-R" onclick="home.changePage('home');"><img src="ico-moon.ico" width="32" height="32" alt="Mode eclipse"></a>
 		</nav>
