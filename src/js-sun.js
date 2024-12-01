@@ -52,10 +52,9 @@ sun.sunPhotoSpacing = async function() {
 	
 	calculatedTimeInterval = timeBetweenPhotos; // Store for next page
 	outputDiv.innerHTML += `
-		</br>
 		<p>Sun Size: <strong>${sunSizePixels}</strong> pixels</p>
 		<p>Recommended Time Interval: <strong>${timeBetweenPhotos}</strong> seconds</p>
-		<p>Maximum Suns per Photo: <strong>${maxSuns}</strong></p></br>
+		<p>Maximum Suns per Photo: <strong>${maxSuns}</strong></p>
 	`;
 
 	document.getElementById("nextButton").classList.remove("hidden");
