@@ -3,108 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css-sun.css">
 	<link rel="stylesheet" href="css-home.css">
 	<link rel="alternate" href="home-big-screen.html" id="big-screen">
 	<link rel="alternate" href="home-landscape-screen.html" id="landscape-screen">
     <title>Sun Photo Spacing Calculator</title>
     <style>
-        /* General Reset */
-        * {
-            margin: 0;
-            padding: 0;
-        }
-html {
-background: #f1c40f;
-}
-
-body, html {
-    margin: 0;
-    padding: 0;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
-/* ----------- ---------- ----------- */
-
-.outer_container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-	flex-direction: column;
-}
-        .container-solar {
-			margin-top: 50px;
-			margin-bottom: 100px;
-            background: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            width: 90%;
-            padding: 30px;
-            text-align: center;
-		}
-			
-
-        .container h1 {
-            font-size: 2rem;
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
 		
-        .container p {
-            font-size: 0.9rem;
-            color: #7f8c8d;
-            margin-bottom: 25px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .container-solar input[type="number"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1rem;
-            color: #2c3e50;
-        }
-
-        button {
-            background-color: #f39c12;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #d35400;
-        }
-
-        .output, .next-page {
-            margin-top: 20px;
-            font-size: 1rem;
-            color: #34495e;
-        }
-
-        .hidden {
-            display: none;
-        }
-		
-		.navbar.solar a {
-		background-color: transparent;
-		}
-		
-
     </style>
 </head>
 <body>
@@ -131,29 +36,29 @@ body, html {
     <div class="container-solar" id="page1">
         <h1>Solar eclipse intervallometer</h1>
         <p>Calculate the optimal photo interval and sun size for your setup.</p>
-        <form id="sunForm">
+        <form class="solar" id="sunForm">
             <input type="number" id="resolutionWidth" name="resolutionWidth" placeholder="Sensor Width (pixels)" value="6000" required>
             <input type="number" id="resolutionHeight" name="resolutionHeight" placeholder="Sensor Height (pixels)" value="4000" required>
             <input type="number" id="focalLength" name="focalLength" placeholder="Focal Length (mm)" value="300" required>
             <input type="number" id="sensorWidth" name="sensorWidth" placeholder="Sensor Width (mm)" value="23.5" required>
             <button type="button" onclick="sun.sunPhotoSpacing();">Calculate</button>
         </form>
-        <div class="output" id="output">
+        <div class="output solar" id="output">
             <!-- Results will appear here -->
         </div>
-        <button class="hidden" id="nextButton" onclick="sun.showNextPage()">Next</button>
+        <button class="hidden solar" id="nextButton" onclick="sun.showNextPage()">Next</button>
     </div>
 	
 
     <div class="container-solar hidden" id="page2">
         <h1>Photo Settings</h1>
-        <form id="photoSettingsForm">
+        <form class="solar" id="photoSettingsForm">
             <input type="number" id="numPictures" name="nb_photos" placeholder="Number of Pictures" required>
             <input type="number" id="timeInterval" name="tmp_enregistrement" placeholder="Time Interval (seconds)" required>
 			<input type="number" id="timeExpo" name="tmp_pose" placeholder="Time Interval (seconds)" value=0.01 style="display: none;">
             <button type="submit" onclick="sun.submitForm('photoSettingsForm')" >Submit</button>
         </form>
-		<div class="output" id="photoCountdown">
+		<div class="output solar" id="photoCountdown">
 		<!-- counting down pictures and time -->
 		</div>
 	</div>
