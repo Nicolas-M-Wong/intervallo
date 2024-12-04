@@ -4,6 +4,9 @@ DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 : > "$DESKTOP_DIR/logfile.txt"
 exec > >(tee -a "$DESKTOP_DIR/logfile.txt") 2> >(tee -a "$DESKTOP_DIR/logfile.txt" >&2)
 
+branch="$1"
+option="$2"
+
 # Function to check if the Raspberry Pi is connected to the internet using DNS
 check_internet() {
     # Use curl to check if we can reach google.com with a short timeout (0.5 seconds)
@@ -29,7 +32,7 @@ center_text() {
     printf "%*s%s\n" $CENTER_COL "" "$msg"
     printf "%*s\n" "$width" | tr ' ' "$character"
     }
-
+	
 compiler_request(){
 local file_path="$1"
 local compiler_path="$2"
@@ -42,19 +45,58 @@ if [ ! -f "$file_path" ]; then
         echo "Compilation failed." 
     fi
 else
-    echo "$3 already exists in $DIR."
+    echo "$3.exe already exists in $DIR."
 fi
 }
 
-center_text "$(date)" "-"
+display_usage() {
+    center_text "Help" "-"
+    echo "Usage: ./$0 <branch-name> [options]"
+    echo "Options:"
+    echo "  --no-check    Bypass the internet connection check."
+	echo "  --no-update   Bypass the gitpull and launch the version already installed"
+    echo "  --help        Display this help message."
+    echo ""
+    echo "If you use --no-check, the script will skip checking for an internet connection."
+    echo "Use this command if you are connected with a very slow internet (<10kbs) but still need an update"
+}
+
+if [[ "$option" == "--help" ]]; then
+    display_usage
+    exit 0
+# Check for the '--no-update' argument to launch the python directly
+elif [[ $option == "--no-update" ]]; then
+    center_text "Launching $branch $(date)" "-"
+    echo "Launching python server"
+	DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
+	cd $DIR
+	python3 intervallo-server-1.py
+	center_text "" "-"
+	exit 0
+
+# Check for the '--no-check' argument to bypass internet check
+elif [[ "$option" == "--no-check" ]]; then
+    center_text "Installing $branch $(date)" "-"
+    echo "Bypassing internet connection check"
+else
+    center_text "Installing $branch $(date)" "-"
+    # Check internet connection
+    if ! check_internet; then
+        echo "No internet connection detected."
+		echo "Launching the server without the latest update"
+        # echo "You can bypass this check by using the '--no-check' argument when running the script."
+        # echo "Example: ./installer.sh main --no-check"
+        # exit 1  # Early exit if no internet and no bypass argument
+    fi
+fi
 
 if [ "$#" -lt 1 ]; then
     echo "$0 missing branch to launch"
+	display_usage
     center_text "fatal error" "-"
     exit 1
 fi
 
-branch="$1"
 #find the user desktop directory
 
 if ! cd "$DESKTOP_DIR/intervallo-$1"; then
@@ -66,29 +108,23 @@ fi
 cd "$DESKTOP_DIR/intervallo-$1"
 #go to the folder
 
-# Check internet connection then git pull
-if check_internet; then
-    echo "Internet connection is active, updating the programm"
-    git config pull.rebase false
-    git pull https://www.github.com/Nicolas-M-Wong/intervallo "$1"
-else
-    echo "Internet unavailable, continuing without the latest update"
-fi
-
 DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
 
-if [ ! -f "$DIR/Trigger.exe" ]; then
-    # echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
-    # Compile trigger.cpp
-    compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh" "Constant_Trigger"
-    if [ $? -eq 1 ]; then
-        echo "Compilation failed." 
-    fi
-else
-    echo "Trigger.exe already exists in $DIR."
-fi
+
+if [[ "$option" != "--no-update" ]]; then
+	git init
+	git config pull.rebase false
+	url="https://www.github.com/Nicolas-M-Wong/intervallo"
+	git pull "${url}" "${branch%/}"
+
+
+	compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh" "Constant_Trigger"
+	compiler_request "$DIR/Variable_Trigger.exe" "$DIR/Compiler.sh" "Variable_Trigger"
+	fi 
 
 cd $DIR
 python3 intervallo-server-1.py
 
 center_text "" "-"
+
+

@@ -1,4 +1,16 @@
 var WheelConstruct = WheelConstruct || {};
+// ---------------------------------------------------------------------------------------------------------------------------------------------
+
+WheelConstruct.countDecimalPlaces = function(num) {
+	let numStr = num.toString();
+	let decimalIndex = numStr.indexOf('.');
+	if (decimalIndex === -1) {
+		return 0;
+	}
+	return numStr.length - decimalIndex - 1;
+	//Compte les chiffres après la virgule du pas décimal
+	//Compte les caractères pour éviter une boucle while
+}
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
  
@@ -12,10 +24,10 @@ WheelConstruct.createWheel = function(elementId, step) {
     let isFirst = true;
 
     step.forEach(({ start, end, step, fixed }) => {
-        for (let i = start; i < end; i += step) {
+        for (let i = start; i <= end; i += step) {
             const numberDiv = document.createElement('div');
             numberDiv.className = 'number';
-            numberDiv.innerText = fixed ? i.toFixed(countDecimalPlaces(step)) : i;
+            numberDiv.innerText = fixed ? i.toFixed(WheelConstruct.countDecimalPlaces(step)) : i;
 
             // Apply attributes to the first numberDiv
             if (isFirst) {
@@ -51,7 +63,7 @@ WheelConstruct.getCurrentValue = function (wheel, step_array) {
 	}
 
 	const step = getStep(currentValue, step_array);
-	return currentValue.toFixed(countDecimalPlaces(step));
+	return currentValue.toFixed(WheelConstruct.countDecimalPlaces(step));
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -146,7 +158,7 @@ WheelConstruct.updateWheel = function(wheelId, startValue, steps) {
     // Find the closest value in the possibleValues array to the startValue
     let closestValue = possibleValues[0];
     let smallestDifference = Math.abs(startValue - closestValue);
-
+	
     for (let i = 1; i < possibleValues.length; i++) {
         const currentDifference = Math.abs(startValue - possibleValues[i]);
         if (currentDifference < smallestDifference) {
@@ -157,6 +169,7 @@ WheelConstruct.updateWheel = function(wheelId, startValue, steps) {
 
     // Find the index of the closest value
     const startIndex = possibleValues.indexOf(closestValue);
+
     if (startIndex === -1) {
         console.error(`Closest value "${closestValue}" not found in possible values.`);
         return;
@@ -170,15 +183,4 @@ WheelConstruct.updateWheel = function(wheelId, startValue, steps) {
     WheelConstruct.updateSelectedNumber(wheel, wheelId);
 }
 
-// ---------------------------------------------------------------------------------------------------------------------------------------------
 
-WheelConstruct.countDecimalPlaces = function(num) {
-	let numStr = num.toString();
-	let decimalIndex = numStr.indexOf('.');
-	if (decimalIndex === -1) {
-		return 0;
-	}
-	return numStr.length - decimalIndex - 1;
-	//Compte les chiffres après la virgule du pas décimal
-	//Compte les caractères pour éviter une boucle while
-}

@@ -1,0 +1,97 @@
+        /* General Reset */
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+background: #f1c40f;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* ----------- ---------- ----------- */
+
+.outer_container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	flex-direction: column;
+}
+.container-solar {
+	margin-top: 50px;
+	margin-bottom: 100px;
+	background: #ffffff;
+	border-radius: 15px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	max-width: 500px;
+	width: 90%;
+	padding: 30px;
+	text-align: center;
+}
+	
+
+.container-solar h1 {
+	font-size: 2rem;
+	color: #2c3e50;
+	margin-bottom: 15px;
+}
+
+.container-solar p {
+	font-size: 0.9rem;
+	color: #7f8c8d;
+	margin-bottom: 25px;
+}
+
+form.solar {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+
+.container-solar input[type="number"] {
+	width: 100%;
+	padding: 12px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font-size: 1rem;
+	color: #2c3e50;
+}
+
+.solar button,
+button.solar {
+	background-color: #f39c12;
+	color: white;
+	border: none;
+	padding: 12px 20px;
+	font-size: 1rem;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.solar button:hover {
+	background-color: #d35400;
+}
+
+.output, .next-page {
+	margin-top: 20px;
+	font-size: 1rem;
+	color: #34495e;
+}
+
+.hidden {
+	display: none;
+}
+
+.navbar.solar a:hover {
+background-color: transparent;
+}

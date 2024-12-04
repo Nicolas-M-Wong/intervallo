@@ -10,20 +10,27 @@
 	
 	/* ----------- Light mode color palette ----------- */
 	--bg-color-light: #fff;
-	--text-color-Light: #333;
+	--text-color-light: #333;
 	--secondary-text-color-light: #666;
 	--border-color-light: #dfdfdf;
 	--highlight-bg-color-light: #CCCCCC;
 
 	/* ----------- Color Accent ----------- */
 	--accent-color: #C70039;   /* red accent*/
-	
+
 	--opacity-transparent: 0;
 	--opacity-solid: 1;
 }
 
+*{
+	box-sizing: border-box;
+}
+
 body{ 
+	
 	margin: 0;
+    height: 100vh;
+    width: 100vw;
 }
 
 /* ----------- ---------- ----------- */
@@ -33,6 +40,8 @@ body{
 body[data-mode="dark"],
 #dialogBox[data-mode="dark"],
 #nb_photos[data-mode="dark"],
+#tmp_pose_start[data-mode="dark"],
+#tmp_pose_end[data-mode="dark"],
 #tmp_pose[data-mode="dark"],
 #enregistrement[data-mode="dark"],
 #shutdown[data-mode="dark"],
@@ -46,6 +55,8 @@ body[data-mode="dark"],
 #dialogBox[data-mode="dark"],
 #nb_photos[data-mode="dark"],
 #tmp_pose[data-mode="dark"],
+#tmp_pose_start[data-mode="dark"],
+#tmp_pose_end[data-mode="dark"],
 #enregistrement[data-mode="dark"],
 #main[data-mode="dark"],
 #navbar-id[data-mode="dark"]{
@@ -59,7 +70,8 @@ body[data-mode="dark"],
 
 #main[data-mode="dark"],
 #navbar-id[data-mode="dark"],
-.shutdown-wrapper[data-mode="dark"] {
+.shutdown-wrapper[data-mode="dark"],
+#header-bar[data-mode="dark"] {
     background-color: var(--border-color-dark);
 	transition: background-color 0.3s, color 0.3s;
 }
@@ -70,6 +82,8 @@ body[data-mode="light"],
 #dialogBox[data-mode="light"],
 #nb_photos[data-mode="light"],
 #tmp_pose[data-mode="light"],
+#tmp_pose_start[data-mode="light"],
+#tmp_pose_end[data-mode="light"],
 #enregistrement[data-mode="light"],
 #shutdown[data-mode="light"],
 #big-screen[data-mode="light"],
@@ -82,6 +96,8 @@ body[data-mode="light"],
 #dialogBox[data-mode="light"],
 #nb_photos[data-mode="light"],
 #tmp_pose[data-mode="light"],
+#tmp_pose_start[data-mode="light"],
+#tmp_pose_end[data-mode="light"],
 #enregistrement[data-mode="light"],
 #main[data-mode="light"],
 #navbar-id[data-mode="light"]{
@@ -95,7 +111,8 @@ body[data-mode="light"],
 
 #main[data-mode="light"],
 #navbar-id[data-mode="light"],
-.shutdown-wrapper[data-mode="light"] {
+.shutdown-wrapper[data-mode="light"],
+#header-bar[data-mode="light"] {
 	color: var(--text-color-light);
     background-color: var(--border-color-light);
 	transition: background-color 0.3s, color 0.3s;
@@ -124,7 +141,14 @@ dialog::backdrop {
 }
 
 /* ----------- ---------- ----------- */
+
 /* Main containers and button */
+
+#screen-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
 
 form { 
 	display: table; 
@@ -158,8 +182,8 @@ label {
 .container{
 	display: flex;
 	flex-direction: column;
-	margin: 15px 25px;
-	margin-bottom: 90px;
+	margin: 50px 25px;
+	margin-bottom: 100px;
 }
 
 .content{
@@ -168,7 +192,7 @@ margin: 0 auto;
 
 .container,
 .content {
-	padding: 20px 20px 5px 20px;
+	padding: 5px 20px 5px 20px;
 	background-color: var(--border-color-dark);
 	color: var(--text-color-dark);
 	border-radius: 10px;
@@ -218,6 +242,11 @@ margin: 0 auto;
 	border: none;
 	border-radius: 5px;
 	box-sizing: border-box;
+}
+
+button:disabled {
+  /* your styling here */
+  opacity: 0.5; 
 }
 
 /* ----------- ---------- ----------- */
@@ -319,7 +348,8 @@ orientation */
 }
 
 .phone-screen-class {
-	display: block;
+	display: flex;
+	flex-direction: column;
 }
 
 /* ----------- ---------- ----------- */
@@ -333,19 +363,20 @@ orientation */
 } 
 
 .navbar { 
-	background-color: var(--border-color-dark); 
+	
+	background: var(--border-color-dark); 
 	display: flex; 
 	justify-content: space-around; 
 	align-items: center; 
 	position: fixed; 
 	bottom: 15px; 
+	max-width: 500px;
 	width: 90%;
 	border-radius: 25px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 } 
 
 .navbar a { 
-	
 	text-align: center; 
 	padding: 8px 8px; 
 	text-decoration: none; 
@@ -359,6 +390,20 @@ orientation */
 
 /* ----------- ---------- ----------- */
 
+.time {
+    flex: 1;
+}
+
+.battery {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.battery-icon {
+    font-size: 16px;
+}
+
 #toggle-mode{
 	font-size: 0px;
 }
@@ -370,7 +415,7 @@ orientation */
 .checkbox-round-shutdown,
 .checkbox-round-sleep,
 #toggle-mode{
-margin-left: 9px;
+margin-left: 15px;
 }
 
 .checkbox-round-sleep{
@@ -381,8 +426,10 @@ color: #C70039;
 }
 
 .circle {
-    width: 1.7vh;
-    height: 1.7vh;
+    width: 1.9vh;
+    height: 1.9vh;
+	min-height: 18px;
+	min-width: 18px;
 	border: solid;
 	border-width: 2px;
 	border-radius: 50%;
@@ -471,9 +518,16 @@ border-color: red;
 
 /* ----------- ---------- ----------- */
 
-#header-bar {
+.header-bar {
 	display: flex;
 	justify-content: space-between;
+	top: 0;
+	width: 100%;
+	height: 35px;
+    padding: 5px 10px;
+	background-color: var(--border-color-dark);
+	color: var(--text-color-dark);
+	position: fixed;
 }
 
 #left-side {
@@ -521,6 +575,65 @@ border-color: red;
 	display: none;
 	opacity: 0;
 }
+
+/* ----------- ---------- ----------- */
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+			justify-content: space-between;
+        }
+
+        .labels {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .switch {
+			margin-top: 10px;
+            position: relative;
+            display: inline-block;
+            width: 55px;
+            height: 27px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--accent-color);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(27px);
+        }
 
 /* ----------- ---------- ----------- */
 
@@ -592,6 +705,8 @@ border-color: red;
 #wheelForm {
 	display: flex;
 }
+
+---------- ----------- */
 
 /* media querry screen width */
 

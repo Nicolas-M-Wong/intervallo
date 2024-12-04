@@ -11,7 +11,7 @@
 
 </head>
 
-<body id="screen-container" data-page="home-V1" data-mode="dark">
+<body id="screen-container" data-page="home-V3" data-mode="dark">
 <div id="phone-screen" class="phone-screen-class">
 
 <div id="header-bar" class="header-bar" data-mode="dark">
@@ -34,9 +34,8 @@
 		</a>
 		</div>
 	</div>
-
+	
 <div class="container" id="main" data-mode="dark">
-
 <div id="notification" data-mode="hide">
 	<div class="txt-notif"><span class="notification-title" id="notificationTitle">La série se termine à X</span>
 	</br><span class="notification-message" id="notificationMessage">X photos, exposition X sec.</span>
@@ -53,7 +52,16 @@
         			<h3 class="Title-3">Paramètres</h3>
         		</div>
     		</div>
-    		
+			
+<div class="toggle-container">
+		<span class="right-label">Exposition </br>variable</span>
+		<label class="switch">
+			<input id="varSlider" type="checkbox" name="varSlider">
+			<span class="slider"></span>
+		</label>
+        <span class="left-label">Enregistrement </br>variable</span>
+</div>
+
     		<form id="interval-Form" method="post" class="param-submit">
     		
         		<div class="param-submit">
@@ -65,11 +73,17 @@
 					<input type="number" step="1" name="nb_photos" id="nb_photos" data-mode="dark" required />
 					
 					<div class="label-info">
-						<label for="tmp_pose">Temps d'expo</label>
+						<label for="tmp_pose_start">Temps d'expo au début de la série</label>
 						<span class="tooltip" title="Temps d'exposition pour une photo">&#x24D8</span>
             		</div>
-            		<input type="number" step="0.01" name="tmp_pose" id="tmp_pose" data-mode="dark" required />
-					
+            		<input type="number" step="0.01" name="tmp_pose_start" id="tmp_pose_start" data-mode="dark" required />
+
+					<div class="label-info">
+						<label for="tmp_pose_end">Temps d'expo à la fin de la série</label>
+						<span class="tooltip" title="Temps d'exposition pour une photo">&#x24D8</span>
+            		</div>
+            		<input type="number" step="0.01" name="tmp_pose_end" id="tmp_pose_end" data-mode="dark" required />
+										
 					<div class="label-info">
 						<label for="enregistrement">Intervalle</label>
 						<span class="tooltip" title="Intervalle de temps entre chaque photo">&#x24D8</span>
@@ -82,11 +96,11 @@
     	</div>
     
         <div id="confirmation" style="display: none;">
-            <h3>Temps de prise de vue estimé : </h3><h3 id="estimation_tmp"></h3>
+            <h3 id="title_tmp_estime">Temps de prise de vue estimé : </h3><h3 id="estimation_tmp"></h3>
             <form action = "" method="post" class = "confirmation-form">
                 <div class="flex-column-confirm">
                     <button name="confirm" value="Confirmer" id="openDialogBox" onclick="home.handleButtonClick('No','interval-Form')">Confirmer</button>
-                    <button name="test-shot" value="Photo_test" id="test-shot" onclick="home.handleButtonClick('Yes','interval-Form')">Photo test</button>
+                    <button name="test-shot" value="Photo_test" id="test-shot" onclick="home.handleButtonClick('Yes','interval-Form')" disabled>Photo test</button>
                 </div>
             </form>
         </div>
@@ -106,6 +120,7 @@
 				<a name="photo-distance" id="photo-distance-L" onclick="home.remoteTrigger();home.changeColor('L');navigator.vibrate([250]);"><img src="ico-camera.ico" width="32" height="32" alt="Déclencheur"></a>
 				<a name="intervallo-home" id="intervallo-home" onclick="home.changePage('left')"><img width="32" height="32" src="ico-intervallo.ico" ></a>
 				<a name="sun-eclipse" id="photo-distance-R" onclick="home.changePage('sun')"><img src="ico-sun.ico" width="32" height="32" alt="Mode eclipse"></a>
+			</nav>
 		</div>
     </div>
     
