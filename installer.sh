@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Determine terminal width
-
+# This installer might not work with the frozen V1
 check_internet() {
     # Use curl to check if we can reach google.com with a short timeout (0.5 seconds)
     curl -s --head --connect-timeout 1 https://www.google.com > /dev/null 2>&1
