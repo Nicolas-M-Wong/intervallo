@@ -361,7 +361,7 @@ if TCP_IP != "127.0.0.1":
                         http_header = "HTTP/1.1 400 Bad Request\r\n"
                         response_body = "Failed NaN"
                         
-                elif 'variable_expo' in parameters.keys() and 'nb_photos' in parameters.keys():
+                elif 'tmp_pose_start' in parameters.keys() and 'nb_photos' in parameters.keys():
                    
                     nb_photos = parameters.get('nb_photos',0)
                     start_expo_time = parameters.get('tmp_pose_start',0)
