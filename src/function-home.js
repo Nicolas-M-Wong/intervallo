@@ -10,7 +10,7 @@ home.showDialog = function(nbPhotos, exposureTime, timeBetweenPhotos,now) {
             e.preventDefault();
         }
     });
-	console.log(timeBetweenPhotos,,nbPhotos,exposureTime);
+	console.log(timeBetweenPhotos,nbPhotos,exposureTime);
 	document.getElementById("dialogBoxTitle").innerHTML = "Temps restant :";
     document.getElementById("Compteur").innerHTML = "00:00:00"; // Initialize countdown display
     dialogBoxId.showModal();
