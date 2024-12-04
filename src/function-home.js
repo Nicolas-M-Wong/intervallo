@@ -10,7 +10,6 @@ home.showDialog = function(nbPhotos, exposureTime, timeBetweenPhotos,now) {
             e.preventDefault();
         }
     });
-	console.log(timeBetweenPhotos,nbPhotos,exposureTime);
 	document.getElementById("dialogBoxTitle").innerHTML = "Temps restant :";
     document.getElementById("Compteur").innerHTML = "00:00:00"; // Initialize countdown display
     dialogBoxId.showModal();
@@ -154,7 +153,7 @@ home.handleButtonClick = function(test_status,formName) {
                 if (http_status_post === 200) {
                     const nowDate = new Date().getTime();
                     if (currentFileName === "home-V3") {
-                        home.showDialog(data["nb_photos"], data["variable_end"], data["tmp_enregistrement"], nowDate); // Show the dialog box with the countdown
+                        home.showDialog(data["nb_photos"], Math.max(data["tmp_pose_start"],data["tmp_pose_end"]), data["tmp_enregistrement"], nowDate); // Show the dialog box with the countdown
                     } else {
                         home.showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"], nowDate); // Show the dialog box with the countdown
                     }
