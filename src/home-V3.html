@@ -87,8 +87,16 @@
 					<div class="label-info">
 						<label for="enregistrement">Intervalle</label>
 						<span class="tooltip" title="Intervalle de temps entre chaque photo">&#x24D8</span>
-            		</div>
-            		<input type="number" step="0.01" name="tmp_enregistrement" id="enregistrement" data-mode="dark" required />
+            		<input type="number" step="0.01" name="tmp_enregistrement_start" id="enregistrement_start" data-mode="dark" required />
+					</div>
+            		
+     					
+					<div class="label-info">
+						<label for="enregistrement">Intervalle</label>
+						<span class="tooltip" title="Intervalle de temps entre chaque photo">&#x24D8</span>
+            		<input type="number" step="0.01" name="tmp_enregistrement_end" id="enregistrement_end" data-mode="dark" required />
+					</div>
+            		
      
             		<button type="submit" id="form-submit" value="Ok" onclick="home.submitForm(event,'interval-Form');">Ok</button>
                 </div>
