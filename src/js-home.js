@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('toggle-mode');
     const body = document.body;
 	let currentFileName = document.body.getAttribute('data-page');
-	const elementsToToggle = [
+	var elementsToToggle = [
 	  body, 
 	  document.getElementById('dialogBox'),
 	  document.getElementById('main'),
@@ -90,10 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// Elements that vary based on currentFileName
 	if (currentFileName === "home-V3") {
+		elementsToToggle = elementsToToggle.filter(item => item !== document.getElementById('enregistrement'));
 	  // Add `tmp_pose_start` and `tmp_pose_end` only for "home-V3"
-	  elementsToToggle.push(
+		elementsToToggle.push(
+
 		document.getElementById('tmp_pose_start'), 
-		document.getElementById('tmp_pose_end')
+		document.getElementById('tmp_pose_end'),
+		document.getElementById('enregistrement_start'), 
+		document.getElementById('enregistrement_end'),
 	  );
 	} else {
 	  // Add `tmp_pose` for other cases
@@ -151,12 +155,17 @@ checkbox.addEventListener('change', function() {
 	
   if (this.checked) {
     console.log("Checkbox is checked..");
-/* 	document.getElementById(Id).textContent = title;
-	document.getElementById(Id).textContent = title;
-	document.getElementById(Id).textContent = title; */
+	// Variable interval
+	document.getElementById('tmp_pose_start').style.display = "block";
+	document.getElementById('tmp_pose_end').style.display = "none";
+	
+	document.getElementById('enregistrement_start').style.display = "block";
+	document.getElementById('enregistrement_end').style.display = "block";
   } else {
-/* 	document.getElementById(Id).textContent = title;
-	document.getElementById(Id).textContent = title;
-	document.getElementById(Id).textContent = title; */
-  }
+	document.getElementById('tmp_pose_start').style.display = "block";
+	document.getElementById('tmp_pose_end').style.display = "block";
+	
+	document.getElementById('enregistrement_start').style.display = "block";
+	document.getElementById('enregistrement_end').style.display = "none";
+}
 });
