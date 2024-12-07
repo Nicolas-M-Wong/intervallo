@@ -10,7 +10,7 @@
 	
 	/* ----------- Light mode color palette ----------- */
 	--bg-color-light: #fff;
-	--text-color-light: #333;
+	--text-color-light: #1C1C1C;
 	--secondary-text-color-light: #666;
 	--border-color-light: #dfdfdf;
 	--highlight-bg-color-light: #CCCCCC;
@@ -44,6 +44,8 @@ body[data-mode="dark"],
 #tmp_pose_end[data-mode="dark"],
 #tmp_pose[data-mode="dark"],
 #enregistrement[data-mode="dark"],
+#enregistrement_start[data-mode="dark"],
+#enregistrement_end[data-mode="dark"],
 #shutdown[data-mode="dark"],
 #big-screen[data-mode="dark"],
 #landscape-screen[data-mode="dark"]{
@@ -58,6 +60,8 @@ body[data-mode="dark"],
 #tmp_pose_start[data-mode="dark"],
 #tmp_pose_end[data-mode="dark"],
 #enregistrement[data-mode="dark"],
+#enregistrement_start[data-mode="dark"],
+#enregistrement_end[data-mode="dark"],
 #main[data-mode="dark"],
 #navbar-id[data-mode="dark"]{
 	color: var(--text-color-dark);
@@ -85,6 +89,8 @@ body[data-mode="light"],
 #tmp_pose_start[data-mode="light"],
 #tmp_pose_end[data-mode="light"],
 #enregistrement[data-mode="light"],
+#enregistrement_start[data-mode="light"],
+#enregistrement_end[data-mode="light"],
 #shutdown[data-mode="light"],
 #big-screen[data-mode="light"],
 #landscape-screen[data-mode="light"]{
@@ -99,6 +105,8 @@ body[data-mode="light"],
 #tmp_pose_start[data-mode="light"],
 #tmp_pose_end[data-mode="light"],
 #enregistrement[data-mode="light"],
+#enregistrement_start[data-mode="light"],
+#enregistrement_end[data-mode="light"],
 #main[data-mode="light"],
 #navbar-id[data-mode="light"]{
 	color: var(--text-color-light);
@@ -485,6 +493,8 @@ border-color: red;
 .label-info{
 	display: flex;
     justify-content: space-between;
+	flex-direction: row;
+	flex-wrap: wrap;
 }
 
 
