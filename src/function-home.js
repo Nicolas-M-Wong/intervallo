@@ -574,7 +574,7 @@ home.languageRedirect = function(lang) {
 	const currentPage = document.body.getAttribute('data-page');
 	if (!userLang.toLowerCase().startsWith('fr')) {
 		home.saveFormData();
-		home.sendPostRequest({"file_request": `${currentPage} ${"-EN"}`).then(() => {
+		home.sendPostRequest({"file_request": `${currentPage} ${"-EN"}`}).then(() => {
 		location.reload();
 		}
 	}
