@@ -576,7 +576,7 @@ home.languageRedirect = function(lang) {
 		home.saveFormData();
 		home.sendPostRequest({"file_request": `${currentPage} ${"-EN"}`}).then(() => {
 		location.reload();
-		}
+		});
 	}
 }
 	
