@@ -6,7 +6,7 @@
 	--text-color-dark: #E0E0E0;
 	--secondary-text-color-dark: #B0B0B0;
 	--highlight-bg-color-dark: #1E1E1E;
-	--border-color-dark: #333;
+	--border-color-dark: #1C1C1C;
 	
 	/* ----------- Light mode color palette ----------- */
 	--bg-color-light: #fff;
@@ -490,11 +490,23 @@ border-color: red;
 	justify-content: flex-end;
 }
 
+#param2,
+#param1 {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	gap: 15px;
+}
+#param2 {
+	margin-bottom: 5px;
+}
+
 .label-info{
 	display: flex;
     justify-content: space-between;
 	flex-direction: row;
 	flex-wrap: wrap;
+	width: 100%;
 }
 
 

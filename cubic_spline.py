@@ -5,11 +5,13 @@ Created on Tue Sep 17 12:11:51 2024
 @author: Nicolas
 """
 
+from matplotlib import pyplot as plt
+
 import numpy as np
 from scipy.interpolate import CubicSpline
 
 
-def f(num_points,y_start_user,y_end_user,interval_time):
+def f(num_points,y_start_user,y_end_user):
     # x_start = 0
     # x_end = number of pictures in the serie
     # y_start = exposure time at the begining
@@ -43,14 +45,19 @@ def f(num_points,y_start_user,y_end_user,interval_time):
     
     Y = continuous_func(X)
     Y = (abs(Y)*(y_end_user-y_start_user)/30)+y_start_user
-    Y2 = continuous_func(X, nu=1)
+    # Y2 = continuous_func(X, nu=1)
     # if sign == 1:
     #     print(f"min de f' {min(Y2)}, f est strictement croissante : {min(Y2)>0}")
     # else:
     #     print(f"max de f' {max(Y2)}, f est strictement décroissante : {max(Y2)<0}")
-    Y2 = interval_time-Y
-    return X, Y,Y2
+    return X, Y
 
+def complement(spline,cst_param):
+    complement_function = cst_param-spline
+    return complement_function, spline
+
+x,y = f(10,23,25)
+    
 # def remap(y, y_start, y_end):
 #     y = (abs(y)*(y_end-y_start)/30)+y_start
 #     return y
@@ -79,3 +86,11 @@ def f(num_points,y_start_user,y_end_user,interval_time):
 # # plt.legend()
 # plt.subplot(212)
 # plt.plot(X,Y2)
+a= (23,23.094454545454546,23.24,23.473073232323234,23.77149494949495,24.09843181818182,24.417050505050504,24.690517676767676,24.882,24.970704545454545)
+plt.title(f"JS-python/python %, erreur totale: {np.round((np.sum(a)-np.sum(y))/np.sum(y)*100,3)}%")
+plt.show()
+plt.figure('1')
+plt.plot(a,'-b',label="JS")
+plt.plot(y,'-r',label="Python")
+plt.legend()
+plt.show()

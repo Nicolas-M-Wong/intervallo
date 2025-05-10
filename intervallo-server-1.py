@@ -5,7 +5,7 @@ import os
 import MAX17043
 import random
 import string
-from cubic_spline import f
+from cubic_spline import f, complement
 import subprocess
 from sun import sun_photo_spacing
 
@@ -131,8 +131,14 @@ def photo_capture(nb_photos_loc,tmp_pose_loc,tmp_enregistrement_loc):
     print(command)
     return command
 
-def variable_trigger (nb_photo_loc, start_expo_time, end_expo_time, tmp_enregistrement_loc):
-    x,y,y2 = f(nb_photo_loc, start_expo_time, end_expo_time, tmp_enregistrement_loc)
+def variable_trigger (nb_photo_loc, start_param1, end_param1, start_param2, end_param2):
+    # y is the spline that fits the variable parameter (whatever the parameter you feed), y2 is the complementary spline 
+    # if the exposure time is variable and the interval is constant
+    x,y= f(nb_photo_loc, start_param1, end_param1)
+    if start_param2 == end_param2 :
+        y, y2 = complement(y,start_param2)
+    else:
+        x2,y2 = f(nb_photo_loc, start_param2, end_param2)
     return y,y2
 
 ###############################################################################
@@ -366,14 +372,15 @@ if TCP_IP != "127.0.0.1":
                     nb_photos = parameters.get('nb_photos',0)
                     start_expo_time = parameters.get('tmp_pose_start',0)
                     end_expo_time = parameters.get('tmp_pose_end',0)
-                    tmp_enregistrement =  parameters.get('tmp_enregistrement',0)
+                    tmp_enregistrement_start =  parameters.get('tmp_enregistrement_start',0)
+                    tmp_enregistrement_end =  parameters.get('tmp_enregistrement_end',0)
                     new_cmd_date = parameters.get('date',0)
-                    tmp_prise = (nb_photos-1)*tmp_enregistrement+end_expo_time
+                    tmp_prise = (nb_photos-1)*tmp_enregistrement_start+end_expo_time
                     #Check that a photoshoot is not currently underway, if its not then proceed, else sent a message to the client
                     if new_cmd_date > expct_end_date:
                         new_cmd_date +=1000*tmp_prise
                         expct_end_date = new_cmd_date
-                        y,y2 = variable_trigger(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement)
+                        y,y2 = variable_trigger(int(nb_photos), start_expo_time, end_expo_time, tmp_enregistrement_start, tmp_enregistrement_end)
                         # print(f"y: {y}; y2: {y2}")
                         print("launching command")
                         if (y2 >= 1.49).all():

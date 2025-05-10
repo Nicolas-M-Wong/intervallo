@@ -111,30 +111,45 @@ home.submitForm = function(event, formName){
 		}
 	}
 	else{		
-		
-		var totalTime = data["tmp_enregistrement"] * (data["nb_photos"] - 1)+data["tmp_pose_end"];
-		var intervalTimeCondition = Math.max(data["tmp_pose_start"],data["tmp_pose_end"]) + 1.5;
-		console.log("Total time for the interval:", totalTime, "seconds");
-		if (Number.isNaN(totalTime) || totalTime <= 0){
-			totalTime=0;
-			document.getElementById("confirmation").style.display = "none";
+		// Two cases : variable exposure time or variable intervals
+		if (Number.isNaN(data["tmp_enregistrement_end"])){
+			
+			// if tmp_pose_end is not a number, then we a fix exposure time but a variable intervals
+			var totalTime = data["tmp_enregistrement_start"] * (data["nb_photos"] - 1)+data["tmp_pose_end"];
+			var intervalTimeCondition = Math.max(data["tmp_pose_start"],data["tmp_pose_end"]) + 1.5;
+			console.log("Total time for the interval:", totalTime, "seconds");
+			
+			if (Number.isNaN(totalTime) || totalTime <= 0){
+				totalTime=0;
+				document.getElementById("confirmation").style.display = "none";
+			}
+			
+			else if (intervalTimeCondition>data["tmp_enregistrement_start"]){
+				document.getElementById("openDialogBox").disabled = true;
+				totalTime=0;
+				document.getElementById("confirmation").style.display = "block";
+				document.getElementById("title_tmp_estime").style.display = "none";
+				document.getElementById("estimation_tmp").innerHTML = `<span>Intervalle trop court</span></br><span style='font-weight: 300;'>Intervalle minimum de ${intervalTimeCondition}s</span>`;
+			}
+			else{
+				document.getElementById("title_tmp_estime").style.display = "block";
+				document.getElementById("openDialogBox").disabled = false;
+				// Display formatted time in confirmation
+				document.getElementById("estimation_tmp").innerHTML = home.formatTime(Math.round(totalTime));
+				document.getElementById("confirmation").style.display = "block";
+				// Prepare form data for the POST request
+				formData = new FormData(document.getElementById('interval-Form'));
+			}
 		}
-		else if (intervalTimeCondition>data["tmp_enregistrement"]){
-			document.getElementById("openDialogBox").disabled = true;
-			totalTime=0;
-			document.getElementById("confirmation").style.display = "block";
-			document.getElementById("title_tmp_estime").style.display = "none";
-			document.getElementById("estimation_tmp").innerHTML = `<span>Intervalle trop court</span></br><span style='font-weight: 300;'>Intervalle minimum de ${intervalTimeCondition}s</span>`;
-		}
-		else{
-			document.getElementById("title_tmp_estime").style.display = "block";
-			document.getElementById("openDialogBox").disabled = false;
-			// Display formatted time in confirmation
-			document.getElementById("estimation_tmp").innerHTML = home.formatTime(Math.round(totalTime));
-			document.getElementById("confirmation").style.display = "block";
-			// Prepare form data for the POST request
-			formData = new FormData(document.getElementById('interval-Form'));
-		}
+	}
+	if (Number.isNaN(data["tmp_pose_end"])){
+		document.getElementById("title_tmp_estime").style.display = "block";
+		document.getElementById("openDialogBox").disabled = false;
+		// Display formatted time in confirmation
+		document.getElementById("estimation_tmp").innerHTML = home.formatTime(Math.round(totalTime));
+		document.getElementById("confirmation").style.display = "block";
+		// Prepare form data for the POST request
+		formData = new FormData(document.getElementById('interval-Form'));
 	}
 }	
 	
@@ -152,8 +167,13 @@ home.handleButtonClick = function(test_status,formName) {
                 console.log(answer, http_status_post);
                 if (http_status_post === 200) {
                     const nowDate = new Date().getTime();
+					console.log(data["variable_end"]);
                     if (currentFileName === "home-V3") {
-                        home.showDialog(data["nb_photos"], data["variable_end"], data["tmp_enregistrement"], nowDate); // Show the dialog box with the countdown
+						let variableParam = Number.isFinite(data["tmp_enregistrement_end"]) ? "tmp_enregistrement_end" : "tmp_pose_end"; 
+						let constantParam = Number.isNaN(data["tmp_enregistrement_end"]) ? "tmp_enregistrement_end" : "tmp_pose_end";
+						
+						// the parameters that is a number
+                        home.showDialog(data["nb_photos"], data[variableParam], data["tmp_enregistrement"], nowDate); // Show the dialog box with the countdown
                     } else {
                         home.showDialog(data["nb_photos"], data["tmp_pose"], data["tmp_enregistrement"], nowDate); // Show the dialog box with the countdown
                     }

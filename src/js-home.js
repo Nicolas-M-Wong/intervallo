@@ -156,16 +156,16 @@ checkbox.addEventListener('change', function() {
   if (this.checked) {
     console.log("Checkbox is checked..");
 	// Variable interval
-	document.getElementById('tmp_pose_start').style.display = "block";
-	document.getElementById('tmp_pose_end').style.display = "none";
+	document.getElementById('param1Start').style.display = "flex";
+	document.getElementById('param1End').style.display = "none";
 	
-	document.getElementById('enregistrement_start').style.display = "block";
-	document.getElementById('enregistrement_end').style.display = "block";
+	document.getElementById('param2Start').style.display = "flex";
+	document.getElementById('param2End').style.display = "flex";
   } else {
-	document.getElementById('tmp_pose_start').style.display = "block";
-	document.getElementById('tmp_pose_end').style.display = "block";
+	document.getElementById('param1Start').style.display = "flex";
+	document.getElementById('param1End').style.display = "flex";
 	
-	document.getElementById('enregistrement_start').style.display = "block";
-	document.getElementById('enregistrement_end').style.display = "none";
+	document.getElementById('param2Start').style.display = "flex";
+	document.getElementById('param2End').style.display = "none";
 }
 });
