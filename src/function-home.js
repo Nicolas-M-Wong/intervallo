@@ -569,7 +569,7 @@ home.changePage = function(direction) {
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
-home.languageRedirect = function(lang) {
+home.languageRedirect = function() {
 	console.log(userLang.toLowerCase());
 	
 	const currentPage = document.body.getAttribute('data-page');
