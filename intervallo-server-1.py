@@ -5,7 +5,7 @@ import os
 import MAX17043
 import random
 import string
-from cubic_spline import f, complement
+#from cubic_spline import f, complement
 import subprocess
 from sun import sun_photo_spacing
 
