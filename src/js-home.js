@@ -58,6 +58,8 @@ window.addEventListener('load', function() {
 window.addEventListener('beforeunload', function(event) {
             home.saveFormData();
         });
+		
+home.languageRedirect();
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
