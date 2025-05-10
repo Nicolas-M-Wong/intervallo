@@ -572,13 +572,15 @@ home.changePage = function(direction) {
 home.languageRedirect = function() {
 	const userLang = navigator.language || navigator.userLanguage;
 	console.log(userLang.toLowerCase());
-	
 	const currentPage = document.body.getAttribute('data-page');
+	
 	if (!userLang.toLowerCase().startsWith('fr')) {
-		home.saveFormData();
-		home.sendPostRequest({"file_request": `${currentPage} ${"-EN"}`}).then(() => {
-		location.reload();
-		});
+		if (dataPage.slice(-3) !== '-EN') {
+			home.saveFormData();
+			home.sendPostRequest({"file_request": `${currentPage} ${"-EN"}`}).then(() => {
+			location.reload();
+			});
+		}
 	}
 }
 	
