@@ -570,6 +570,7 @@ home.changePage = function(direction) {
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 home.languageRedirect = function(lang) {
+	console.log(userLang.toLowerCase());
 	
 	const currentPage = document.body.getAttribute('data-page');
 	if (!userLang.toLowerCase().startsWith('fr')) {
