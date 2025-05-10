@@ -575,7 +575,7 @@ home.languageRedirect = function() {
 	const currentPage = document.body.getAttribute('data-page');
 	
 	if (!userLang.toLowerCase().startsWith('fr')) {
-		if (dataPage.slice(-3) !== '-EN') {
+		if (currentPage.slice(-3) !== '-EN') {
 			home.saveFormData();
 			home.sendPostRequest({"file_request": `${currentPage} ${"-EN"}`}).then(() => {
 			location.reload();
@@ -584,7 +584,6 @@ home.languageRedirect = function() {
 	}
 }
 	
-
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
 home.saveFormData = function(){
