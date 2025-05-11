@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Intervallomètre</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background-color: #121212;
+      color: #FFFFFF;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #BB86FC;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      background-color: #1F1F1F;
+      border: 1px solid #333;
+      color: #fff;
+      border-radius: 5px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      background-color: #BB86FC;
+      color: #121212;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #9b6bdc;
+    }
+
+    .status {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #1F1F1F;
+      border-radius: 5px;
+    }
+
+    .battery {
+      margin-top: 15px;
+      padding: 5px;
+      background-color: #333;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Intervallomètre</h1>
+
+<label>Temps d'exposition (secondes)
+  <input type="number" id="exposureTime" min="1" value="5">
+</label>
+
+<label>Intervalle entre photos (secondes)
+  <input type="number" id="intervalTime" min="1" value="10">
+</label>
+
+<label>Nombre de photos
+  <input type="number" id="photoCount" min="1" value="3">
+</label>
+
+<button id="startButton">Lancer la session</button>
+
+<div class="status">
+  <p><strong>Temps estimé total :</strong> <span id="estimatedTime">0</span> secondes</p>
+  <p><strong>Heure estimée de fin :</strong> <span id="endTime">-</span></p>
+  <p><strong>Statut :</strong> <span id="status">En attente</span></p>
+</div>
+
+<div class="battery">
+  <p><strong>Niveau de batterie :</strong> <span id="batteryLevel">-</span>%</p>
+</div>
+
+<script>
+  // === Connexion dynamique au serveur WebSocket ===
+  const serverHost = window.location.hostname;
+  const serverPort = 55000;
+  const ws = new WebSocket(`ws://${serverHost}:${serverPort}`);
+
+  let sessionEnCours = false;
+  let clientId = null;
+
+  ws.onopen = () => {
+    console.log("Connecté au serveur WebSocket");
+  };
+
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+
+    if (data.type === "batteryStatus") {
+      document.getElementById('batteryLevel').innerText = data.battery;
+      clientId = data.clientId;  // On récupère l'id client
+    }
+
+    if (data.type === "sessionStatus") {
+      document.getElementById('status').innerText = data.status;
+      if (data.status === "terminé") {
+        sessionEnCours = false;
+      }
+    }
+  };
+
+  document.getElementById('startButton').addEventListener('click', () => {
+    if (sessionEnCours) {
+      alert("Une session est déjà en cours.");
+      return;
+    }
+
+    const exposure = parseInt(document.getElementById('exposureTime').value);
+    const interval = parseInt(document.getElementById('intervalTime').value);
+    const count = parseInt(document.getElementById('photoCount').value);
+
+    const totalTime = (exposure + interval) * count - interval; // dernier intervalle inutile
+    const endDate = new Date(Date.now() + totalTime * 1000);
+
+    document.getElementById('estimatedTime').innerText = totalTime;
+    document.getElementById('endTime').innerText = endDate.toLocaleTimeString();
+    document.getElementById('status').innerText = "En cours";
+
+    // Envoi au serveur
+    const message = {
+      type: "startSession",
+      clientId: clientId,
+      exposure: exposure,
+      interval: interval,
+      count: count
+    };
+
+    ws.send(JSON.stringify(message));
+    sessionEnCours = true;
+  });
+</script>
+
+</body>
+</html>
