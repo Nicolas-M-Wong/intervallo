@@ -22,7 +22,7 @@ def get_ip():
 clients = {}
 client_counter = 1  # Compteur pour générer des identifiants clients uniques
 
-async def handler(websocket, path):
+async def handler(websocket):
     global client_counter
 
     # Attribuer un clientId unique
