@@ -4,6 +4,19 @@ import json
 import random
 import time
 from datetime import datetime
+import socket
+
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.settimeout(0)
+    try:
+        s.connect(('8.8.8.8',1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    
+    s.close()
+    return IP
 
 # Dictionnaire pour stocker les sessions des clients
 clients = {}
@@ -103,8 +116,8 @@ async def handler(websocket, path):
 # Lancer le serveur WebSocket
 async def main():
     # Démarrer le serveur WebSocket sur l'IP et port spécifiés
-    server = await websockets.serve(handler, "0.0.0.0", 55000)
-    print("Serveur WebSocket démarré sur ws://0.0.0.0:55000")
+    server = await websockets.serve(handler, get_ip(), 55000)
+    print(f"Serveur WebSocket démarré sur ws://{get_ip()}55000")
     await server.wait_closed()
 
 # Lancer l'événement principal
