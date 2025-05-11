@@ -115,9 +115,15 @@ async def handler(websocket):
 
 # Lancer le serveur WebSocket
 async def main():
-    # Démarrer le serveur WebSocket sur l'IP et port spécifiés
-    server = await websockets.serve(handler, get_ip(), 55000)
-    print(f"Serveur WebSocket démarré sur ws://{get_ip()}55000")
+    # Démarrer le serveur WebSocket sur l'IP et port spécifiés avec keepalive
+    server = await websockets.serve(
+        handler,
+        get_ip(),
+        55000,
+        ping_interval=20,  # Envoie un ping toutes les 20 secondes
+        ping_timeout=20     # Attends max 20 sec une réponse au ping
+    )
+    print(f"Serveur WebSocket démarré sur ws://{get_ip()}:55000")
     await server.wait_closed()
 
 # Lancer l'événement principal
