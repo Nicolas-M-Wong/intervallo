@@ -1,130 +1,138 @@
 import asyncio
-import websockets
 import json
 import random
 import time
 from datetime import datetime
 import socket
+from aiohttp import web
 
+# --- Obtenir l'adresse IP locale ---
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.settimeout(0)
     try:
-        s.connect(('8.8.8.8',1))
+        s.connect(('8.8.8.8', 1))
         IP = s.getsockname()[0]
     except:
         IP = '127.0.0.1'
-    
     s.close()
     return IP
 
-# Dictionnaire pour stocker les sessions des clients
+# --- Dictionnaire pour stocker les sessions clients ---
 clients = {}
-client_counter = 1  # Compteur pour générer des identifiants clients uniques
+client_counter = 1
 
-async def handler(websocket):
+# --- Route HTTP pour servir index.html ---
+async def index(request):
+    return web.FileResponse('index.html')
+
+# --- Route WebSocket ---
+async def websocket_handler(request):
     global client_counter
+    ws = web.WebSocketResponse(heartbeat=20)  # Ping/pong toutes les 20 sec
+    await ws.prepare(request)
 
     # Attribuer un clientId unique
     client_id = client_counter
     client_counter += 1
 
-    # Ajouter le client dans la liste des clients
     clients[client_id] = {
-        "websocket": websocket,
+        "websocket": ws,
         "session_active": False,
-        "battery": random.randint(50, 100),  # Batterie aléatoire entre 50 et 100
+        "battery": random.randint(50, 100),
         "exposure": 0,
         "interval": 0,
         "count": 0,
         "start_time": None
     }
 
-    # Envoyer l'ID client et l'état de la batterie au client
-    battery_status = {
+    print(f"Client {client_id} connecté")
+
+    # Envoyer l'ID client et le niveau de batterie
+    await ws.send_json({
         "type": "batteryStatus",
         "battery": clients[client_id]["battery"],
         "clientId": client_id
-    }
-    await websocket.send(json.dumps(battery_status))
+    })
 
     try:
-        # Attente de messages des clients
-        async for message in websocket:
-            data = json.loads(message)
-            print(data)
-            # Gestion des sessions
-            if data["type"] == "startSession" and not clients[client_id]["session_active"]:
-                # Démarrer la session
-                clients[client_id]["exposure"] = data["exposure"]
-                clients[client_id]["interval"] = data["interval"]
-                clients[client_id]["count"] = data["count"]
-                clients[client_id]["session_active"] = True
-                clients[client_id]["start_time"] = time.time()
+        async for msg in ws:
+            if msg.type == web.WSMsgType.TEXT:
+                data = json.loads(msg.data)
 
-                # Estimation du temps total (exposition + intervalle * nombre de photos)
-                total_time = (clients[client_id]["exposure"] + clients[client_id]["interval"]) * clients[client_id]["count"] - clients[client_id]["interval"]
-                estimated_end_time = datetime.fromtimestamp(clients[client_id]["start_time"] + total_time)
+                # Démarrage session
+                if data["type"] == "startSession" and not clients[client_id]["session_active"]:
+                    clients[client_id]["exposure"] = data["exposure"]
+                    clients[client_id]["interval"] = data["interval"]
+                    clients[client_id]["count"] = data["count"]
+                    clients[client_id]["session_active"] = True
+                    clients[client_id]["start_time"] = time.time()
 
-                # Envoi du message de statut à tous les clients (en cours)
-                session_status = {
-                    "type": "sessionStatus",
-                    "status": "en cours",
-                    "clientId": client_id
-                }
-                await websocket.send(json.dumps(session_status))
+                    total_time = (clients[client_id]["exposure"] + clients[client_id]["interval"]) * clients[client_id]["count"] - clients[client_id]["interval"]
+                    estimated_end_time = datetime.fromtimestamp(clients[client_id]["start_time"] + total_time)
 
-                # Envoyer la durée estimée et l'heure de fin aux autres clients
-                for ws in clients.values():
-                    await ws["websocket"].send(json.dumps({
-                        "type": "estimatedTime",
-                        "estimatedTime": total_time,
-                        "endTime": estimated_end_time.strftime("%H:%M:%S"),
+                    # Informer le client que la session démarre
+                    await ws.send_json({
+                        "type": "sessionStatus",
+                        "status": "en cours",
                         "clientId": client_id
-                    }))
+                    })
 
-                # Attente que le temps de la session soit écoulé
-                await asyncio.sleep(total_time)
+                    # Envoyer durée estimée à tous les clients
+                    for c in clients.values():
+                        await c["websocket"].send_json({
+                            "type": "estimatedTime",
+                            "estimatedTime": total_time,
+                            "endTime": estimated_end_time.strftime("%H:%M:%S"),
+                            "clientId": client_id
+                        })
 
-                # Session terminée
-                clients[client_id]["session_active"] = False
-                session_status["status"] = "terminé"
-                await websocket.send(json.dumps(session_status))
+                    # Attendre la fin de session
+                    await asyncio.sleep(total_time)
 
-                # Envoyer un message de fin aux autres clients
-                for ws in clients.values():
-                    await ws["websocket"].send(json.dumps({
+                    # Session terminée
+                    clients[client_id]["session_active"] = False
+
+                    await ws.send_json({
                         "type": "sessionStatus",
                         "status": "terminé",
                         "clientId": client_id
-                    }))
+                    })
 
-            # Le client veut récupérer son niveau de batterie
-            if data["type"] == "getBatteryStatus":
-                battery_status = {
-                    "type": "batteryStatus",
-                    "battery": clients[client_id]["battery"],
-                    "clientId": client_id
-                }
-                await websocket.send(json.dumps(battery_status))
+                    for c in clients.values():
+                        await c["websocket"].send_json({
+                            "type": "sessionStatus",
+                            "status": "terminé",
+                            "clientId": client_id
+                        })
 
-    except websockets.exceptions.ConnectionClosed as e:
-        # En cas de déconnexion du client
-        print(f"Client {client_id} déconnecté.")
-        del clients[client_id]
+                # Requête niveau batterie
+                elif data["type"] == "getBatteryStatus":
+                    await ws.send_json({
+                        "type": "batteryStatus",
+                        "battery": clients[client_id]["battery"],
+                        "clientId": client_id
+                    })
 
-# Lancer le serveur WebSocket
-async def main():
-    # Démarrer le serveur WebSocket sur l'IP et port spécifiés avec keepalive
-    server = await websockets.serve(
-        handler,
-        get_ip(),
-        55000,
-        ping_interval=20,  # Envoie un ping toutes les 20 secondes
-        ping_timeout=20     # Attends max 20 sec une réponse au ping
-    )
-    print(f"Serveur WebSocket démarré sur ws://{get_ip()}:55000")
-    await server.wait_closed()
+            elif msg.type == web.WSMsgType.ERROR:
+                print(f"Erreur WS pour client {client_id}: {ws.exception()}")
 
-# Lancer l'événement principal
-asyncio.run(main())
+    except Exception as e:
+        print(f"Exception client {client_id}: {e}")
+
+    # Déconnexion
+    del clients[client_id]
+    print(f"Client {client_id} déconnecté")
+    return ws
+
+# --- Application aiohttp ---
+app = web.Application()
+app.router.add_get('/', index)          # Route HTTP
+app.router.add_get('/ws', websocket_handler)  # Route WebSocket
+
+if __name__ == '__main__':
+    ip = get_ip()
+    port = 55000
+    print(f"Serveur aiohttp démarré sur http://{ip}:{port}")
+    print(f"WebSocket disponible sur ws://{ip}:{port}/ws")
+    web.run_app(app, host=ip, port=port)
