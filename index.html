@@ -95,7 +95,7 @@
   // === Connexion dynamique au serveur WebSocket ===
   const serverHost = window.location.hostname;
   const serverPort = 55000;
-  const ws = new WebSocket(`ws://${serverHost}:${serverPort}`);
+  const ws = new WebSocket(`ws://${serverHost}:${serverPort}/ws`);
 
   let sessionEnCours = false;
   let clientId = null;
