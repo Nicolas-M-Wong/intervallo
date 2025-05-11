@@ -24,6 +24,7 @@ client_counter = 1
 
 # --- Route HTTP pour servir index.html ---
 async def index(request):
+    print(request)
     return web.FileResponse('index.html')
 
 # --- Route WebSocket ---
@@ -59,7 +60,7 @@ async def websocket_handler(request):
         async for msg in ws:
             if msg.type == web.WSMsgType.TEXT:
                 data = json.loads(msg.data)
-
+                print(data)
                 # Démarrage session
                 if data["type"] == "startSession" and not clients[client_id]["session_active"]:
                     clients[client_id]["exposure"] = data["exposure"]
