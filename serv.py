@@ -52,7 +52,7 @@ async def handler(websocket):
         # Attente de messages des clients
         async for message in websocket:
             data = json.loads(message)
-
+            print(data)
             # Gestion des sessions
             if data["type"] == "startSession" and not clients[client_id]["session_active"]:
                 # Démarrer la session
