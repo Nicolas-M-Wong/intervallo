@@ -58,7 +58,7 @@ def photo_capture(nb_photo_loc,tmp_pose_loc,tmp_enregistrement_loc):
 
 # Server setup
 TCP_IP = get_ip()      # Local host
-TCP_IP = '127.0.0.1'
+# TCP_IP = '127.0.0.1'
 BUFFER_SIZE = 1024
 TCP_PORT_list = [55000,54000,53000,52000]
 
