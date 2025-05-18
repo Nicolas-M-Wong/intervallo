@@ -165,6 +165,7 @@ while True:
                 break
     
         body = b""
+        print(body)
         while len(body) < content_length:
             body += client_socket.recv(content_length - len(body))
             
@@ -190,6 +191,7 @@ while True:
                 ).encode('utf-8') + response_body
                 
             else:
+                photo_capture(count,exposure,interval)
                 duration = update_session_time(exposure, interval, count)
                 response_body = json.dumps({
                     "status": "started",
@@ -201,7 +203,7 @@ while True:
                     f"Content-Length: {len(response_body)}\r\n"
                     "Connection: close\r\n\r\n"
                 ).encode('utf-8') + response_body
-                photo_capture(count,exposure,interval)
+                
 
                 
         except Exception as e:
