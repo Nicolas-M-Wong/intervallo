@@ -52,7 +52,8 @@ def update_session_time(exposure, interval, count):
 
 def photo_capture(nb_photo_loc,tmp_pose_loc,tmp_enregistrement_loc):
     #Capture d'une unique photo
-    command = "sudo ./Constant_Trigger.exe"+str(tmp_pose_loc)+" "+str(nb_photo_loc)+" "+str(tmp_enregistrement_loc)
+    command = "sudo ./Constant_Trigger.exe "+str(tmp_pose_loc)+" "+str(nb_photo_loc)+" "+str(tmp_enregistrement_loc)
+    print(command)
     os.popen(command)
     return
 
