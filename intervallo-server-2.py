@@ -165,11 +165,11 @@ while True:
                 break
     
         body = b""
-        print(body)
+        
         while len(body) < content_length:
             body += client_socket.recv(content_length - len(body))
-            
         
+        print(body)
         try:
             data = json.loads(body.decode('utf-8'))
             print("Données POST reçues :", data)
