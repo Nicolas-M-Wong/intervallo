@@ -123,7 +123,7 @@ if [[ "$option" != "--no-update" ]]; then
 	fi 
 
 cd $DIR
-python3 intervallo-server-1.py
+python3 intervallo-server-2.py
 
 center_text "" "-"
 
