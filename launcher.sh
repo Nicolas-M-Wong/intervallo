@@ -70,7 +70,7 @@ elif [[ $option == "--no-update" ]]; then
     echo "Launching python server"
 	DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
 	cd $DIR
-	python3 intervallo-server-1.py
+	python3 intervallo-server-2.py
 	center_text "" "-"
 	exit 0
 
