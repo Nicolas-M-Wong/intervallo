@@ -46,7 +46,7 @@ def is_session_running():
 
 def shutdown_raspi():
     os.popen("sleep 15")
-    # os.popen("sudo shutdown -h -now")
+    os.popen("sudo shutdown -h -now")
     return
 
 def update_session_time(exposure, interval, count):
