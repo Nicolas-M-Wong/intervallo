@@ -2,6 +2,7 @@ import socket
 import io
 import json
 import time
+import os
 
 # Dictionary of accepted content types
 http_type_header_dict = {}
@@ -39,9 +40,8 @@ def is_session_running():
     return time.time() < latest_session_end_time
 
 def shutdown_raspi ():
-    # os.popen("sleep 15")
+    os.popen("sleep 15")
     # os.popen("sudo shutdown -h -now")
-    # break
     return
 
 def update_session_time(exposure, interval, count):
@@ -52,8 +52,8 @@ def update_session_time(exposure, interval, count):
 
 def photo_capture(nb_photo_loc,tmp_pose_loc,tmp_enregistrement_loc):
     #Capture d'une unique photo
-    #command = "sudo ./interval_new "+str(tmp_pose_loc)+" "+str(nb_photo_loc)+" "+str(tmp_enregistrement_loc)
-    #os.popen(command)
+    command = "sudo ./interval_new "+str(tmp_pose_loc)+" "+str(nb_photo_loc)+" "+str(tmp_enregistrement_loc)
+    os.popen(command)
     return
 
 # Server setup
@@ -213,7 +213,7 @@ while True:
             ).encode('utf-8') + error_msg
             
         if method == 'POST' and first_line[1] == "/shutdown":
-            raspi_shutdown()
+            shutdown_raspi()
             response_body = "OK".encode('utf-8')
             response = (
                 f"HTTP/1.1 503 Unavailable\r\n"
