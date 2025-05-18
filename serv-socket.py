@@ -81,7 +81,7 @@ def GET(file, file_type, accept_type=http_type_header_dict):
     route = file.split("?")[0] if "?" in file else file
 
     if route == "":
-        script = io.open("index.html", mode='r', encoding='utf-8').read()
+        script = io.open("home.html", mode='r', encoding='utf-8').read()
         response_body = script.encode('utf-8')
         content_type = accept_type.get("html")
 
@@ -116,7 +116,7 @@ def GET(file, file_type, accept_type=http_type_header_dict):
             content_type = "text/plain"
 
     else:
-        script = io.open("index.html", mode='r', encoding='utf-8').read()
+        script = io.open("home.html", mode='r', encoding='utf-8').read()
         response_body = script.encode('utf-8')
         content_type = accept_type.get("html")
 
