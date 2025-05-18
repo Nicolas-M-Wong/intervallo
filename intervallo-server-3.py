@@ -66,7 +66,8 @@ class RateLimiter:
             return False
 
 # Initialize rate limiter
-rate_limiter = RateLimiter()import os
+rate_limiter = RateLimiter()
+import os
 import json
 import time
 import threading
