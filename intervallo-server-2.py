@@ -205,8 +205,8 @@ def handle_client(client_socket, client_address):
                 try:
                     data = json.loads(body.decode('utf-8'))
                     print("Données POST reçues :", data)
-                    exposure = int(data.get('exposure', 0))
-                    interval = int(data.get('interval', 0))
+                    exposure = float(data.get('exposure', 0))
+                    interval = float(data.get('interval', 0))
                     count = int(data.get('count', 0))
                     
                     if is_session_running():
