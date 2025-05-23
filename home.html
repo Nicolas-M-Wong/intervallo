@@ -80,14 +80,6 @@
       </button>
     </div>
 
-    <button id="shutdownButton" class="shutdown-btn">
-      <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
-        <line x1="12" y1="2" x2="12" y2="12"></line>
-      </svg>
-      Éteindre le système
-    </button>
-
     <div class="status-tile">
       <div class="status-header">
         <div class="status-indicator"></div>
@@ -108,6 +100,22 @@
         <span id="status">En attente</span>
       </div>
     </div>
+
+    <!-- Hidden Shutdown Section -->
+    <div class="shutdown-section">
+      <div class="shutdown-trigger">
+        <button class="shutdown-reveal" onclick="toggleShutdownControls()">Options système</button>
+      </div>
+      <div class="shutdown-controls" id="shutdownControls">
+        <button id="shutdownButton" class="shutdown-btn">
+          <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+            <line x1="12" y1="2" x2="12" y2="12"></line>
+          </svg>
+          Éteindre le système
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Confirmation Modal for Starting a Session -->
@@ -115,7 +123,7 @@
     <div class="modal">
       <div class="modal-header">
         <div class="modal-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#BB86FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <line x1="12" y1="8" x2="12" y2="12"></line>
             <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -140,7 +148,7 @@
     <div class="modal">
       <div class="modal-header">
         <div class="modal-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#CF6679" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
             <line x1="12" y1="2" x2="12" y2="12"></line>
           </svg>
@@ -160,6 +168,7 @@
       </div>
     </div>
   </div>
+  
 <script src="js-home.js">
 </script>
 </body>
