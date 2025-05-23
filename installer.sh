@@ -109,3 +109,4 @@ chmod +x "$DESKTOP_FOLDER/launcher-$branch.sh"
 
 center_text "Installation finished" "-"
 "$DESKTOP_FOLDER/launcher-$branch.sh" "$branch" "--no-update"
+
