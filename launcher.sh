@@ -77,6 +77,10 @@ if [[ "$option" != "--no-update" ]]; then
     git config pull.rebase false
     url="https://www.github.com/Nicolas-M-Wong/intervallo"
     git pull "${url}" "${branch%/}"
+	# Run make
+	cd "$REPO_DIR"
+	make clean
+	make all
 fi
 
 # Ensure Makefile is present
@@ -84,11 +88,6 @@ if [ ! -f "$REPO_DIR/Makefile" ]; then
     echo "Makefile not found in $REPO_DIR. Aborting."
     exit 1
 fi
-
-# Run make
-cd "$REPO_DIR"
-make clean
-make all
 
 # Validate compilation
 if [[ ! -f Constant_Trigger.exe || ! -f Variable_Trigger.exe || ! -f server-test.exe ]]; then
