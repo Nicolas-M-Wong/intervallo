@@ -8,23 +8,23 @@ check_internet() {
     return $?
 }
 
+# Determine terminal width
 center_text() {
     local msg="$1"
     local character="$2"
     if [ -t 1 ]; then
-        # Inside a terminal, use `tput` to get terminal width
+	# Inside a terminal, use `tput` to get terminal width
         width=$(tput cols)
     else
-        # Default to 80 columns if not inside a terminal
+	# Default to 80 columns if not inside a terminal
         width=80
     fi
     LENGTH_MSG=${#msg}
     CENTER_COL=$(((width - LENGTH_MSG) / 2))
-    # Repeat the character COUNT times
     printf '%*s\n' "$width" '' | tr ' ' "$character"
     printf "%*s%s\n" $CENTER_COL "" "$msg"
-    printf "%*s\n" "$width" | tr ' ' "$character"
-    }
+    printf '%*s\n' "$width" | tr ' ' "$character"
+}
 
 display_usage() {
     center_text "Help" "-"
@@ -37,27 +37,15 @@ display_usage() {
     echo "Use this command if you are connected with a very slow internet (<10kbs) but still need an update"
 }
 
-compiler_request(){
-local file_path="$1"
-local compiler_path="$2"
-local compiler_arg="$3"
-if [ ! -f "$file_path" ]; then
-    echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
-    # Compile trigger.cpp
-    sh "$compiler_path" "$compiler_arg" &
-    if [ $? -eq 1 ]; then
-        echo "Compilation failed." 
-    fi
-else
-    echo "$3 already exists in $DIR."
-fi
-}
-
+# Argument validation
 branch="$1"
 option="$2"
+
 if [ "$#" -lt 1 ]; then
     echo "$0 missing branch to install"
     echo "Usage: $0 <branch_name> [option]"
+	# echo "Installing main branch by default"
+	# branch = "main"
     exit 1
 fi
 
@@ -70,7 +58,6 @@ elif [[ "$option" == "--no-check" ]]; then
     echo "Bypassing internet connection check"
 else
     center_text "Installing $branch $(date)" "-"
-    # Check internet connection
     if ! check_internet; then
         echo "No internet connection detected."
         echo "You can bypass this check by using the '--no-check' argument when running the script."
@@ -79,13 +66,12 @@ else
     fi
 fi
 
+# Setup directories
 DESKTOP_DIR=$(xdg-user-dir DESKTOP)
-#find the user desktop directory
 REPO="intervallo-$1"
 cd "$DESKTOP_DIR"
-#go to desktop
-mkdir $REPO
-cd $REPO
+mkdir "$REPO" 
+cd "$REPO" 
 
 git init
 git config pull.rebase false
@@ -94,11 +80,29 @@ git pull "${url}" "${branch%/}"
 
 DIR=$(xdg-user-dir DESKTOP)/$REPO
 
-compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh" "Constant_Trigger"
-compiler_request "$DIR/Variable_Trigger.exe" "$DIR/Compiler.sh" "Variable_Trigger"
+# Compile using Makefile
+cd "$DIR"
+make clean
+make all
 
+# Check compilation success
+check_executables() {
+    [[ -f Constant_Trigger && -f Variable_Trigger && -f server-test ]]
+}
+
+if ! check_executables; then
+    echo "Initial compilation failed. Retrying in 10 seconds..."
+    sleep 10
+    make clean && make
+    if ! check_executables; then
+        echo "Compilation failed after retry. Exiting."
+        exit 1
+    fi
+fi
+
+# Move launcher script and finish
 DESKTOP_FOLDER=$(xdg-user-dir DESKTOP)
-mv "$DIR/launcher.sh" "$DESKTOP_FOLDER/launcher-$branch.sh" 
+mv "$DIR/launcher.sh" "$DESKTOP_FOLDER/launcher-$branch.sh"
 chmod +x "$DESKTOP_FOLDER/launcher-$branch.sh"
 
 center_text "Installation finished" "-"
