@@ -27,9 +27,16 @@ private:
     
     void initializeHeaders() {
         std::vector<std::string> liste_header = {
-            "image/gif", "image/jpeg", "image/png", "image/tif",
-            "image/vnd.microsoft.icon", "image/x-icon", "image/vnd.djvu", "image/svg+xml",
-            "text/css", "text/csv", "text/html", "text/javascript", "text/plain", "text/xml"
+            "image/gif", 
+			"image/jpeg", 
+			"image/png", 
+			"image/tif",
+            "text/css", 
+			"text/csv", 
+			"text/html", 
+			"text/javascript", 
+			"text/plain", 
+			"text/xml"
         };
         
         for (const auto& header : liste_header) {
