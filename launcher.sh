@@ -91,7 +91,7 @@ make clean
 make all
 
 # Validate compilation
-if [[ ! -f Constant_Trigger.exe || ! -f Variable_Trigger.exe || ! -f server-test ]]; then
+if [[ ! -f Constant_Trigger.exe || ! -f Variable_Trigger.exe || ! -f server-test.exe ]]; then
     echo "One or more executables are missing after compilation. Exiting."
     center_text "Compilation failed" "-"
     exit 1
