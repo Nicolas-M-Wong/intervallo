@@ -87,9 +87,12 @@ private:
     }
     
     void shutdownRaspi() {
-        // Using system() instead of popen() for commands that don't need output capture
-        std::system("sleep 15 &");
-        std::system("sudo shutdown -h now &");
+        // Run shutdown commands asynchronously in separate thread
+        std::thread shutdown_thread([]() {
+            std::system("sleep 15");
+            std::system("sudo shutdown -h now");
+        });
+        shutdown_thread.detach(); // Let it run independently
     }
     
     double updateSessionTime(double exposure, double interval, int count) {
@@ -107,8 +110,11 @@ private:
         std::string command = command_stream.str();
         std::cout << "Executing: " << command << std::endl;
         
-        // Using system() for fire-and-forget commands
-        std::system((command + " &").c_str());
+        // Run photo capture command asynchronously in separate thread
+        std::thread photo_thread([command]() {
+            std::system(command.c_str());
+        });
+        photo_thread.detach(); // Let it run independently
     }
     
     std::string readFile(const std::string& filename, bool binary = false) {
