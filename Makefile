@@ -15,5 +15,7 @@ Variable_Trigger: Variable_Trigger.cpp
 server-test: server-test.cpp
 	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
+.PHONY: clean
+
 clean:
 	rm -f $(TARGETS)
