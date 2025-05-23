@@ -88,13 +88,14 @@ make all
 
 # Check compilation success
 check_executables() {
-    [[ -f Constant_Trigger && -f Variable_Trigger && -f server-test ]]
+    [[ -f Constant_Trigger.exe && -f Variable_Trigger.exe && -f server-test.exe ]]
 }
 
 if ! check_executables; then
     echo "Initial compilation failed. Retrying in 10 seconds..."
     sleep 10
-    make clean && make
+    make clean
+	make all
     if ! check_executables; then
         echo "Compilation failed after retry. Exiting."
         exit 1
