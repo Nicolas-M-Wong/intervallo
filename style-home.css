@@ -1,16 +1,16 @@
-
 :root {
-  --primary: #6200ee;
-  --primary-light: #BB86FC;
-  --secondary: #03DAC6;
+  --primary: #d32f2f;
+  --primary-light: #f87171;
+  --primary-dark: #b71c1c;
+  --secondary: #dc2626;
   --background: #121212;
   --surface: #1E1E1E;
   --surface-light: #2C2C2C;
   --on-surface: #FFFFFF;
   --on-surface-medium: rgba(255, 255, 255, 0.6);
-  --on-primary: #000000;
-  --error: #CF6679;
-  --success: #03DAC6;
+  --on-primary: #FFFFFF;
+  --error: #ef4444;
+  --success: #10b981;
   --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -118,7 +118,7 @@ input {
 input:focus {
   outline: none;
   border-color: var(--primary-light);
-  box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.3);
+  box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.3);
 }
 
 button {
@@ -252,18 +252,18 @@ button:disabled {
   background-color: var(--primary-light);
   transition: 0.4s;
   border-radius: 50%;
-  box-shadow: 0 0 5px rgba(187, 134, 252, 0.5);
+  box-shadow: 0 0 5px rgba(248, 113, 113, 0.5);
 }
 
 input:checked + .slider {
   background-color: var(--primary);
-  box-shadow: inset 0 0 8px rgba(98, 0, 238, 0.5);
+  box-shadow: inset 0 0 8px rgba(211, 47, 47, 0.5);
 }
 
 input:checked + .slider:before {
   transform: translateX(22px);
   background-color: var(--primary-light);
-  box-shadow: 0 0 8px rgba(187, 134, 252, 0.5);
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
 }
 
 .btn-icon {
@@ -362,7 +362,7 @@ input:checked + .slider:before {
 }
 
 .danger-btn:hover {
-  background-color: #e57373;
+  background-color: #f87171;
 }
 
 .secondary-btn {
@@ -381,16 +381,58 @@ input:checked + .slider:before {
 }
 
 .test-btn:hover {
-  background-color: #20E6D3;
+  background-color: var(--primary-light);
+}
+
+.shutdown-section {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shutdown-trigger {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.shutdown-reveal {
+  color: var(--on-surface-medium);
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  text-decoration: underline;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.shutdown-reveal:hover {
+  opacity: 0.7;
+}
+
+.shutdown-controls {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.shutdown-controls.visible {
+  opacity: 1;
+  height: auto;
+  margin-top: 0.75rem;
 }
 
 .shutdown-btn {
   background-color: var(--error);
   color: var(--on-surface);
+  font-size: 0.8rem;
+  padding: 0.5rem;
 }
 
 .shutdown-btn:hover {
-  background-color: #e57373;
+  background-color: #f87171;
 }
 
 .progress-bar-container {
@@ -412,7 +454,6 @@ input:checked + .slider:before {
 
 @media (max-width: 600px) {
   .tile-grid {
-	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   }
 }
-</style>
