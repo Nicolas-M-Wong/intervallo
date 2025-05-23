@@ -83,7 +83,8 @@ DIR=$(xdg-user-dir DESKTOP)/$REPO
 # Compile using Makefile
 cd "$DIR"
 
-make
+make clean
+make all
 
 # Check compilation success
 check_executables() {
