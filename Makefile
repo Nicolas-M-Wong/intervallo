@@ -1,21 +1,23 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -pthread
+CXXFLAGS = -std=c++17
+WARNFLAGS = -Wall
 LDFLAGS = -lrt
+PIGPIO = -lpigpio
 
-TARGETS = Constant_Trigger Variable_Trigger server-test
+TARGETS = Constant_Trigger.exe Variable_Trigger.exe server-test
 
 all: $(TARGETS)
 
-Constant_Trigger: Constant_Trigger.cpp
-	$(CXX) $(CXXFLAGS) $< -o $@
+Constant_Trigger.exe: Constant_Trigger.cpp
+	$(CXX) $(WARNFLAGS) -o $@ $< $(PIGPIO) $(LDFLAGS)
 
-Variable_Trigger: Variable_Trigger.cpp
-	$(CXX) $(CXXFLAGS) $< -o $@
+Variable_Trigger.exe: Variable_Trigger.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $<
 
 server-test: server-test.cpp
-	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -pthread -o $@ $< $(LDFLAGS)
 
 .PHONY: clean
 
 clean:
-	rm -f $(TARGETS)
+	rm -f Constant_Trigger.exe Variable_Trigger.exe server-test
