@@ -4,7 +4,7 @@ WARNFLAGS = -Wall
 LDFLAGS = -lrt
 PIGPIO = -lpigpio
 
-TARGETS = Constant_Trigger.exe Variable_Trigger.exe server-test
+TARGETS = Constant_Trigger.exe Variable_Trigger.exe server-test.exe
 
 all: $(TARGETS)
 
@@ -14,7 +14,7 @@ Constant_Trigger.exe: Constant_Trigger.cpp
 Variable_Trigger.exe: Variable_Trigger.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
-server-test: server-test.cpp
+server-test.exe: server-test.cpp
 	$(CXX) $(CXXFLAGS) -pthread -o $@ $< $(LDFLAGS)
 
 .PHONY: clean
