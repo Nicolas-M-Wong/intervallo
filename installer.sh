@@ -104,7 +104,7 @@ fi
 
 # Move launcher script and finish
 DESKTOP_FOLDER=$(xdg-user-dir DESKTOP)
-mv "$DIR/launcher.sh" "$DESKTOP_FOLDER/launcher-$branch.sh"
+cp "$DIR/launcher.sh" "$DESKTOP_FOLDER/launcher-$branch.sh"
 chmod +x "$DESKTOP_FOLDER/launcher-$branch.sh"
 
 center_text "Installation finished" "-"
