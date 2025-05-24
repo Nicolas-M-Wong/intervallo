@@ -97,6 +97,6 @@ if [[ ! -f Constant_Trigger.exe || ! -f Variable_Trigger.exe || ! -f server-test
 fi
 
 # Launch Python server
-./server-test.exe 
+python3 intervallo-server-1.py
 
 center_text "" "-"
