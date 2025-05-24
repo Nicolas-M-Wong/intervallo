@@ -315,7 +315,7 @@ if TCP_IP != "127.0.0.1":
         first_line = headers[0].split(' ')
         method = first_line[0]
         
-        print(f'Received request: {first_line}')
+        print(f'Received request: {first_line}\nMethod: {method}')
         
         if method == 'GET':
             print(f'home: {file}\n')
