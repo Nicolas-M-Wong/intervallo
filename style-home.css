@@ -140,7 +140,7 @@ button {
 }
 
 button:hover:not(:disabled) {
-  background-color: var(--primary-light);
+
   transform: translateY(-1px);
 }
 
