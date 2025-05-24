@@ -90,13 +90,14 @@ if [ ! -f "$REPO_DIR/Makefile" ]; then
 fi
 
 # Validate compilation
-if [[ ! -f Constant_Trigger.exe || ! -f Variable_Trigger.exe ]]; then
+
+if [[ ! -f Constant_Trigger.exe || ! -f Variable_Trigger.exe || ! -f server-test.exe ]]; then
+
     echo "One or more executables are missing after compilation. Exiting."
     center_text "Compilation failed" "-"
     exit 1
 fi
 
-# Launch Python server
-python3 intervallo-server-1.py
-
+# Launch server
+./server-test.exe 
 center_text "" "-"
