@@ -132,9 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return true;
     } catch (error) {
       console.error("Erreur lors de l'envoi :", error.message);
-      
-      // For offline mode, we'll simulate a successful request
-      console.log("Mode hors ligne - simulation de réponse réussie");
       return true; 
     }
   }
@@ -250,7 +247,9 @@ document.addEventListener("DOMContentLoaded", () => {
   confirmShutdownBtn.addEventListener("click", async () => {
     // Disable cancel button and change confirm button text
     cancelShutdownBtn.disabled = true;
+	cancelShutdownBtn.style.display = "none";
     confirmShutdownBtn.disabled = true;
+	confirmShutdownBtn.style.backgroundColor = "var(--disabled)";
     confirmShutdownBtn.textContent = "Extinction en cours...";
     
     // Show progress bar
@@ -263,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
       progressBar.style.width = `${progress}%`;
       
       if (progress < 100) {
-        setTimeout(updateProgress, 50);
+        setTimeout(updateProgress, 150);
       } else {
         // When progress completes
         confirmShutdownBtn.textContent = "Système éteint";
@@ -274,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
           statusSpan.textContent = "Système éteint";
           statusIndicator.style.backgroundColor = "#ef4444";
           disableButtonUI("Système éteint");
-        }, 1000);
+        }, 5000);
       }
     };
     
@@ -295,7 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
       confirmShutdownBtn.disabled = false;
       cancelShutdownBtn.disabled = false;
       confirmShutdownBtn.textContent = "Éteindre";
-    }, 500);
+    }, 5000);
   });
 
   // Close modal if clicking outside (for better UX)
