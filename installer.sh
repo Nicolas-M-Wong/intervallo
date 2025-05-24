@@ -88,7 +88,12 @@ make all
 
 # Check compilation success
 check_executables() {
-    [[ -f Constant_Trigger.exe && -f Variable_Trigger.exe && -f server-test.exe ]]
+	MAKE_STATUS=$?
+	# Check if make was successful
+	if [ $MAKE_STATUS -ne 0 ]; then
+		echo "Compilation failed (make returned $MAKE_STATUS)"
+		exit 1
+	fi
 }
 
 if ! check_executables; then
