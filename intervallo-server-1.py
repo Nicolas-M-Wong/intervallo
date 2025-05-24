@@ -244,6 +244,17 @@ def construct_vect (vect):
         output+=str(vect[i])+";"
     output+=str(vect[-1])+"]"
     return output
+
+def read_request(sock):
+    data = b''
+    while b'\r\n\r\n' not in data:
+        data += sock.recv(1024)
+    headers, body = data.split(b'\r\n\r\n', 1)
+    length = int(next((l.split(b':')[1].strip() for l in headers.split(b'\r\n') if l.lower().startswith(b'content-length')), b'0'))
+    while len(body) < length:
+        body += sock.recv(1024)
+    return headers.decode(), body.decode()
+
     
 time_delay = 0
 server_status = True
@@ -282,6 +293,7 @@ if TCP_IP != "127.0.0.1":
     while server_status:
 
         client_socket, client_address = server_socket.accept()
+        header, body_received =  read_request(client_socket)
         print(f'Accepted connection from {client_address}')
             # Receive the request data
         client_request = client_socket.recv(1024).decode('utf-8')
@@ -330,7 +342,7 @@ if TCP_IP != "127.0.0.1":
         
         elif method == 'POST':
             # Parse the request to extract form data
-            body = headers[-1]
+            body = body_received
             print(f"POST = {body}\n")
             response_body = "Data received"
             parameters = {}
