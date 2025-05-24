@@ -13,6 +13,7 @@
   --success: #10b981;
   --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --disabled: #575757;
 }
 
 * {
@@ -145,7 +146,7 @@ button:hover:not(:disabled) {
 }
 
 button:disabled {
-  background-color: var(--surface-light);
+  background-color: var(--disabled);
   cursor: not-allowed;
   color: var(--on-surface-medium);
   box-shadow: none;
