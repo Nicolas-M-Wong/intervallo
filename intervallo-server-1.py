@@ -487,7 +487,7 @@ if TCP_IP != "127.0.0.1":
                                         client_socket.close()
                                         server_socket.close()
                                         os.popen("sudo shutdown -h now")
-                                        return
+                                    
                     
                     if not parameters:
                         print("empty post request")
