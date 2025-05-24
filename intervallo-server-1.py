@@ -294,6 +294,7 @@ if TCP_IP != "127.0.0.1":
 
         client_socket, client_address = server_socket.accept()
         header, body_received =  read_request(client_socket)
+        print(body_received)
         print(f'Accepted connection from {client_address}')
             # Receive the request data
         client_request = client_socket.recv(1024).decode('utf-8')
