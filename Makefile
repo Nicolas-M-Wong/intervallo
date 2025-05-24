@@ -20,4 +20,4 @@ server-test.exe: server-test.cpp
 .PHONY: clean
 
 clean:
-	rm -f Constant_Trigger.exe Variable_Trigger.exe server-test
+	rm -f Constant_Trigger.exe Variable_Trigger.exe server-test.exe
