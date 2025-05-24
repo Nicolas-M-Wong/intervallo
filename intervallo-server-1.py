@@ -288,6 +288,7 @@ if TCP_IP != "127.0.0.1":
         # Parse the request to determine the type of request (GET/POST)
         headers = client_request.split('\r\n')
         expect_content_len = parse_header_item(headers,'Content-Length')
+        print(headers)
         if expect_content_len != None:
             expect_content_len = int(expect_content_len)
         if expect_content_len == None:
