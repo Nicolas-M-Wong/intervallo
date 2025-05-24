@@ -566,23 +566,6 @@ home.changePage = function(direction) {
     location.reload();
 	});
 }
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-
-home.languageRedirect = function() {
-	const userLang = navigator.language || navigator.userLanguage;
-	console.log(userLang.toLowerCase());
-	const currentPage = document.body.getAttribute('data-page');
-	
-	if (!userLang.toLowerCase().startsWith('fr')) {
-		if (currentPage.slice(-3) !== '-EN') {
-			home.saveFormData();
-			home.sendPostRequest({"file_request": `${currentPage}${"-EN"}`}).then(() => {
-			location.reload();
-			});
-		}
-	}
-}
 	
 // ---------------------------------------------------------------------------------------------------------------------------------------------
 
