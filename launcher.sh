@@ -4,91 +4,99 @@ DESKTOP_DIR=$(xdg-user-dir DESKTOP)
 : > "$DESKTOP_DIR/logfile.txt"
 exec > >(tee -a "$DESKTOP_DIR/logfile.txt") 2> >(tee -a "$DESKTOP_DIR/logfile.txt" >&2)
 
-# Function to check if the Raspberry Pi is connected to the internet using DNS
+branch="$1"
+option="$2"
+
+# Function to check internet connectivity
 check_internet() {
-    # Use curl to check if we can reach google.com with a short timeout (0.5 seconds)
     curl -s --head --connect-timeout 1 https://www.google.com > /dev/null 2>&1
     return $?
 }
 
-# Determine terminal width
+# Centered terminal message
 center_text() {
     local msg="$1"
     local character="$2"
     if [ -t 1 ]; then
-        # Inside a terminal, use `tput` to get terminal width
         width=$(tput cols)
     else
-        # Default to 80 columns if not inside a terminal
         width=80
     fi
     LENGTH_MSG=${#msg}
     CENTER_COL=$(((width - LENGTH_MSG) / 2))
-    # Repeat the character COUNT times
     printf '%*s\n' "$width" '' | tr ' ' "$character"
     printf "%*s%s\n" $CENTER_COL "" "$msg"
     printf "%*s\n" "$width" | tr ' ' "$character"
-    }
-
-compiler_request(){
-local file_path="$1"
-local compiler_path="$2"
-local compiler_arg="$3"
-if [ ! -f "$file_path" ]; then
-    echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
-    # Compile trigger.cpp
-    sh "$compiler_path" "$compiler_arg" &
-    if [ $? -eq 1 ]; then
-        echo "Compilation failed." 
-    fi
-else
-    echo "$3 already exists in $DIR."
-fi
 }
 
-center_text "$(date)" "-"
+# Help message
+display_usage() {
+    center_text "Help" "-"
+    echo "Usage: ./$0 <branch-name> [options]"
+    echo "Options:"
+    echo "  --no-check    Bypass the internet connection check."
+    echo "  --no-update   Skip git pull and use existing files."
+    echo "  --help        Display this help message."
+}
 
+# Exit early if --help is requested
+if [[ "$option" == "--help" ]]; then
+    display_usage
+    exit 0
+fi
+
+# Ensure branch is provided
 if [ "$#" -lt 1 ]; then
     echo "$0 missing branch to launch"
+    display_usage
     center_text "fatal error" "-"
     exit 1
 fi
 
-branch="$1"
-#find the user desktop directory
+center_text "Launching $branch $(date)" "-"
 
-if ! cd "$DESKTOP_DIR/intervallo-$1"; then
-    echo "No folder named $DESKTOP_DIR/intervallo-$1 found."
-    center_text "fatal error" "-"
-    exit 1
-fi
-
-cd "$DESKTOP_DIR/intervallo-$1"
-#go to the folder
-
-# Check internet connection then git pull
-if check_internet; then
-    echo "Internet connection is active, updating the programm"
-    git config pull.rebase false
-    git pull https://www.github.com/Nicolas-M-Wong/intervallo "$1"
-else
-    echo "Internet unavailable, continuing without the latest update"
-fi
-
-DIR="$(xdg-user-dir DESKTOP)/intervallo-$1"
-
-if [ ! -f "$DIR/Trigger.exe" ]; then
-    # echo "trigger.exe does not exist in $DIR. Compiling trigger.cpp..."
-    # Compile trigger.cpp
-    compiler_request "$DIR/Constant_Trigger.exe" "$DIR/Compiler.sh" "Constant_Trigger"
-    if [ $? -eq 1 ]; then
-        echo "Compilation failed." 
+# Handle network check
+if [[ "$option" != "--no-check" && "$option" != "--no-update" ]]; then
+    if ! check_internet; then
+        echo "No internet connection detected. Proceeding without update."
     fi
-else
-    echo "Trigger.exe already exists in $DIR."
 fi
 
-cd $DIR
-python3 intervallo-server-1.py
+# Folder setup
+REPO_DIR="$DESKTOP_DIR/intervallo-$branch"
+
+if ! cd "$REPO_DIR"; then
+    echo "No folder named $REPO_DIR found."
+    center_text "fatal error" "-"
+    exit 1
+fi
+
+# Git update if not skipped
+if [[ "$option" != "--no-update" ]]; then
+    git init
+    git config pull.rebase false
+    url="https://www.github.com/Nicolas-M-Wong/intervallo"
+    git pull "${url}" "${branch%/}"
+	# Run make
+	cd "$REPO_DIR"
+	make clean
+	make all
+fi
+
+# Ensure Makefile is present
+if [ ! -f "$REPO_DIR/Makefile" ]; then
+    echo "Makefile not found in $REPO_DIR. Aborting."
+    exit 1
+fi
+
+# Validate compilation
+if [[ ! -f Constant_Trigger.exe || ! -f Variable_Trigger.exe || ! -f server-test.exe ]]; then
+    echo "One or more executables are missing after compilation. Exiting."
+    center_text "Compilation failed" "-"
+    exit 1
+fi
+
+# Launch Python server
+./server-test.exe 
 
 center_text "" "-"
