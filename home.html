@@ -8,8 +8,10 @@
 </head>
 
 <body>
+  <div class="floating-particles" id="particles"></div>
+
   <header>
-    <h1>Intervallomètre</h1>
+    <h1>Intervallomètre Pro</h1>
   </header>
 
   <div class="container">
@@ -17,65 +19,58 @@
       <div class="tile">
         <div class="tile-header">
           <div class="tile-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
               <polyline points="12 6 12 12 16 14"></polyline>
             </svg>
           </div>
-          <div class="tile-title">Durée</div>
+          <div class="tile-title">Durée d'exposition<span class="label-style"> (sec)</span></div>
         </div>
-        <label for="exposureTime">Exposition (s)</label>
         <input type="number" id="exposureTime" min="0" value="5" step="0.1"/>
       </div>
 
       <div class="tile">
         <div class="tile-header">
           <div class="tile-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
               <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
               <path d="M2 12a10 10 0 0 0 10 10V12z"></path>
-              <path d="M12 2a10 10 0 0 1 10 10H12z"></path>
-              <path d="M12 22a10 10 0 0 1-10-10h10z"></path>
             </svg>
           </div>
-          <div class="tile-title">Intervalle</div>
+          <div class="tile-title">Intervalle<span class="label-style"> (sec)</span></div>
         </div>
-        <label for="intervalTime">Secondes</label>
         <input type="number" id="intervalTime" min="0" value="15" step="0.1"/>
       </div>
 
       <div class="tile">
         <div class="tile-header">
           <div class="tile-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="8" y1="12" x2="16" y2="12"></line>
-              <line x1="12" y1="16" x2="12" y2="16"></line>
-              <line x1="12" y1="8" x2="12" y2="8"></line>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+              <circle cx="9" cy="9" r="2"></circle>
+              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
             </svg>
           </div>
-          <div class="tile-title">Photos</div>
+          <div class="tile-title">Nombre de photos</div>
         </div>
-        <label for="photoCount">Quantité</label>
         <input type="number" id="photoCount" min="1" value="3" />
       </div>
     </div>
 
     <div class="button-group">
       <button id="testButton" class="test-btn">
-        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="6" width="20" height="12" rx="2"></rect>
           <circle cx="12" cy="12" r="4"></circle>
-          <line x1="17" y1="8" x2="17" y2="8"></line>
         </svg>
         Test (1 Photo)
       </button>
       <button id="startButton">
-        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"></circle>
           <polygon points="10 8 16 12 10 16 10 8"></polygon>
         </svg>
-        Démarrer
+        Démarrer la session
       </button>
     </div>
 
@@ -86,12 +81,11 @@
       </div>
       <div class="status-grid">
         <div class="status-item">
-          <p>Temps total</p>
-          <span id="estimatedTime">0</span>
-          <small>secondes</small>
+          <p>Temps total estimé</p>
+          <span id="estimatedTime">0 sec</span>
         </div>
         <div class="status-item">
-          <p>Heure de fin</p>
+          <p>Heure de fin prévue</p>
           <span id="endTime">-</span>
         </div>
       </div>
@@ -100,59 +94,53 @@
       </div>
     </div>
 
-    <!-- Hidden Shutdown Section -->
-    <div class="shutdown-section">
-      <div class="shutdown-trigger">
+    <div class="system-section">
+      <div style="text-align: center;">
         <button class="shutdown-reveal" onclick="toggleShutdownControls()">Options système</button>
       </div>
-      <div class="shutdown-controls" id="shutdownControls">
-        <button id="shutdownButton" class="shutdown-btn">
-          <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
-            <line x1="12" y1="2" x2="12" y2="12"></line>
-          </svg>
-          Éteindre le système
-        </button>
-      </div>
-	  
-	<div class="shutdown-controls" id="batterie">
-		  
-		<button id="batteryStatusButton" class="battery-btn">
-			  <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<!-- Battery Outline -->
-				<rect x="2" y="7" width="18" height="10" rx="2" ry="2"></rect>
-				<!-- Battery Positive Terminal -->
-				<line x1="22" y1="11" x2="22" y2="13"></line>
-				<!-- Battery Charge Level (can be styled via CSS or JS for dynamic fill) -->
-				<rect x="4" y="9" width="10" height="6" fill="currentColor"></rect>
-			  </svg>
-			  État de la batterie
-		</button>
+      <div id="system-info">
+        <div class="system-controls" id="shutdownControls">
+          <button class="system-btn" id="shutdownButton">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+              <line x1="12" y1="2" x2="12" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="system-controls" id="batteryLevel">
+          <button class="system-btn" id="batteryBtn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <rect x="3" y="8" width="16" height="8" rx="3"></rect>
+              <rect x="20" y="10" width="2" height="4" rx="1" fill="white"></rect>
+              <rect x="5" y="10" width="12" height="4" rx="1" fill="white"></rect>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Confirmation Modal for Starting a Session -->
+  <!-- Confirmation Modal -->
   <div id="confirmModal" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
         <div class="modal-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
             <circle cx="12" cy="12" r="10"></circle>
             <line x1="12" y1="8" x2="12" y2="12"></line>
             <line x1="12" y1="16" x2="12.01" y2="16"></line>
           </svg>
         </div>
-        <div class="modal-title">Confirmation</div>
+        <div class="modal-title">Confirmation de session</div>
       </div>
       <div class="modal-content">
-        <p>Voulez-vous démarrer une session de <span id="confirmPhotoCount">0</span> photos ?</p>
-        <p id="confirmDetails">Durée d'exposition: <span id="confirmExposure">0</span>s, Intervalle: <span id="confirmInterval">0</span>s</p>
-        <p>Temps total estimé: <span id="confirmTotalTime">0</span>s</p>
+        <p>Prêt à démarrer une session de <strong><span id="confirmPhotoCount">0</span> photos</strong> ?</p>
+        <p>Exposition: <strong><span id="confirmExposure">0</span>s</strong>, Intervalle: <strong><span id="confirmInterval">0</span>s</strong></p>
+        <p>Durée totale: <strong><span id="confirmTotalTime">0</span>s</strong></p>
       </div>
       <div class="modal-actions">
         <button id="cancelSessionBtn" class="secondary-btn">Annuler</button>
-        <button id="confirmSessionBtn">Confirmer</button>
+        <button id="confirmSessionBtn">Démarrer</button>
       </div>
     </div>
   </div>
@@ -162,7 +150,7 @@
     <div class="modal">
       <div class="modal-header">
         <div class="modal-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
             <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
             <line x1="12" y1="2" x2="12" y2="12"></line>
           </svg>
@@ -170,8 +158,8 @@
         <div class="modal-title">Extinction du système</div>
       </div>
       <div class="modal-content">
-        <p>Êtes-vous sûr de vouloir éteindre le système ?</p>
-        <p>Cette action ne peut pas être annulée.</p>
+        <p><strong>Attention:</strong> Vous êtes sur le point d'éteindre le système.</p>
+        <p>Cette action fermera l'application et ne peut pas être annulée.</p>
       </div>
       <div id="shutdownProgress" class="progress-bar-container" style="display: none;">
         <div class="progress-bar"></div>
@@ -182,6 +170,7 @@
       </div>
     </div>
   </div>
+
   
 <script src="js-home.js">
 </script>
