@@ -65,15 +65,34 @@ document.addEventListener("DOMContentLoaded", () => {
     return endTime.toLocaleTimeString();
   }
 
-  function updateStatusInfo(exposure, interval, count) {
-    const totalTime = calculateTotalTime(exposure, interval, count);
-    const endTimeStr = formatEndTime(totalTime);
-    
-    estimatedTimeSpan.textContent = totalTime.toFixed(1);
-    endTimeSpan.textContent = endTimeStr;
-    
-    return totalTime;
+function updateStatusInfo(exposure, interval, count) {
+  const totalTime = calculateTotalTime(exposure, interval, count);
+  const endTimeStr = formatEndTime(totalTime);
+
+  // Use the formatted time instead of raw seconds
+  estimatedTimeSpan.textContent = formatTime(totalTime);
+  endTimeSpan.textContent = endTimeStr;
+
+  return totalTime;
+}
+
+// Helper function to format time
+function formatTime(seconds) {
+  if (seconds < 60) {
+    return `${seconds.toFixed(1)} sec`;
   }
+
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = (seconds % 60).toFixed(1);
+
+  let formatted = '';
+  if (hrs > 0) formatted += `${hrs} h `;
+  if (mins > 0) formatted += `${mins} min `;
+  if (secs > 0 || formatted === '') formatted += `${secs} sec`;
+
+  return formatted.trim();
+}
 
   async function checkServerStatus() {
     try {
@@ -190,9 +209,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function toggleShutdownControls() {
-    const shutdownControls = document.getElementById("shutdownControls");
-    shutdownControls.classList.toggle("visible");
-  }
+	 const idsToToggle = ["shutdownControls", "batteryLevel"];
+
+	  idsToToggle.forEach(id => {
+		const el = document.getElementById(id);
+		if (el) {
+		  el.classList.toggle("visible");
+		}	
+	  });
+	}
 
   // Make function globally available
   window.toggleShutdownControls = toggleShutdownControls;
